@@ -4,8 +4,9 @@ class Model extends CI_Model {
     
     public static $fieldMapping = [];
     
-    public static function parseJson ($json) {
+    public static function parseJson ($timestamp, $json) {
         $object = new static;
+        $object->timestamp = $timestamp;
         $vars = get_object_vars($object);
         foreach ($vars as $var => $val) {
             $class = static::$fieldMapping[$var];
@@ -13,10 +14,10 @@ class Model extends CI_Model {
                 if (is_array($json->$var)) {
                     $object->$var = array();
                     foreach ($json->$var as $entry) {
-                        $object->$var[] = $class::parseJson($entry);
+                        $object->$var[] = $class::parseJson($timestamp, $entry);
                     }
                 } else {
-                    $object->$var = $class::parseJson($json->$var);
+                    $object->$var = $class::parseJson($timestamp, $json->$var);
                 }
             } else {
                 $object->$var = $json->$var;
@@ -25,5 +26,7 @@ class Model extends CI_Model {
         
         return $object;
     }
+    
+    public $timestamp;
     
 }

@@ -13,3 +13,4 @@ application/logs/*
 !application/logs/calls
 application/logs/calls/*
 !application/logs/calls/index.html
+/test.php

@@ -3,19 +3,24 @@
 class ClanLoader {
     
     public function loadAll () {
-        $this->load('clan');
-        $this->load('members');
-        $this->load('currentwar');
+        // Same timestamp for all calls
+        $timestamp = time();
+        $this->load($timestamp, 'clan'      );
+        $this->load($timestamp, 'members'   );
+        $this->load($timestamp, 'currentwar');
     }
     
     public function test () {
         $value = file_get_contents (APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'calls' . DIRECTORY_SEPARATOR . 'clan.json');
         $json = json_decode($value);
-        $object = Clan::parseJson($json);
+        $timestamp = 1234567890;
+        $object = Clan::parseJson($timestamp, $json);
         return $object;
     }
     
-    private function load ($mode = 'clan') {
+    private function load ($timestamp, $mode = 'clan') {
+        // Same timestamp for all calls
+        $date = date('Y-m-d_H-i-s', $timestamp);
         $suffix = '';
         if ($mode != 'clan') {
             $suffix = '/' . $mode;
@@ -28,11 +33,11 @@ class ClanLoader {
                 'authorization: Bearer ' . $config['coc_api']
         ));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        $api = curl_exec($curl);
+        $value = curl_exec($curl);
         curl_close($curl);
-        file_put_contents(APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'calls' . DIRECTORY_SEPARATOR . 'call_' . date('Y-m-d_H-i-s') . '_' . $mode . '.json', $api);
-        $value = json_decode($api);
-        return $value;
+        file_put_contents(APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'calls' . DIRECTORY_SEPARATOR . $mode . '_' . $date . '.json', $value);
+        $result = json_decode($value);
+        return $result;
     }
     
     private function clan () {

@@ -19,10 +19,12 @@ class Maintenance extends CI_Controller {
     
     public function test () {
         $this->load->library('ClanLoader');
+        /*
+         * @var $value Clan
+         */
         $value = $this->clanloader->test();
-        $this->load->model('Clan');
-        $e = 'end';// $this->Clan->getLastEntry();
-        echo $e;
+        $value->save();
+        echo $value->tag . ' end';
     }
     
     private function cyclic () {
