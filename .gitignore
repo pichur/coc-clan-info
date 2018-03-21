@@ -1,1 +1,11 @@
+# Eclipse project files
+/.buildpath
+/.project
+/.settings
+
+# CodeIgniter system files
+/system/
+/index.php
+
+# Project temporary files
 application/logs/*
