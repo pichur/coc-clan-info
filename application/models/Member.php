@@ -3,7 +3,7 @@
 class Member extends Model {
     
     public static $fieldMapping = [
-            league => League::class,
+            'league' => League::class,
     ];
     
     /** @var string  */ public $tag              ;

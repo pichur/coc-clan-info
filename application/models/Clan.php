@@ -3,9 +3,9 @@
 class Clan extends Model {
     
     public static $fieldMapping = [
-            location   => Location ::class,
-            badgeUrls  => BadgeUrls::class,
-            memberList => Member   ::class,
+            'location'   => Location ::class,
+            'badgeUrls'  => BadgeUrls::class,
+            'memberList' => Member   ::class,
     ];
     
     /** @var string        */ public $tag             ;

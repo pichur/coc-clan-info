@@ -3,7 +3,7 @@
 class League extends Model {
     
     public static $fieldMapping = [
-            iconUrls => IconUrls::class,
+            'iconUrls' => IconUrls::class,
     ];
     
     /** @var integer  */ public $id      ;
