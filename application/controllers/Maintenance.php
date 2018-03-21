@@ -21,7 +21,7 @@ class Maintenance extends CI_Controller {
         $this->load->library('ClanLoader');
         $value = $this->clanloader->test();
         $this->load->model('Clan');
-        $e = $this->Clan->getLastEntry();
+        $e = 'end';// $this->Clan->getLastEntry();
         echo $e;
     }
     

@@ -9,3 +9,7 @@
 
 # Project temporary files
 application/logs/*
+!application/logs/index.html
+!application/logs/calls
+application/logs/calls/*
+!application/logs/calls/index.html
