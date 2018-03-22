@@ -6,7 +6,6 @@ class Model extends CI_Model {
     
     public static function parseJson ($timestamp, $json) {
         $object = new static;
-        $object->timestamp = $timestamp;
         $vars = get_object_vars($object);
         foreach ($vars as $var => $val) {
             $class = static::$fieldMapping[$var];
@@ -23,6 +22,8 @@ class Model extends CI_Model {
                 $object->$var = $json->$var;
             }
         }
+        
+        $object->timestamp = date('Y-m-d H:i:s', $timestamp);
         
         return $object;
     }

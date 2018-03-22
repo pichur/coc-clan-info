@@ -27,4 +27,41 @@ class Clan extends Model {
     /** @var integer       */ public $members         ;
     /** @var array[Member] */ public $memberList      ;
     
+    public function create () {
+        /**
+         * @var CI_DB_query_builder $db
+         */
+        $db = $this->db;
+        if ($db->table_exists($table_name)) {
+            return;
+        }
+        $this->db->query(<<<EOT
+CREATE TABLE clan (
+    timestamp         TIMESTAMP PRIMARY KEY,
+    tag               CHAR(9),
+    name              VARCHAR(32),
+    type              VARCHAR(32),
+    description       VARCHAR(255),
+    clanLevel         INTEGER,
+    clanPoints        INTEGER,
+    clanVersusPoints  INTEGER,
+    requiredTrophies  INTEGER,
+    warFrequency      VARCHAR(32),
+    warWinStreak      INTEGER,
+    warWins           INTEGER,
+    warTies           INTEGER,
+    warLosses         INTEGER,
+    isWarLogPublic    BOOLEAN,
+    members           INTEGER)
+EOT
+        );
+        //location         /** @var Location      */ public $;
+        //badgeUrls        /** @var BadgeUrls     */ public $;
+        //memberList       /** @var array[Member] */ public $;
+    }
+    
+    public function save () {
+        $this->db->insert('clan', $this);
+    }
+    
 }
