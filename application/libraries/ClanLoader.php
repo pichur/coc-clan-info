@@ -21,16 +21,17 @@ class ClanLoader {
     private function load ($timestamp, $mode = 'clan') {
         // Same timestamp for all calls
         $date = date('Y-m-d_H-i-s', $timestamp);
+        
         $suffix = '';
         if ($mode != 'clan') {
             $suffix = '/' . $mode;
         }
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_URL, 'https://api.clashofclans.com/v1/clans/' . urlencode($config['clan_tag']) . $suffix);
+        curl_setopt($curl, CURLOPT_URL, 'https://api.clashofclans.com/v1/clans/' . urlencode(config_item('clan_tag')) . $suffix);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
                 'Accept: application/json',
-                'authorization: Bearer ' . $config['coc_api']
+                'authorization: Bearer ' . config_item('coc_api')
         ));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         $value = curl_exec($curl);
