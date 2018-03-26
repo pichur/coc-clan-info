@@ -23,7 +23,6 @@ class Maintenance extends CI_Controller {
          * @var $value Clan
          */
         $value = $this->clanloader->test();
-        $value->create();
         $value->save();
         echo $value->tag . ' end';
     }
