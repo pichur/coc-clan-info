@@ -29,6 +29,11 @@ class Clan extends Model {
     
     public function save () {
         $this->db->insert('clan', $this);
+        
+        $location ->save();
+        $badgeUrls->save();
+        
+        foreach ($this->memberList as $member) $member->save();
     }
     
 }
