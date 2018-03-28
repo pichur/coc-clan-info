@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS Version  CASCADE;
+DROP TABLE IF EXISTS Clan     CASCADE;
+DROP TABLE IF EXISTS Location CASCADE;
+DROP TABLE IF EXISTS Badge    CASCADE;
+
 CREATE TABLE Version (
     number      INTEGER,
     version1    INTEGER,
@@ -9,7 +14,14 @@ CREATE TABLE Version (
 );
 CREATE TRIGGER VersionLog BEFORE INSERT ON Version FOR EACH ROW SET new.updateUser = user();
 
-CREATE TABLE clan (
+CREATE TABLE Location (
+    id                  INTEGER PRIMARY KEY,
+    name                VARCHAR(64),
+    isCountry           BOOLEAN,
+    countryCode         VARCHAR(8)
+);
+
+CREATE TABLE Clan (
     timestamp           TIMESTAMP PRIMARY KEY,
     
     tag                 CHAR(9),
@@ -32,20 +44,12 @@ CREATE TABLE clan (
     FOREIGN KEY (location_id) REFERENCES location (id)
 );
 
-CREATE TABLE location (
-    id                  INTEGER PRIMARY KEY,
-    name                VARCHAR(64),
-    isCountry           BOOLEAN,
-    countryCode         VARCHAR(8),
-);
-
-CREATE TABLE badge (
+CREATE TABLE Badge (
     timestamp           TIMESTAMP PRIMARY KEY,
-    active              BOOLEAN,
     
     small               VARCHAR(255),
     medium              VARCHAR(255),
-    large               VARCHAR(255),
+    large               VARCHAR(255)
 );
 
 INSERT INTO VERSION (number, version1, version2, version3, info) values (0, 0, 0, 1, 'Install script');

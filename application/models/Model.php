@@ -19,15 +19,15 @@ class Model extends CI_Model {
                     $object->$var = $class::parseJson($timestamp, $json->$var);
                 }
             } else {
-                $object->$var = $json->$var;
+                if ($var == 'timestamp') {
+                    $object->timestamp = date('Y-m-d H:i:s', $timestamp);
+                } else {
+                    $object->$var = $json->$var;
+                }
             }
         }
         
-        $object->timestamp = date('Y-m-d H:i:s', $timestamp);
-        
         return $object;
     }
-    
-    public $timestamp;
     
 }

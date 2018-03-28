@@ -8,6 +8,8 @@ class Clan extends Model {
             'memberList' => Member   ::class,
     ];
     
+    /** @var string        */ public $timestamp       ;
+    
     /** @var string        */ public $tag             ;
     /** @var string        */ public $name            ;
     /** @var string        */ public $type            ;
@@ -28,12 +30,13 @@ class Clan extends Model {
     /** @var array[Member] */ public $memberList      ;
     
     public function save () {
-        $this->db->insert('clan', $this);
+        $this->location_id = $this->location->save();
         
-        $location ->save();
-        $badgeUrls->save();
+        $this->db->insert('Clan', $this);
         
-        foreach ($this->memberList as $member) $member->save();
+        //$badgeUrls->save();
+        
+        //foreach ($this->memberList as $member) $member->save();
     }
     
 }
