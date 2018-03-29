@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS Version  CASCADE;
-DROP TABLE IF EXISTS Clan     CASCADE;
-DROP TABLE IF EXISTS Location CASCADE;
-DROP TABLE IF EXISTS Badge    CASCADE;
+DROP TABLE IF EXISTS Version   CASCADE;
+DROP TABLE IF EXISTS Clan      CASCADE;
+DROP TABLE IF EXISTS Location  CASCADE;
+DROP TABLE IF EXISTS BadgeUrls CASCADE;
 
 CREATE TABLE Version (
     number      INTEGER,
@@ -44,7 +44,7 @@ CREATE TABLE Clan (
     FOREIGN KEY (location_id) REFERENCES location (id)
 );
 
-CREATE TABLE Badge (
+CREATE TABLE BadgeUrls (
     timestamp           TIMESTAMP PRIMARY KEY,
     
     small               VARCHAR(255),

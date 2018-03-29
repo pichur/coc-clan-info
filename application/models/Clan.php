@@ -1,14 +1,16 @@
 <?php
 
+include_once 'application/models/Timestamp.php';
+
 class Clan extends Model {
+    
+    use Timestamp;
     
     public static $fieldMapping = [
             'location'   => Location ::class,
             'badgeUrls'  => BadgeUrls::class,
             'memberList' => Member   ::class,
     ];
-    
-    /** @var string        */ public $timestamp       ;
     
     /** @var string        */ public $tag             ;
     /** @var string        */ public $name            ;
@@ -34,7 +36,7 @@ class Clan extends Model {
         
         $this->db->insert('Clan', $this);
         
-        //$badgeUrls->save();
+        $this->badgeUrls->save();
         
         //foreach ($this->memberList as $member) $member->save();
     }

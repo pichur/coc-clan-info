@@ -14,9 +14,9 @@ class Location extends Model {
             $count = count($result);
             if ($count == 0) {
                 $this->db->insert('Location', $this);
-                return $id;
+                return $this->id;
             } else if ($count == 1) {
-                return $id;
+                return $this->id;
             } else {
                 throw new Exception('Non unique key, ' . $count . 'results for id=' . $this->id);
             }

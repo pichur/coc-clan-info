@@ -21,7 +21,7 @@ class ClanLoader {
     public function test () {
         $value = file_get_contents (APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'calls' . DIRECTORY_SEPARATOR . 'clan.json');
         $json = json_decode($value);
-        $timestamp = 1234567890;
+        $timestamp = time();
         $object = Clan::parseJson($timestamp, $json);
         return $object;
     }
