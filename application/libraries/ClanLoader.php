@@ -27,9 +27,6 @@ class ClanLoader {
     }
     
     private function load ($timestamp, $mode = 'clan', $tag = null) {
-        // Same timestamp for all calls
-        $date = date('Y-m-d_H-i-s', $timestamp);
-        
         $url = 'https://api.clashofclans.com/v1/';
         if ($mode == 'player') {
             $url .= 'players/' . urlencode($tag);
@@ -51,9 +48,15 @@ class ClanLoader {
         $value = curl_exec($curl);
         curl_close($curl);
         
-        $filename = APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'calls' . DIRECTORY_SEPARATOR . $mode;
+        $date = date('Y_m_d_H-i-s', $timestamp);
+        $date = str_replace('_', DIRECTORY_SEPARATOR, $date);
+        $path = APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'calls' . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+        if (!file_exists($path)) {
+            mkdir($path, null, true);
+        }
+        $filename = $path . $mode;
         if ($tag) $filename .= '_' . substr($tag, 1);
-        $filename .= '_' . $date . '.json';
+        $filename .= '.json';
         file_put_contents($filename, $value);
         
         $result = json_decode($value);
