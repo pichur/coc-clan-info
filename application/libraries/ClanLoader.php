@@ -52,7 +52,7 @@ class ClanLoader {
         $date = str_replace('_', DIRECTORY_SEPARATOR, $date);
         $path = APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'calls' . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
         if (!file_exists($path)) {
-            mkdir($path, null, true);
+            mkdir($path, 0777, true);
         }
         $filename = $path . $mode;
         if ($tag) $filename .= '_' . substr($tag, 1);
