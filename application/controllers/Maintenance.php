@@ -19,6 +19,7 @@ class Maintenance extends CI_Controller {
     
     public function test () {
         $this->load->library('ClanLoader');
+        $this->load->database();
         /*
          * @var $value Clan
          */
