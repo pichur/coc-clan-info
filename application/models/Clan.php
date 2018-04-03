@@ -9,7 +9,7 @@ class Clan extends Model {
     public static $fieldMapping = [
             'location'   => Location ::class,
             'badgeUrls'  => BadgeUrls::class,
-            'memberList' => Member   ::class,
+            'memberList' => Player   ::class,
     ];
     
     /** @var string        */ public $tag             ;
@@ -29,7 +29,7 @@ class Clan extends Model {
     /** @var integer       */ public $warLosses       ;
     /** @var boolean       */ public $isWarLogPublic  ;
     /** @var integer       */ public $members         ;
-    /** @var array[Member] */ public $memberList      ;
+    /** @var array[Player] */ public $memberList      ;
     
     public function save () {
         $this->location_id = $this->location->save();
@@ -38,7 +38,7 @@ class Clan extends Model {
         
         $this->badgeUrls->save();
         
-        //foreach ($this->memberList as $member) $member->save();
+        foreach ($this->memberList as $member) $member->save();
     }
     
 }
