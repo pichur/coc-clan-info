@@ -17,13 +17,13 @@ class Maintenance extends CI_Controller {
         $this->planned();
     }
     
-    public function test () {
+    public function read () {
         $this->load->library('ClanLoader');
         $this->load->database();
         /*
          * @var $value Clan
          */
-        $value = $this->clanloader->test();
+        $value = $this->clanloader->read();
         $value->save();
         echo $value->tag . ' end';
     }
