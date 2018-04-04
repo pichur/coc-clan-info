@@ -11,22 +11,52 @@ class ClanLoader {
          */
         $clan = $this->load($timestamp, 'clan');
         foreach ($clan->memberList as $member) {
-            $this->load($timestamp, 'player', $member->tag);
+            $this->load($timestamp, 'player', $member->tag, $member);
         }
         //$this->load($timestamp, 'members'   );
         $this->load($timestamp, 'currentwar');
         
     }
     
-    public function test () {
-        $value = file_get_contents (APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'calls' . DIRECTORY_SEPARATOR . 'clan.json');
-        $json = json_decode($value);
+    public function read () {
+        $directory = APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'calls' . DIRECTORY_SEPARATOR;
+        $filesY = scandir($directory);
+        foreach ($filesY as $fileY) {
+            if ($fileY && ($fileY[0] != '.') && is_dir($directory . $fileY)) {
+                $dirY = $directory . $fileY . DIRECTORY_SEPARATOR;
+                $filesM = scandir($dirY);
+                foreach ($filesM as $fileM) {
+                    if ($fileM && ($fileM[0] != '.') && is_dir($dirY . $fileM)) {
+                        $dirYM = $dirY . $fileM . DIRECTORY_SEPARATOR;
+                        $filesD = scandir($dirYM);
+                        foreach ($filesD as $fileD) {
+                            if ($fileD && ($fileD[0] != '.') && is_dir($dirYM . $fileD)) {
+                                $dirYMD = $dirYM . $fileD . DIRECTORY_SEPARATOR;
+                                $filesH = scandir($dirYMD);
+                                foreach ($filesH as $fileH) {
+                                    if ($fileH && ($fileH[0] != '.') && is_dir($dirYMD . $fileH)) {
+                                        $dir = $dirYMD . $fileH . DIRECTORY_SEPARATOR;
+                                        $this->test($dir);
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private function test ($dir) {
+        $clanValue = file_get_contents ($dir . 'clan.json');
+        $clanJson = json_decode($clanValue);
         $timestamp = time();
         $object = Clan::parseJson($timestamp, $json);
         return $object;
     }
     
-    private function load ($timestamp, $mode = 'clan', $tag = null) {
+    private function load ($timestamp, $mode = 'clan', $tag = null, $object = null) {
         $url = 'https://api.clashofclans.com/v1/';
         if ($mode == 'player') {
             $url .= 'players/' . urlencode($tag);
@@ -60,7 +90,15 @@ class ClanLoader {
         file_put_contents($filename, $value);
         
         $result = json_decode($value);
-        return $result;
+        
+        if ($object) {
+            foreach ($result as $k => $v) {
+                $object->$k = $v;
+            }
+            return $object;
+        } else {
+            return $result;
+        }
     }
     
     private function clan () {
