@@ -1,12 +1,11 @@
 <?php
 
-class League extends Model {
+class League extends StaticModel {
     
     public static $fieldMapping = [
             'iconUrls' => IconUrls::class,
     ];
     
-    /** @var integer  */ public $id      ;
     /** @var string   */ public $name    ;
     /** @var IconUrls */ public $iconUrls;
 

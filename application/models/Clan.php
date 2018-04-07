@@ -1,10 +1,6 @@
 <?php
 
-include_once 'application/models/Timestamp.php';
-
-class Clan extends Model {
-    
-    use Timestamp;
+class Clan extends TimestampModel {
     
     public static $fieldMapping = [
             'location'   => Location ::class,

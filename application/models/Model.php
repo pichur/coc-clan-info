@@ -33,4 +33,8 @@ class Model extends CI_Model {
         return $object;
     }
     
+    public function table () {
+        return get_class($this);
+    }
+    
 }

@@ -1,6 +1,6 @@
 <?php
 
-trait Timestamp {
+class TimestampModel extends Model {
     
     /**
      * @var string

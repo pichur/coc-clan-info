@@ -1,8 +1,6 @@
 <?php
 
-class Troop extends Model {
-    
-    use Timestamp;
+class Troop extends TimestampModel {
     
     /** @var string  */ public $player;
     

@@ -1,8 +1,6 @@
 <?php
 
-class Achievement extends Model {
-    
-    use Timestamp;
+class Achievement extends TimestampModel {
     
     /** @var string  */ public $player;
     

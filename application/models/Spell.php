@@ -1,8 +1,6 @@
 <?php
 
-class Spell extends Model {
-    
-    use Timestamp;
+class Spell extends TimestampModel {
     
     /** @var string  */ public $player;
     

@@ -1,8 +1,6 @@
 <?php
 
-class Player extends Model {
-    
-    use Timestamp;
+class Player extends TimestampModel {
     
     public static $fieldMapping = [
             'league'       => League     ::class,
@@ -39,5 +37,16 @@ class Player extends Model {
     /** @var array[Troop      ] */ public $troops      ;
     /** @var array[Hero       ] */ public $heroes      ;
     /** @var array[Spell      ] */ public $spells      ;
+    
+    public function save () {
+        $this->league_id = $this->league->save();
+        
+        $this->db->insert('Player', $this);
+        
+        foreach ($this->achievements as $achievement) $achievement->save();
+        foreach ($this->troops       as $troop      ) $troop      ->save();
+        foreach ($this->heroes       as $hero       ) $hero       ->save();
+        foreach ($this->spells       as $spell      ) $spell      ->save();
+    }
     
 }

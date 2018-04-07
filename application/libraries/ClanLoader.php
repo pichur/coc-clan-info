@@ -36,8 +36,8 @@ class ClanLoader {
                                 foreach ($filesH as $fileH) {
                                     if ($fileH && ($fileH[0] != '.') && is_dir($dirYMD . $fileH)) {
                                         $dir = $dirYMD . $fileH . DIRECTORY_SEPARATOR;
-                                        $this->test($dir);
-                                        return;
+                                        $object = $this->test($dir);
+                                        return $object;
                                     }
                                 }
                             }
@@ -52,8 +52,8 @@ class ClanLoader {
         $clanValue = file_get_contents ($dir . 'clan.json');
         $clanJson = json_decode($clanValue);
         $timestamp = time();
-        $object = Clan::parseJson($timestamp, $json);
-        return $object;
+        $clanObject = Clan::parseJson($timestamp, $clanJson);
+        return $clanObject;
     }
     
     private function load ($timestamp, $mode = 'clan', $tag = null, $object = null) {
