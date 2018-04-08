@@ -8,18 +8,23 @@ class Model extends CI_Model {
         $object = new static;
         $vars = get_object_vars($object);
         foreach ($vars as $var => $val) {
-            $class = static::$fieldMapping[$var];
-            if ($class) {
-                if (is_array($json->$var)) {
+            $mapping = static::$fieldMapping[$var];
+            if ($mapping) {
+                $target   = $mapping['target'  ];
+                $relation = $mapping['relation'];
+                
+                if ($relation == 'OneToMany') {
                     $object->$var = array();
-                    foreach ($json->$var as $entry) {
-                        $entryObject = $class::parseJson($timestamp, $entry);
-                        if ($entryObject) {
-                            array_push($object->$var, $entryObject);
+                    if (is_array($json->$var)) {
+                        foreach ($json->$var as $entry) {
+                            $entryObject = $target::parseJson($timestamp, $entry);
+                            if ($entryObject) {
+                                array_push($object->$var, $entryObject);
+                            }
                         }
                     }
-                } else {
-                    $object->$var = $class::parseJson($timestamp, $json->$var);
+                } else if ($json->$var) {
+                    $object->$var = $target::parseJson($timestamp, $json->$var);
                 }
             } else {
                 if ($var == 'timestamp') {

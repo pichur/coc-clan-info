@@ -3,9 +3,9 @@
 class Clan extends TimestampModel {
     
     public static $fieldMapping = [
-            'location'   => Location ::class,
-            'badgeUrls'  => BadgeUrls::class,
-            'memberList' => Player   ::class,
+        'location'   => ['target' => Location ::class, 'relation' => 'ManyToOne'],
+        'badgeUrls'  => ['target' => BadgeUrls::class, 'relation' => 'OneToOne' ],
+        'memberList' => ['target' => Player   ::class, 'relation' => 'OneToMany'],
     ];
     
     /** @var string        */ public $tag             ;
