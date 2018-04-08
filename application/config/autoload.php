@@ -134,7 +134,9 @@ $autoload['language'] = array();
 */
 $autoload['model'] = array(
     'Model',
+    'StaticModel',
     'TimestampModel',
+    'HistoryModel',
     'Achievement',
     'BadgeUrls', 
     'Clan',
