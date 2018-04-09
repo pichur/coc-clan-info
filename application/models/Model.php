@@ -4,6 +4,13 @@ class Model extends CI_Model {
     
     public static $fieldMapping = array();
     
+    /**
+     * @return CI_DB_query_builder
+     */
+    protected function db () {
+        return $this->db;
+    }
+    
     public static function parseJson ($timestamp, $json) {
         $object = new static;
         $vars = get_object_vars($object);

@@ -41,12 +41,14 @@ class Player extends TimestampModel {
     public function save () {
         $this->league_id = $this->league->save();
         
-        $this->db->insert('Player', $this);
+        $this->db->insert($this->table(), $this);
         
-        foreach ($this->achievements as $achievement) $achievement->save();
-        foreach ($this->troops       as $troop      ) $troop      ->save();
-        foreach ($this->heroes       as $hero       ) $hero       ->save();
-        foreach ($this->spells       as $spell      ) $spell      ->save();
+        foreach (['achievements', 'troops', 'heroes', 'spells'] as $list) {
+            foreach ($this->$list as $entry) {
+                $entry->tag = $this->tag;
+                $entry->db->insert($entry->table(), $entry);
+            }
+        }
     }
     
 }

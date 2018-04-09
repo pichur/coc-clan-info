@@ -13,8 +13,16 @@ class HistoryModel extends TimestampModel {
         return true;
     }
     
+    protected function key () {
+        return false;
+    }
+    
     public function save () {
         $this->db->from($this->table());
+        $key = $this->key();
+        if ($key) {
+            $this->db->where($key, $this->$key);
+        }
         $this->db->order_by('timestamp', 'desc');
         $this->db->limit(1);
         $query = $this->db->get();

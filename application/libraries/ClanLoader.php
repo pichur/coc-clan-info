@@ -32,11 +32,11 @@ class ClanLoader {
                         foreach ($filesD as $fileD) {
                             if ($fileD && ($fileD[0] != '.') && is_dir($dirYM . $fileD)) {
                                 $dirYMD = $dirYM . $fileD . DIRECTORY_SEPARATOR;
-                                $filesH = scandir($dirYMD);
-                                foreach ($filesH as $fileH) {
-                                    if ($fileH && ($fileH[0] != '.') && is_dir($dirYMD . $fileH)) {
-                                        $dir = $dirYMD . $fileH . DIRECTORY_SEPARATOR;
-                                        $object = $this->test($dir);
+                                $filesT = scandir($dirYMD);
+                                foreach ($filesT as $fileT) {
+                                    if ($fileT && ($fileT[0] != '.') && is_dir($dirYMD . $fileT)) {
+                                        $dir = $dirYMD . $fileT . DIRECTORY_SEPARATOR;
+                                        $object = $this->test($dir, $fileY, $fileM, $fileD, $fileT);
                                         return $object;
                                     }
                                 }
@@ -48,11 +48,27 @@ class ClanLoader {
         }
     }
     
-    private function test ($dir) {
+    private function test ($dir, $year, $month, $day, $time) {
         $clanValue = file_get_contents ($dir . 'clan.json');
         $clanJson = json_decode($clanValue);
-        $timestamp = time();
+        
+        $date = new DateTime();
+        $date->setDate($year, $month, $day);
+        $times = explode('-', $time);
+        $date->setTime($times[0], $times[1], $times[2]);
+        $timestamp = $date->getTimestamp();
+        
+        foreach ($clanJson->memberList as $player) {
+            $playerValue = file_get_contents($dir . 'player_' . substr($player->tag, 1) . '.json');
+            $playerJson = json_decode($playerValue);
+            
+            foreach ($playerJson as $k => $v) {
+                $player->$k = $v;
+            }
+        }
+        
         $clanObject = Clan::parseJson($timestamp, $clanJson);
+        
         return $clanObject;
     }
     

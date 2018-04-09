@@ -1,11 +1,9 @@
 <?php
 
-class Achievement extends TimestampModel {
+class Achievement extends PlayerInfo {
     
-    /** @var string  */ public $player;
-    
-    /** @var string  */ public $name ;
     /** @var integer */ public $stars;
     /** @var integer */ public $value;
+    /** @var integer */ public $target;
     
 }

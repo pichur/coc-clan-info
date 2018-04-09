@@ -8,5 +8,12 @@ class League extends StaticModel {
     
     /** @var string   */ public $name    ;
     /** @var IconUrls */ public $iconUrls;
-
+    
+    public function save () {
+        parent::save();
+        
+        $this->iconUrls->id = $this->id;
+        $this->iconUrls->save();
+    }
+    
 }

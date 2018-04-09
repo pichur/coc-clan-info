@@ -1,10 +1,7 @@
 <?php
 
-class Troop extends TimestampModel {
+class Troop extends PlayerImprovement {
     
-    /** @var string  */ public $player;
-    
-    /** @var string  */ public $name ;
-    /** @var integer */ public $level;
+    // No specific fields
     
 }

@@ -1,10 +1,14 @@
-DROP TABLE IF EXISTS Version   CASCADE;
-DROP TABLE IF EXISTS Clan      CASCADE;
-DROP TABLE IF EXISTS Location  CASCADE;
-DROP TABLE IF EXISTS BadgeUrls CASCADE;
-DROP TABLE IF EXISTS Player    CASCADE;
-DROP TABLE IF EXISTS IconUrls  CASCADE;
-DROP TABLE IF EXISTS League    CASCADE;
+DROP TABLE IF EXISTS Troop       CASCADE;
+DROP TABLE IF EXISTS Spell       CASCADE;
+DROP TABLE IF EXISTS Hero        CASCADE;
+DROP TABLE IF EXISTS Achievement CASCADE;
+DROP TABLE IF EXISTS Player      CASCADE;
+DROP TABLE IF EXISTS IconUrls    CASCADE;
+DROP TABLE IF EXISTS League      CASCADE;
+DROP TABLE IF EXISTS BadgeUrls   CASCADE;
+DROP TABLE IF EXISTS Clan        CASCADE;
+DROP TABLE IF EXISTS Location    CASCADE;
+DROP TABLE IF EXISTS Version     CASCADE;
 
 CREATE TABLE Version (
     number                INTEGER,
@@ -70,9 +74,9 @@ CREATE TABLE League (
 );
 
 CREATE TABLE IconUrls (
-	timestamp             TIMESTAMP,
-	id                    INTEGER,
-	
+    timestamp             TIMESTAMP,
+    id                    INTEGER,
+    
     tiny                  VARCHAR(255),
     small                 VARCHAR(255),
     medium                VARCHAR(255),
@@ -84,7 +88,7 @@ CREATE TABLE IconUrls (
 CREATE TABLE Player (
     timestamp             TIMESTAMP,
     
-    tag                   CHAR(9),
+    tag                   CHAR(10),
     name                  VARCHAR(64),
     role                  VARCHAR(32),
     expLevel              INTEGER,
@@ -104,9 +108,62 @@ CREATE TABLE Player (
     clanRank              INTEGER,
     previousClanRank      INTEGER,
     league_id             INTEGER,
-
+    
     PRIMARY KEY (timestamp, tag),
     FOREIGN KEY (league_id) REFERENCES League (id)
+);
+
+CREATE TABLE Achievement (
+    timestamp             TIMESTAMP,
+    tag                   CHAR(10),
+    
+    name                  VARCHAR(255),
+    village               VARCHAR(32),
+    stars                 INTEGER,
+    value                 INTEGER,
+    target                INTEGER,
+    
+    PRIMARY KEY (timestamp, tag, name, village),
+    FOREIGN KEY (timestamp, tag) REFERENCES Player (timestamp, tag)
+);
+
+CREATE TABLE Hero (
+    timestamp             TIMESTAMP,
+    tag                   CHAR(10),
+    
+    name                  VARCHAR(255),
+    village               VARCHAR(32),
+    level                 INTEGER,
+    maxLevel              INTEGER,
+    
+    PRIMARY KEY (timestamp, tag, name, village),
+    FOREIGN KEY (timestamp, tag) REFERENCES Player (timestamp, tag)
+);
+
+CREATE TABLE Spell (
+    timestamp             TIMESTAMP,
+    tag                   CHAR(10),
+    
+    name                  VARCHAR(255),
+    village               VARCHAR(32),
+    level                 INTEGER,
+    maxLevel              INTEGER,
+    
+    PRIMARY KEY (timestamp, tag, name, village),
+    FOREIGN KEY (timestamp, tag) REFERENCES Player (timestamp, tag)
+);
+
+CREATE TABLE Troop (
+    timestamp             TIMESTAMP,
+    tag                   CHAR(10),
+    
+    name                  VARCHAR(255),
+    village               VARCHAR(32),
+    level                 INTEGER,
+    maxLevel              INTEGER,
+    
+    PRIMARY KEY (timestamp, tag, name, village),
+    FOREIGN KEY (timestamp, tag) REFERENCES Player (timestamp, tag)
 );
 
 INSERT INTO VERSION (number, version1, version2, version3, info) values (0, 0, 0, 1, 'Install script');

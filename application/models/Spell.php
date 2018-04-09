@@ -1,10 +1,7 @@
 <?php
 
-class Spell extends TimestampModel {
+class Spell extends PlayerImprovement {
     
-    /** @var string  */ public $player;
-    
-    /** @var string  */ public $name ;
-    /** @var integer */ public $level;
+    // No specific fields
     
 }
