@@ -149,4 +149,8 @@ $autoload['model'] = array(
     'Player',
     'Spell',
     'Troop',
+    'War',
+    'Opponent',
+    'Member',
+    'Attack',
 );
