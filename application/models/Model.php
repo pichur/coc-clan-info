@@ -54,11 +54,18 @@ class Model extends CI_Model {
     }
     
     /**
-     * @param string $key field to search for
+     * @param string|array[string] $key key or keys field names to search for
      * @return array[mixed]
      */
     protected function listBy ($key) {
-        $this->db()->select()->from($this->table())->where($key, $this->$key)->get()->result();
+        if (!is_array($key)) {
+            $key = array($key);
+        }
+        $this->db()->select()->from($this->table());
+        foreach ($key as $field) {
+            $this->db()->where($field, $this->$field);
+        }
+        return $this->db()->get()->result();
     }
     
 }

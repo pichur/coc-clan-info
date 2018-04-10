@@ -3,9 +3,9 @@
 class War extends Model {
     
     public static $fieldMapping = [
-            'clan'       => ['target' => Opponent::class, 'relation' => 'OneToOne'],
-            'opponent'   => ['target' => Opponent::class, 'relation' => 'OneToOne'],
-            'attackList' => ['target' => Attack  ::class, 'relation' => 'OneToMany'],
+            'clan'       => ['target' => WarClan::class, 'relation' => 'OneToOne' ],
+            'opponent'   => ['target' => WarClan::class, 'relation' => 'OneToOne' ],
+            'attackList' => ['target' => Attack ::class, 'relation' => 'OneToMany'],
     ];
     
     /** @var integer       */ public $warNumber           ;
@@ -14,8 +14,8 @@ class War extends Model {
     /** @var string        */ public $preparationStartTime;
     /** @var string        */ public $startTime           ;
     /** @var string        */ public $endTime             ;
-    /** @var Opponent      */ public $clan                ;
-    /** @var Opponent      */ public $opponent            ;
+    /** @var WarClan       */ public $clan                ;
+    /** @var WarClan       */ public $opponent            ;
     /** @var array[Attack] */ public $attackList          ;
     
     public function save () {
@@ -34,9 +34,11 @@ class War extends Model {
         
         parent::save();
         
-        $this->clan    ->warNumber = - $this->warNumber;
-        $this->opponent->warNumber =   $this->warNumber;
+        $this->clan    ->warNumber = $this->warNumber;
+        $this->clan    ->type      = 'clan';
         $this->clan    ->save();
+        $this->opponent->warNumber = $this->warNumber;
+        $this->opponent->type      = 'opponent';
         $this->opponent->save();
     }
     

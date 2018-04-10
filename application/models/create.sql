@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS War         CASCADE;
 DROP TABLE IF EXISTS Troop       CASCADE;
 DROP TABLE IF EXISTS Spell       CASCADE;
 DROP TABLE IF EXISTS Hero        CASCADE;
@@ -164,6 +165,18 @@ CREATE TABLE Troop (
     
     PRIMARY KEY (timestamp, tag, name, village),
     FOREIGN KEY (timestamp, tag) REFERENCES Player (timestamp, tag)
+);
+
+CREATE TABLE War (
+    warNumber             INTEGER,
+    state                 VARCHAR(32),
+    teamSize              INTEGER,
+    preparationStartTime  TIMESTAMP,
+    startTime             TIMESTAMP,
+    endTime               TIMESTAMP,
+    
+    PRIMARY KEY (warNumber),
+    UNIQUE      (preparationStartTime)
 );
 
 INSERT INTO VERSION (number, version1, version2, version3, info) values (0, 0, 0, 1, 'Install script');

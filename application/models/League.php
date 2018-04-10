@@ -3,9 +3,11 @@
 class League extends StaticModel {
     
     public static $fieldMapping = [
-        'iconUrls' => ['target' => IconUrls::class, 'relation' => 'OneToOne' ],
+        'id'       => ['key' => true],
+        'iconUrls' => ['target' => IconUrls::class, 'relation' => 'OneToOne'],
     ];
     
+    /** @var integer  */ public $id      ;
     /** @var string   */ public $name    ;
     /** @var IconUrls */ public $iconUrls;
     

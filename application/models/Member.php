@@ -3,6 +3,7 @@
 class Member extends Model {
     
     /** @var integer       */ public $warNumber         ;
+    /** @var string        */ public $type              ;
     /** @var string        */ public $tag               ;
     /** @var string        */ public $name              ;
     /** @var integer       */ public $townhallLevel     ;
@@ -12,13 +13,13 @@ class Member extends Model {
     /** @var array[Attack] */ public $attacks           ;
     
     public function save () {
+        $this->bestOpponentAttack_id = $this->bestOpponentAttack->save();
+        
         parent::save();
         
-        if ($this->warNumber > 0) {
-            foreach ($this->attacks as $attack) {
-                $attack->warNumber = $this->warNumber;
-                $attack->save();
-            }
+        foreach ($this->attacks as $attack) {
+            $attack->warNumber = $this->warNumber;
+            $attack->save();
         }
     }
     

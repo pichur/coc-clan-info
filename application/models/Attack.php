@@ -1,6 +1,11 @@
 <?php
 
-class Attack extends Model {
+class Attack extends StaticModel {
+    
+    public static $fieldMapping = [
+        'warNumber' => ['key' => true],
+        'order'     => ['key' => true],
+    ];
     
     /** @var integer */ public $warNumber            ;
     /** @var integer */ public $order                ;
