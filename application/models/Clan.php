@@ -30,7 +30,7 @@ class Clan extends TimestampModel {
     public function save () {
         $this->location_id = $this->location->save();
         
-        $this->db->insert('Clan', $this);
+        parent::save();
         
         $this->badgeUrls->save();
         

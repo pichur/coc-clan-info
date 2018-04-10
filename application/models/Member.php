@@ -1,11 +1,25 @@
 <?php
 
 class Member extends Model {
-    public $tag; //String
-    public $name; //String
-    public $townhallLevel; //int
-    public $mapPosition; //int
-    public $attacks; //array(Attack)
-    public $opponentAttacks; //int
-    public $bestOpponentAttack; //Attack
+    
+    /** @var integer       */ public $warNumber         ;
+    /** @var string        */ public $tag               ;
+    /** @var string        */ public $name              ;
+    /** @var integer       */ public $townhallLevel     ;
+    /** @var integer       */ public $mapPosition       ;
+    /** @var integer       */ public $opponentAttacks   ;
+    /** @var Attack        */ public $bestOpponentAttack;
+    /** @var array[Attack] */ public $attacks           ;
+    
+    public function save () {
+        parent::save();
+        
+        if ($this->warNumber > 0) {
+            foreach ($this->attacks as $attack) {
+                $attack->warNumber = $this->warNumber;
+                $attack->save();
+            }
+        }
+    }
+    
 }

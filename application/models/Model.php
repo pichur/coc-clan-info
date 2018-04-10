@@ -4,13 +4,6 @@ class Model extends CI_Model {
     
     public static $fieldMapping = array();
     
-    /**
-     * @return CI_DB_query_builder
-     */
-    protected function db () {
-        return $this->db;
-    }
-    
     public static function parseJson ($timestamp, $json) {
         $object = new static;
         $vars = get_object_vars($object);
@@ -45,8 +38,27 @@ class Model extends CI_Model {
         return $object;
     }
     
-    public function table () {
+    /**
+     * @return CI_DB_query_builder
+     */
+    protected function db () {
+        return $this->db;
+    }
+    
+    protected function table () {
         return get_class($this);
+    }
+    
+    protected function save () {
+        $this->db()->insert($this->table(), $this);
+    }
+    
+    /**
+     * @param string $key field to search for
+     * @return array[mixed]
+     */
+    protected function listBy ($key) {
+        $this->db()->select()->from($this->table())->where($key, $this->$key)->get()->result();
     }
     
 }

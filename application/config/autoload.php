@@ -151,6 +151,7 @@ $autoload['model'] = array(
     'Troop',
     'War',
     'Opponent',
+    'OpponentBadgeUrls',
     'Member',
     'Attack',
 );
