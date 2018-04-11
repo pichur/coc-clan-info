@@ -1,18 +1,23 @@
-DROP TABLE IF EXISTS War         CASCADE;
-DROP TABLE IF EXISTS Troop       CASCADE;
-DROP TABLE IF EXISTS Spell       CASCADE;
-DROP TABLE IF EXISTS Hero        CASCADE;
-DROP TABLE IF EXISTS Achievement CASCADE;
-DROP TABLE IF EXISTS Player      CASCADE;
-DROP TABLE IF EXISTS IconUrls    CASCADE;
-DROP TABLE IF EXISTS League      CASCADE;
-DROP TABLE IF EXISTS BadgeUrls   CASCADE;
-DROP TABLE IF EXISTS Clan        CASCADE;
-DROP TABLE IF EXISTS Location    CASCADE;
-DROP TABLE IF EXISTS Version     CASCADE;
+DROP TABLE IF EXISTS Attack           CASCADE;
+DROP TABLE IF EXISTS Member           CASCADE;
+DROP TABLE IF EXISTS WarClanBadgeUrls CASCADE;
+DROP TABLE IF EXISTS WarClan          CASCADE;
+DROP TABLE IF EXISTS War              CASCADE;
+DROP TABLE IF EXISTS Troop            CASCADE;
+DROP TABLE IF EXISTS Spell            CASCADE;
+DROP TABLE IF EXISTS Hero             CASCADE;
+DROP TABLE IF EXISTS Achievement      CASCADE;
+DROP TABLE IF EXISTS Player           CASCADE;
+DROP TABLE IF EXISTS IconUrls         CASCADE;
+DROP TABLE IF EXISTS League           CASCADE;
+DROP TABLE IF EXISTS BadgeUrls        CASCADE;
+DROP TABLE IF EXISTS Clan             CASCADE;
+DROP TABLE IF EXISTS Location         CASCADE;
+DROP TABLE IF EXISTS Version          CASCADE;
 
 CREATE TABLE Version (
     number                INTEGER,
+    
     version1              INTEGER,
     version2              INTEGER,
     version3              INTEGER,
@@ -26,6 +31,7 @@ CREATE TRIGGER VersionLog BEFORE INSERT ON Version FOR EACH ROW SET new.updateUs
 
 CREATE TABLE Location (
     id                    INTEGER,
+    
     name                  VARCHAR(64),
     isCountry             BOOLEAN,
     countryCode           VARCHAR(8),
@@ -69,6 +75,7 @@ CREATE TABLE BadgeUrls (
 
 CREATE TABLE League (
     id                    INTEGER,
+    
     name                  VARCHAR(64),
     
     PRIMARY KEY (id)
@@ -88,8 +95,8 @@ CREATE TABLE IconUrls (
 
 CREATE TABLE Player (
     timestamp             TIMESTAMP,
-    
     tag                   CHAR(10),
+    
     name                  VARCHAR(64),
     role                  VARCHAR(32),
     expLevel              INTEGER,
@@ -117,9 +124,9 @@ CREATE TABLE Player (
 CREATE TABLE Achievement (
     timestamp             TIMESTAMP,
     tag                   CHAR(10),
-    
     name                  VARCHAR(255),
     village               VARCHAR(32),
+    
     stars                 INTEGER,
     value                 INTEGER,
     target                INTEGER,
@@ -131,9 +138,9 @@ CREATE TABLE Achievement (
 CREATE TABLE Hero (
     timestamp             TIMESTAMP,
     tag                   CHAR(10),
-    
     name                  VARCHAR(255),
     village               VARCHAR(32),
+    
     level                 INTEGER,
     maxLevel              INTEGER,
     
@@ -144,9 +151,9 @@ CREATE TABLE Hero (
 CREATE TABLE Spell (
     timestamp             TIMESTAMP,
     tag                   CHAR(10),
-    
     name                  VARCHAR(255),
     village               VARCHAR(32),
+    
     level                 INTEGER,
     maxLevel              INTEGER,
     
@@ -157,9 +164,9 @@ CREATE TABLE Spell (
 CREATE TABLE Troop (
     timestamp             TIMESTAMP,
     tag                   CHAR(10),
-    
     name                  VARCHAR(255),
     village               VARCHAR(32),
+    
     level                 INTEGER,
     maxLevel              INTEGER,
     
@@ -169,6 +176,7 @@ CREATE TABLE Troop (
 
 CREATE TABLE War (
     warNumber             INTEGER,
+    
     state                 VARCHAR(32),
     teamSize              INTEGER,
     preparationStartTime  TIMESTAMP,
@@ -177,6 +185,61 @@ CREATE TABLE War (
     
     PRIMARY KEY (warNumber),
     UNIQUE      (preparationStartTime)
+);
+
+CREATE TABLE WarClan (
+    warNumber             INTEGER,
+    type                  VARCHAR(32),
+    
+    tag                   CHAR(9),
+    name                  VARCHAR(64),
+    clanLevel             INTEGER,
+    attacks               INTEGER,
+    stars                 INTEGER,
+    destructionPercentage DOUBLE,
+    
+    PRIMARY KEY (warNumber, type),
+    FOREIGN KEY (warNumber) REFERENCES War (warNumber)
+);
+
+CREATE TABLE WarClanBadgeUrls (
+    warNumber             INTEGER,
+    type                  VARCHAR(32),
+    
+    small                 VARCHAR(255),
+    medium                VARCHAR(255),
+    large                 VARCHAR(255),
+    
+    PRIMARY KEY (warNumber, type),
+    FOREIGN KEY (warNumber, type) REFERENCES WarClan (warNumber, type)
+);
+
+CREATE TABLE Member (
+    warNumber             INTEGER,
+    tag                   CHAR(10),
+    
+    type                  VARCHAR(32),
+    mapPosition           INTEGER,
+    name                  VARCHAR(64),
+    townHallLevel         INTEGER,
+    opponentAttacks       INTEGER,
+    bestOpponentAttack_nr INTEGER,
+    
+    PRIMARY KEY (warNumber, tag),
+    FOREIGN KEY (warNumber, type) REFERENCES WarClan (warNumber, type)
+);
+
+CREATE TABLE Attack (
+    warNumber             INTEGER,
+    position              INTEGER,
+    
+    attackerTag           CHAR(10),
+    defenderTag           CHAR(10),
+    stars                 INTEGER,
+    destructionPercentage INTEGER,
+    
+    PRIMARY KEY (warNumber, position),
+    FOREIGN KEY (warNumber) REFERENCES War (warNumber)
 );
 
 INSERT INTO VERSION (number, version1, version2, version3, info) values (0, 0, 0, 1, 'Install script');

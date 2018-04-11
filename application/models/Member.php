@@ -2,6 +2,11 @@
 
 class Member extends Model {
     
+    public static $fieldMapping = [
+            'bestOpponentAttack' => ['target' => Attack::class, 'relation' => 'ManyToOne'],
+            'attacks'            => ['target' => Attack::class, 'relation' => 'OneToMany'],
+    ];
+    
     /** @var integer       */ public $warNumber         ;
     /** @var string        */ public $type              ;
     /** @var string        */ public $tag               ;
@@ -13,7 +18,9 @@ class Member extends Model {
     /** @var array[Attack] */ public $attacks           ;
     
     public function save () {
-        $this->bestOpponentAttack_id = $this->bestOpponentAttack->save();
+        if ($this->bestOpponentAttack) {
+            $this->bestOpponentAttack_nr = $this->bestOpponentAttack->position;
+        }
         
         parent::save();
         

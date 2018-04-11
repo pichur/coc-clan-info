@@ -2,6 +2,8 @@
 
 class Model extends CI_Model {
     
+    public static $null = array();
+    
     public static $fieldMapping = array();
     
     public static function parseJson ($timestamp, $json) {
@@ -9,28 +11,47 @@ class Model extends CI_Model {
         $vars = get_object_vars($object);
         foreach ($vars as $var => $val) {
             $mapping = static::$fieldMapping[$var];
+            $jsonName  = $var;
+            $converter = false;
+            $target    = false;
+            $relation  = false;
             if ($mapping) {
-                $target   = $mapping['target'  ];
-                $relation = $mapping['relation'];
-                
-                if ($relation == 'OneToMany') {
-                    $object->$var = array();
-                    if (is_array($json->$var)) {
-                        foreach ($json->$var as $entry) {
-                            $entryObject = $target::parseJson($timestamp, $entry);
-                            if ($entryObject) {
-                                array_push($object->$var, $entryObject);
-                            }
+                $target    = $mapping['target'  ];
+                $relation  = $mapping['relation'];
+                $converter = $mapping['converter'];
+                if (array_key_exists('jsonName', $mapping)) {
+                    $jsonName = $mapping['jsonName'];
+                }
+            }
+            
+            $jsonValue = $json->$jsonName;
+            
+            if ($converter) {
+                $jsonValue = static::$converter($jsonValue);
+            }
+            
+            if ($relation == 'OneToMany') {
+                $object->$var = array();
+                if (is_array($jsonValue)) {
+                    foreach ($jsonValue as $entry) {
+                        $entryObject = $target::parseJson($timestamp, $entry);
+                        if ($entryObject) {
+                            array_push($object->$var, $entryObject);
                         }
                     }
-                } else if ($json->$var) {
-                    $object->$var = $target::parseJson($timestamp, $json->$var);
+                }
+            } else if ($target) {
+                if ($jsonValue) {
+                    $object->$var = $target::parseJson($timestamp, $jsonValue);
+                } else {
+                    // Empty object to avoid inserting
+                    $object->$var = self::$null;
                 }
             } else {
                 if ($var == 'timestamp') {
                     $object->timestamp = date('Y-m-d H:i:s', $timestamp);
                 } else {
-                    $object->$var = $json->$var;
+                    $object->$var = $jsonValue;
                 }
             }
         }
@@ -41,7 +62,7 @@ class Model extends CI_Model {
     /**
      * @return CI_DB_query_builder
      */
-    protected function db () {
+    public function db () {
         return $this->db;
     }
     

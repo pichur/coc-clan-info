@@ -4,7 +4,7 @@ class WarClan extends Model {
     
     public static $fieldMapping = [
             'badgeUrls' => ['target' => WarClanBadgeUrls::class, 'relation' => 'OneToOne' ],
-            '$members'  => ['target' => Member          ::class, 'relation' => 'OneToMany'],
+            'members'   => ['target' => Member          ::class, 'relation' => 'OneToMany'],
     ];
     
     /** @var integer          */ public $warNumber            ;
@@ -27,6 +27,7 @@ class WarClan extends Model {
         
         foreach ($this->members as $member) {
             $member->warNumber = $this->warNumber;
+            $member->type      = $this->type     ;
             $member->save();
         }
     }

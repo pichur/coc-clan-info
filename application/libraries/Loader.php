@@ -1,6 +1,6 @@
 <?php
 
-class ClanLoader {
+class Loader {
     
     public function loadAll () {
         // Same timestamp for all calls
@@ -13,8 +13,11 @@ class ClanLoader {
         foreach ($clan->memberList as $member) {
             $this->load($timestamp, 'player', $member->tag, $member);
         }
-        //$this->load($timestamp, 'members'   );
-        $this->load($timestamp, 'currentwar');
+        
+        /**
+         * @var War $war
+         */
+        $war = $this->load($timestamp, 'currentwar');
         
     }
     
@@ -36,7 +39,7 @@ class ClanLoader {
                                 foreach ($filesT as $fileT) {
                                     if ($fileT && ($fileT[0] != '.') && is_dir($dirYMD . $fileT)) {
                                         $dir = $dirYMD . $fileT . DIRECTORY_SEPARATOR;
-                                        $object = $this->test($dir, $fileY, $fileM, $fileD, $fileT);
+                                        $object = $this->clan($dir, $fileY, $fileM, $fileD, $fileT);
                                         return $object;
                                     }
                                 }
@@ -48,7 +51,7 @@ class ClanLoader {
         }
     }
     
-    private function test ($dir, $year, $month, $day, $time) {
+    public function clan ($dir, $year, $month, $day, $time) {
         $clanValue = file_get_contents ($dir . 'clan.json');
         $clanJson = json_decode($clanValue);
         
@@ -70,6 +73,21 @@ class ClanLoader {
         $clanObject = Clan::parseJson($timestamp, $clanJson);
         
         return $clanObject;
+    }
+    
+    public function war ($dir, $year, $month, $day, $time) {
+        $warValue = file_get_contents ($dir . 'currentwar.json');
+        $warJson = json_decode($warValue);
+        
+        $date = new DateTime();
+        $date->setDate($year, $month, $day);
+        $times = explode('-', $time);
+        $date->setTime($times[0], $times[1], $times[2]);
+        $timestamp = $date->getTimestamp();
+        
+        $warObject = War::parseJson($timestamp, $warJson);
+        
+        return $warObject;
     }
     
     private function load ($timestamp, $mode = 'clan', $tag = null, $object = null) {
@@ -115,18 +133,6 @@ class ClanLoader {
         } else {
             return $result;
         }
-    }
-    
-    private function clan () {
-        
-    }
-    
-    private function members () {
-        
-    }
-    
-    private function currentWar () {
-        
     }
     
 }
