@@ -70,8 +70,20 @@ class Model extends CI_Model {
         return get_class($this);
     }
     
+    protected function exsist () {
+        return false;
+    }
+    
+    protected function key () {
+        return null;
+    }
+    
     protected function save () {
-        $this->db()->insert($this->table(), $this);
+        if ($this->exsist()) {
+            $this->db()->update($this->table(), $this, $this->key());
+        } else {
+            $this->db()->insert($this->table(), $this);
+        }
     }
     
     /**
@@ -87,6 +99,22 @@ class Model extends CI_Model {
             $this->db()->where($field, $this->$field);
         }
         return $this->db()->get()->result();
+    }
+    
+    /**
+     * @param string|array[string] $key key or keys field names to search for
+     * @return self
+     */
+    protected function getBy ($key) {
+        $result = $this->listBy($key);
+        $count = count($result);
+        if ($count === 0) {
+            return null;
+        } else if ($count === 1) {
+            return $result[0];
+        } else {
+            throw new Exception("Not unique, $count results");
+        }
     }
     
 }

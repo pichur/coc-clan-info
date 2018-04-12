@@ -21,6 +21,38 @@ class Loader {
         
     }
     
+    /**
+     * Load clan info from server
+     * @return Clan
+     */
+    public function clanX ($timestamp = null) {
+        if (!$timestamp) $timestamp = time();
+        
+        /**
+         * @var Clan $clan
+         */
+        $clan = $this->load($timestamp, 'clan');
+        foreach ($clan->memberList as $member) {
+            $this->load($timestamp, 'player', $member->tag, $member);
+        }
+        
+        return $clan;
+    }
+    
+    /**
+     * Load war info from server
+     * @return Clan
+     */
+    public function warX ($timestamp = null) {
+        if (!$timestamp) $timestamp = time();
+        
+        /**
+         * @var War $war
+         */
+        $war = $this->load($timestamp, 'currentwar');
+        
+    }
+    
     public function read () {
         $directory = APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'calls' . DIRECTORY_SEPARATOR;
         $filesY = scandir($directory);

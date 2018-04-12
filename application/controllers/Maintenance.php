@@ -19,12 +19,10 @@ class Maintenance extends CI_Controller {
     
     public function read () {
         $this->load->library('Loader');
-        $this->load->database();
         /*
          * @var $value Clan
          */
         $value = $this->loader->read();
-        $value->save();
         echo $value->tag . ' end';
     }
     
@@ -72,9 +70,17 @@ class Maintenance extends CI_Controller {
         }
     }
     
-    private function cyclic () {
+    public function cyclic () {
         $this->load->library('Loader');
-        $this->loader->loadAll();
+        $this->load->database();
+        
+        $timestamp = time();
+        
+        $clan = $this->loader->clanX($timestamp);
+        $clan->save();
+        
+        $war = $this->loader->warX($timestamp);
+        $war->save();
     }
     
     private function planned () {

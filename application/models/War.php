@@ -21,28 +21,46 @@ class War extends Model {
     /** @var WarClan       */ public $opponent            ;
     /** @var array[Attack] */ public $attackList          ;
     
+    protected function exsist () {
+        return $this->warNumber > 0;
+    }
+    
+    protected function key () {
+        return ['warNumber' => $this->warNumber];
+    }
+    
     public function save () {
-        if ($this->state != 'warEnded') {
+        if ($this->state == 'notInWar') {
             return;
         }
-        if (!$this->warNumber) {
+        
+        $war = $this->getBy('preparationStartTime');
+        
+        if ($war) {
+            $this->warNumber = $war->warNumber;
+        } else {
             $result = $this->db()->select_max('warNumber')->from($this->table())->get()->result();
             $count = count($result);
             if ($count == 0) {
                 $this->warNumber = 1;
             } else {
-                $this->warNumber = $result[0]->warNumber+ 1;
+                $this->warNumber = $result[0]->warNumber + 1;
             }
         }
         
+        // Basic save (insert or update)
         parent::save();
         
-        $this->clan    ->warNumber = $this->warNumber;
-        $this->clan    ->type      = 'clan';
-        $this->clan    ->save();
-        $this->opponent->warNumber = $this->warNumber;
-        $this->opponent->type      = 'opponent';
-        $this->opponent->save();
+        if ($this->state == 'warEnded') {
+            // Full save
+            $this->clan    ->warNumber = $this->warNumber;
+            $this->clan    ->type      = 'clan';
+            $this->clan    ->save();
+            
+            $this->opponent->warNumber = $this->warNumber;
+            $this->opponent->type      = 'opponent';
+            $this->opponent->save();
+        }
     }
     
     public static function toDate ($input) {
