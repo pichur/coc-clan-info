@@ -36,7 +36,7 @@ class Maintenance extends CI_Controller {
         /*
          * @var $clan Clan
          */
-        $clan = $this->loader->clan($dir, $year, $month, $day, $time);
+        $clan = $this->loader->clanFile($dir, $year, $month, $day, $time);
         $clan->db()->trans_start();
         $clan->save();
         $clan->db()->trans_complete();
@@ -58,7 +58,7 @@ class Maintenance extends CI_Controller {
         /*
          * @var $war War
          */
-        $war = $this->loader->war($dir, $year, $month, $day, $time);
+        $war = $this->loader->warFile($dir, $year, $month, $day, $time);
         $war->db()->trans_start();
         $war->save();
         $war->db()->trans_complete();
@@ -76,10 +76,10 @@ class Maintenance extends CI_Controller {
         
         $timestamp = time();
         
-        $clan = $this->loader->clanX($timestamp);
+        $clan = $this->loader->clanCall($timestamp);
         $clan->save();
         
-        $war = $this->loader->warX($timestamp);
+        $war = $this->loader->warCall($timestamp);
         $war->save();
     }
     

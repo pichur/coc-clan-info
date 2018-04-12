@@ -3,11 +3,11 @@
 class Player extends TimestampModel {
     
     public static $fieldMapping = [
-        'league'       => ['target' => League     ::class, 'relation' => 'ManyToOne'],
-        'achievements' => ['target' => Achievement::class, 'relation' => 'OneToMany'],
-        'troops'       => ['target' => Troop      ::class, 'relation' => 'OneToMany'],
-        'heroes'       => ['target' => Hero       ::class, 'relation' => 'OneToMany'],
-        'spells'       => ['target' => Spell      ::class, 'relation' => 'OneToMany'],
+        'league'       => ['type' => 'ManyToOne', 'target' => League     ::class],
+        'achievements' => ['type' => 'OneToMany', 'target' => Achievement::class],
+        'troops'       => ['type' => 'OneToMany', 'target' => Troop      ::class],
+        'heroes'       => ['type' => 'OneToMany', 'target' => Hero       ::class],
+        'spells'       => ['type' => 'OneToMany', 'target' => Spell      ::class],
     ];
     
     /** @var string  */ public $tag                 ;

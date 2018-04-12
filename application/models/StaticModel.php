@@ -2,23 +2,9 @@
 
 class StaticModel extends Model {
     
-    private function keys () {
-        $keys = array();
-        
-        foreach (static::$fieldMapping as $field => $mapping) {
-            if (array_key_exists('key', $mapping)) {
-                if ($mapping['key']) {
-                    array_push($keys, $field);
-                }
-            }
-        }
-        
-        return $keys;
-    }
-    
     public function save () {
-        $keys = $this->keys();
-        $result = $this->listBy($keys);
+        $key = $this->key();
+        $result = $this->listBy($key);
         $count = count($result);
         if ($count == 0) {
             parent::save();
@@ -26,8 +12,8 @@ class StaticModel extends Model {
             // Found, save not need
         } else {
             $msg = 'Non unique key, ' . $count . ' results for';
-            foreach ($keys as $key) {
-                $msg .= ' ' . $key . '=' . $this->$key;
+            foreach ($key as $field => $value) {
+                $msg .= ' ' . $field . '=' . $value;
             }
             $msg .= ' in table ' . $this->table();
             throw new Exception($msg);

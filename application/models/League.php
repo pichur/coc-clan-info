@@ -4,7 +4,7 @@ class League extends StaticModel {
     
     public static $fieldMapping = [
         'id'       => ['key' => true],
-        'iconUrls' => ['target' => IconUrls::class, 'relation' => 'OneToOne'],
+        'iconUrls' => ['type' => 'OneToOne', 'target' => IconUrls::class],
     ];
     
     /** @var integer  */ public $id      ;

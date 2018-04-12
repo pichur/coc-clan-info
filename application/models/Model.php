@@ -14,10 +14,13 @@ class Model extends CI_Model {
             $jsonName  = $var;
             $converter = false;
             $target    = false;
-            $relation  = false;
+            $type = 'column';
             if ($mapping) {
-                $target    = $mapping['target'  ];
-                $relation  = $mapping['relation'];
+                $type = $mapping['type'];
+                if ($type == 'transient') {
+                    continue;
+                }
+                $target    = $mapping['target'   ];
                 $converter = $mapping['converter'];
                 if (array_key_exists('jsonName', $mapping)) {
                     $jsonName = $mapping['jsonName'];
@@ -30,7 +33,7 @@ class Model extends CI_Model {
                 $jsonValue = static::$converter($jsonValue);
             }
             
-            if ($relation == 'OneToMany') {
+            if ($type == 'OneToMany') {
                 $object->$var = array();
                 if (is_array($jsonValue)) {
                     foreach ($jsonValue as $entry) {
@@ -44,7 +47,7 @@ class Model extends CI_Model {
                 if ($jsonValue) {
                     $object->$var = $target::parseJson($timestamp, $jsonValue);
                 } else {
-                    // Empty object to avoid inserting
+                    // Empty object to avoid inserting (object set separatly)
                     $object->$var = self::$null;
                 }
             } else {
@@ -70,39 +73,65 @@ class Model extends CI_Model {
         return get_class($this);
     }
     
-    protected function exsist () {
+    protected function exist () {
         return false;
     }
     
-    protected function key () {
-        return null;
+    protected function key() {
+        $key = array();
+        
+        foreach (static::$fieldMapping as $field => $mapping) {
+            if ($mapping['key']) {
+                $key[$field] = $this->$field;
+            }
+        }
+        
+        return $key;
+    }
+    
+    protected function autoKey () {
+        
+    }
+    
+    protected function set () {
+        $set = [];
+        $vars = get_object_vars($this);
+        foreach ($vars as $key => $val) {
+            if (array_key_exists($key, static::$fieldMapping) && (static::$fieldMapping[$key]['type'] != 'column')) {
+                continue;
+            }
+            if (is_array($val) || is_object($val)) {
+                continue;
+            }
+            $set[$key] = $val;
+        }
+        
+        return $set;
     }
     
     protected function save () {
-        if ($this->exsist()) {
+        if ($this->exist()) {
             $this->db()->update($this->table(), $this, $this->key());
         } else {
+            $this->autoKey();
             $this->db()->insert($this->table(), $this);
         }
     }
     
     /**
-     * @param string|array[string] $key key or keys field names to search for
+     * @param string|array[string] $key keys field names mapped to values, or single field name (value to get from object) to search for
      * @return array[mixed]
      */
     protected function listBy ($key) {
         if (!is_array($key)) {
-            $key = array($key);
+            $key = array($key => $this->$key);
         }
-        $this->db()->select()->from($this->table());
-        foreach ($key as $field) {
-            $this->db()->where($field, $this->$field);
-        }
-        return $this->db()->get()->result();
+        
+        return $this->db()->select()->from($this->table())->where($key)->get()->result();
     }
     
     /**
-     * @param string|array[string] $key key or keys field names to search for
+     * @param string|array[string] $key keys field names mapped to values, or single field name (value to get from object) to search for
      * @return self
      */
     protected function getBy ($key) {

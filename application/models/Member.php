@@ -3,8 +3,8 @@
 class Member extends Model {
     
     public static $fieldMapping = [
-            'bestOpponentAttack' => ['target' => Attack::class, 'relation' => 'ManyToOne'],
-            'attacks'            => ['target' => Attack::class, 'relation' => 'OneToMany'],
+            'bestOpponentAttack' => ['type' => 'ManyToOne', 'target' => Attack::class],
+            'attacks'            => ['type' => 'OneToMany', 'target' => Attack::class],
     ];
     
     /** @var integer       */ public $warNumber         ;

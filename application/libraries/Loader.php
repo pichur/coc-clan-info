@@ -25,32 +25,34 @@ class Loader {
      * Load clan info from server
      * @return Clan
      */
-    public function clanX ($timestamp = null) {
+    public function clanCall ($timestamp = null) {
         if (!$timestamp) $timestamp = time();
         
-        /**
-         * @var Clan $clan
-         */
-        $clan = $this->load($timestamp, 'clan');
-        foreach ($clan->memberList as $member) {
+        $clanJson = $this->load($timestamp, 'clan');
+        foreach ($clanJson->memberList as $member) {
             $this->load($timestamp, 'player', $member->tag, $member);
         }
         
-        return $clan;
+        $clanObject = Clan::parseJson($timestamp, $clanJson);
+        
+        return $clanObject;
     }
     
     /**
      * Load war info from server
      * @return Clan
      */
-    public function warX ($timestamp = null) {
+    public function warCall ($timestamp = null) {
         if (!$timestamp) $timestamp = time();
         
         /**
          * @var War $war
          */
-        $war = $this->load($timestamp, 'currentwar');
+        $warJson = $this->load($timestamp, 'currentwar');
         
+        $warObject = War::parseJson($timestamp, $warJson);
+        
+        return $warObject;
     }
     
     public function read () {
@@ -71,7 +73,7 @@ class Loader {
                                 foreach ($filesT as $fileT) {
                                     if ($fileT && ($fileT[0] != '.') && is_dir($dirYMD . $fileT)) {
                                         $dir = $dirYMD . $fileT . DIRECTORY_SEPARATOR;
-                                        $object = $this->clan($dir, $fileY, $fileM, $fileD, $fileT);
+                                        $object = $this->clanFile($dir, $fileY, $fileM, $fileD, $fileT);
                                         return $object;
                                     }
                                 }
@@ -83,7 +85,7 @@ class Loader {
         }
     }
     
-    public function clan ($dir, $year, $month, $day, $time) {
+    public function clanFile ($dir, $year, $month, $day, $time) {
         $clanValue = file_get_contents ($dir . 'clan.json');
         $clanJson = json_decode($clanValue);
         
@@ -107,7 +109,7 @@ class Loader {
         return $clanObject;
     }
     
-    public function war ($dir, $year, $month, $day, $time) {
+    public function warFile ($dir, $year, $month, $day, $time) {
         $warValue = file_get_contents ($dir . 'currentwar.json');
         $warJson = json_decode($warValue);
         

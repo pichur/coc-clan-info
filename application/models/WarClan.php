@@ -3,8 +3,8 @@
 class WarClan extends Model {
     
     public static $fieldMapping = [
-            'badgeUrls' => ['target' => WarClanBadgeUrls::class, 'relation' => 'OneToOne' ],
-            'members'   => ['target' => Member          ::class, 'relation' => 'OneToMany'],
+            'badgeUrls' => ['type' => 'OneToOne' , 'target' => WarClanBadgeUrls::class],
+            'members'   => ['type' => 'OneToMany', 'target' => Member          ::class],
     ];
     
     /** @var integer          */ public $warNumber            ;

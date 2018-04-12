@@ -3,12 +3,13 @@
 class War extends Model {
     
     public static $fieldMapping = [
-            'clan'                 => ['target' => WarClan::class, 'relation' => 'OneToOne' ],
-            'opponent'             => ['target' => WarClan::class, 'relation' => 'OneToOne' ],
-            'attackList'           => ['target' => Attack ::class, 'relation' => 'OneToMany'],
+            'clan'                 => ['type' => 'OneToOne' , 'target' => WarClan::class],
+            'opponent'             => ['type' => 'OneToOne' , 'target' => WarClan::class],
+            'attackList'           => ['type' => 'OneToMany', 'target' => Attack ::class],
             'preparationStartTime' => ['converter' => 'toDate'],
             'startTime'            => ['converter' => 'toDate'],
             'endTime'              => ['converter' => 'toDate'],
+            'warNumber'            => ['key' => true],
     ];
     
     /** @var integer       */ public $warNumber           ;
@@ -21,12 +22,22 @@ class War extends Model {
     /** @var WarClan       */ public $opponent            ;
     /** @var array[Attack] */ public $attackList          ;
     
-    protected function exsist () {
+    protected function exist () {
         return $this->warNumber > 0;
     }
     
-    protected function key () {
-        return ['warNumber' => $this->warNumber];
+    protected function autoKey () {
+        if ($this->warNumber) {
+            return;
+        }
+        
+        $result = $this->db()->select_max('warNumber')->from($this->table())->get()->result();
+        $count = count($result);
+        if ($count == 0) {
+            $this->warNumber = 1;
+        } else {
+            $this->warNumber = $result[0]->warNumber + 1;
+        }
     }
     
     public function save () {
@@ -38,14 +49,6 @@ class War extends Model {
         
         if ($war) {
             $this->warNumber = $war->warNumber;
-        } else {
-            $result = $this->db()->select_max('warNumber')->from($this->table())->get()->result();
-            $count = count($result);
-            if ($count == 0) {
-                $this->warNumber = 1;
-            } else {
-                $this->warNumber = $result[0]->warNumber + 1;
-            }
         }
         
         // Basic save (insert or update)
@@ -67,7 +70,7 @@ class War extends Model {
         $input = substr($input, 0, -5);
         $date = date_create_from_format('Ymd\THis', $input);
         $result = $date->format('Y-m-d H:i:s');
-        return $esult;
+        return $result;
     }
     
 }
