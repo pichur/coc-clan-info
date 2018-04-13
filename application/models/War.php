@@ -15,12 +15,19 @@ class War extends Model {
     /** @var integer       */ public $warNumber           ;
     /** @var string        */ public $state               ;
     /** @var integer       */ public $teamSize            ;
-    /** @var string        */ public $preparationStartTime;
-    /** @var string        */ public $startTime           ;
-    /** @var string        */ public $endTime             ;
+    /** @var DateTime      */ public $preparationStartTime;
+    /** @var DateTime      */ public $startTime           ;
+    /** @var DateTime      */ public $endTime             ;
     /** @var WarClan       */ public $clan                ;
     /** @var WarClan       */ public $opponent            ;
     /** @var array[Attack] */ public $attackList          ;
+    
+    /**
+     * @return War|NULL
+     */
+    public function loadLast () {
+        return $this->db()->select()->from('War')->order_by('warNumber', 'DESC')->limit(1)->get()->custom_row_object(0, 'War');
+    }
     
     protected function exist () {
         return $this->warNumber > 0;

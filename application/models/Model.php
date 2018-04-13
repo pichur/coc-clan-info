@@ -11,10 +11,10 @@ class Model extends CI_Model {
         $vars = get_object_vars($object);
         foreach ($vars as $var => $val) {
             $mapping = static::$fieldMapping[$var];
-            $jsonName  = $var;
-            $converter = false;
-            $target    = false;
-            $type = 'column';
+            $jsonName  = $var    ;
+            $converter = false   ;
+            $target    = false   ;
+            $type      = 'column';
             if ($mapping) {
                 $type = $mapping['type'];
                 if ($type == 'transient') {
@@ -52,7 +52,7 @@ class Model extends CI_Model {
                 }
             } else {
                 if ($var == 'timestamp') {
-                    $object->timestamp = date('Y-m-d H:i:s', $timestamp);
+                    $object->timestamp = $timestamp;
                 } else {
                     $object->$var = $jsonValue;
                 }
@@ -97,8 +97,13 @@ class Model extends CI_Model {
         $set = [];
         $vars = get_object_vars($this);
         foreach ($vars as $key => $val) {
-            if (array_key_exists($key, static::$fieldMapping) && (static::$fieldMapping[$key]['type'] != 'column')) {
+            if (        static::$fieldMapping[$key]
+                    &&  static::$fieldMapping[$key]['type']
+                    && (static::$fieldMapping[$key]['type'] != 'column')) {
                 continue;
+            }
+            if ($val instanceof DateTime) {
+                $val = $val->format('Y-m-d H:i:s');
             }
             if (is_array($val) || is_object($val)) {
                 continue;
@@ -111,10 +116,10 @@ class Model extends CI_Model {
     
     protected function save () {
         if ($this->exist()) {
-            $this->db()->update($this->table(), $this, $this->key());
+            $this->db()->update($this->table(), $this->set(), $this->key());
         } else {
             $this->autoKey();
-            $this->db()->insert($this->table(), $this);
+            $this->db()->insert($this->table(), $this->set());
         }
     }
     

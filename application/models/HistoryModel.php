@@ -26,7 +26,7 @@ class HistoryModel extends TimestampModel {
         if (is_array($result)) {
             $count = count($result);
             if ($count == 0) {
-                $this->db->insert($this->table(), $this);
+                parent::save();
                 return;
             } else if ($count == 1) {
                 $result = $result[0];
@@ -35,7 +35,7 @@ class HistoryModel extends TimestampModel {
                     return;
                 } else {
                     // Insert new values
-                    $this->db->insert($this->table(), $this);
+                    parent::save();
                     return;
                 }
             } else {

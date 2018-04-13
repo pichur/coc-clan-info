@@ -3,7 +3,7 @@
 class TimestampModel extends Model {
     
     /**
-     * @var string
+     * @var DateTime
      */
     public $timestamp;
     

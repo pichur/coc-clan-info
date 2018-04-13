@@ -39,14 +39,15 @@ class Player extends TimestampModel {
     /** @var array[Spell      ] */ public $spells      ;
     
     public function save () {
-        $this->league_id = $this->league->save();
+        $this->league->save();
+        $this->league_id = $this->league->id;
         
-        $this->db->insert($this->table(), $this);
+        parent::save();
         
         foreach (['achievements', 'troops', 'heroes', 'spells'] as $list) {
             foreach ($this->$list as $entry) {
                 $entry->tag = $this->tag;
-                $entry->db->insert($entry->table(), $entry);
+                $entry->save();
             }
         }
     }

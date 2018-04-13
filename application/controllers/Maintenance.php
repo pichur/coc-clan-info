@@ -74,7 +74,7 @@ class Maintenance extends CI_Controller {
         $this->load->library('Loader');
         $this->load->database();
         
-        $timestamp = time();
+        $timestamp = new DateTime();
         
         $clan = $this->loader->clanCall($timestamp);
         $clan->save();
@@ -83,8 +83,14 @@ class Maintenance extends CI_Controller {
         $war->save();
     }
     
-    private function planned () {
+    public function planned () {
+        $this->load->database();
         
+        $timestamp = new DateTime();
+        
+        $war = $this->War->loadLast();
+        
+        $war->endTime;
     }
     
 }

@@ -4,7 +4,7 @@ class Loader {
     
     public function loadAll () {
         // Same timestamp for all calls
-        $timestamp = time();
+        $timestamp = new DateTime();
         
         /**
          * @var Clan $clan
@@ -26,7 +26,7 @@ class Loader {
      * @return Clan
      */
     public function clanCall ($timestamp = null) {
-        if (!$timestamp) $timestamp = time();
+        if (!$timestamp) $timestamp = new DateTime();
         
         $clanJson = $this->load($timestamp, 'clan');
         foreach ($clanJson->memberList as $member) {
@@ -43,7 +43,7 @@ class Loader {
      * @return Clan
      */
     public function warCall ($timestamp = null) {
-        if (!$timestamp) $timestamp = time();
+        if (!$timestamp) $timestamp = new DateTime();
         
         /**
          * @var War $war
@@ -89,11 +89,10 @@ class Loader {
         $clanValue = file_get_contents ($dir . 'clan.json');
         $clanJson = json_decode($clanValue);
         
-        $date = new DateTime();
-        $date->setDate($year, $month, $day);
         $times = explode('-', $time);
-        $date->setTime($times[0], $times[1], $times[2]);
-        $timestamp = $date->getTimestamp();
+        $timestamp = new DateTime();
+        $timestamp->setDate($year, $month, $day);
+        $timestamp->setTime($times[0], $times[1], $times[2]);
         
         foreach ($clanJson->memberList as $player) {
             $playerValue = file_get_contents($dir . 'player_' . substr($player->tag, 1) . '.json');
@@ -113,18 +112,17 @@ class Loader {
         $warValue = file_get_contents ($dir . 'currentwar.json');
         $warJson = json_decode($warValue);
         
-        $date = new DateTime();
-        $date->setDate($year, $month, $day);
         $times = explode('-', $time);
-        $date->setTime($times[0], $times[1], $times[2]);
-        $timestamp = $date->getTimestamp();
+        $timestamp = new DateTime();
+        $timestamp->setDate($year, $month, $day);
+        $timestamp->setTime($times[0], $times[1], $times[2]);
         
         $warObject = War::parseJson($timestamp, $warJson);
         
         return $warObject;
     }
     
-    private function load ($timestamp, $mode = 'clan', $tag = null, $object = null) {
+    private function load (DateTime $timestamp, $mode = 'clan', $tag = null, $object = null) {
         $url = 'https://api.clashofclans.com/v1/';
         if ($mode == 'player') {
             $url .= 'players/' . urlencode($tag);
@@ -146,7 +144,7 @@ class Loader {
         $value = curl_exec($curl);
         curl_close($curl);
         
-        $date = date('Y_m_d_H-i-s', $timestamp);
+        $date = $timestamp->format('Y_m_d_H-i-s');
         $date = str_replace('_', DIRECTORY_SEPARATOR, $date);
         $path = APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'calls' . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
         if (!file_exists($path)) {
