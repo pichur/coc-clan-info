@@ -68,7 +68,8 @@ class War extends Model {
     
     public static function toDate ($input) {
         $input = substr($input, 0, -5);
-        $date = date_create_from_format('Ymd\THis', $input);
+        $date = DateTime::createFromFormat('Ymd\THis', $input, new DateTimeZone('UTC'));
+        $date->setTimeZone(new DateTimeZone(date_default_timezone_get()));
         $result = $date->format('Y-m-d H:i:s');
         return $result;
     }
