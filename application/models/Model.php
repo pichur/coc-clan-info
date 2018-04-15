@@ -11,17 +11,17 @@ class Model extends CI_Model {
         $vars = get_object_vars($object);
         foreach ($vars as $var => $val) {
             $mapping = static::$fieldMapping[$var];
-            $jsonName  = $var    ;
-            $converter = false   ;
-            $target    = false   ;
-            $type      = 'column';
+            $jsonName      = $var    ;
+            $jsonConverter = false   ;
+            $target        = false   ;
+            $type          = 'column';
             if ($mapping) {
                 $type = $mapping['type'];
                 if ($type == 'transient') {
                     continue;
                 }
-                $target    = $mapping['target'   ];
-                $converter = $mapping['converter'];
+                $target        = $mapping['target'   ];
+                $jsonConverter = $mapping['jsonConverter'];
                 if (array_key_exists('jsonName', $mapping)) {
                     $jsonName = $mapping['jsonName'];
                 }
@@ -29,8 +29,8 @@ class Model extends CI_Model {
             
             $jsonValue = $json->$jsonName;
             
-            if ($converter) {
-                $jsonValue = static::$converter($jsonValue);
+            if ($jsonConverter) {
+                $jsonValue = static::$jsonConverter($jsonValue);
             }
             
             if ($type == 'OneToMany') {
@@ -60,6 +60,20 @@ class Model extends CI_Model {
         }
         
         return $object;
+    }
+    
+    /**
+     * @return self
+     */
+    public function fixDbLoad () {
+        foreach (static::$fieldMapping as $var => $properties) {
+            $dbConverter = $properties['dbConverter'];
+            if ($dbConverter) {
+                $this->$var = static::$dbConverter($this->$var);
+            }
+        }
+        
+        return $this;
     }
     
     /**
@@ -132,7 +146,18 @@ class Model extends CI_Model {
             $key = array($key => $this->$key);
         }
         
-        return $this->db()->select()->from($this->table())->where($key)->get()->result();
+        foreach ($key as $var => $val) {
+            if ($val instanceof DateTime) {
+                $key[$var] = $val->format('Y-m-d H:i:s');
+            }
+        }
+        
+        $result = $this->db()->select()->from($this->table())->where($key)->get()->custom_result_object(get_class($this));
+        foreach ($result as $row) {
+            $row->fixDbLoad();
+        }
+        
+        return $result;
     }
     
     /**

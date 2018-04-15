@@ -73,8 +73,9 @@ class Loader {
                                 foreach ($filesT as $fileT) {
                                     if ($fileT && ($fileT[0] != '.') && is_dir($dirYMD . $fileT)) {
                                         $dir = $dirYMD . $fileT . DIRECTORY_SEPARATOR;
-                                        $object = $this->clanFile($dir, $fileY, $fileM, $fileD, $fileT);
-                                        return $object;
+                                        $this->clanFile($dir, $fileY, $fileM, $fileD, $fileT)->save();
+                                        $this->warFile ($dir, $fileY, $fileM, $fileD, $fileT)->save();
+                                        echo $dir . PHP_EOL;
                                     }
                                 }
                             }

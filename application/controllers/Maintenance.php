@@ -12,6 +12,11 @@ class Maintenance extends CI_Controller {
      */
     public $Clan;
     
+    /**
+     * @var War
+     */
+    public $War;
+    
     public function call () {
         $this->cyclic ();
         $this->planned();
@@ -19,11 +24,9 @@ class Maintenance extends CI_Controller {
     
     public function read () {
         $this->load->library('Loader');
-        /*
-         * @var $value Clan
-         */
-        $value = $this->loader->read();
-        echo $value->tag . ' end';
+        $this->load->database();
+        $this->loader->read();
+        echo 'Read';
     }
     
     public function clan ($year, $month, $day, $time) {
@@ -89,8 +92,10 @@ class Maintenance extends CI_Controller {
         $timestamp = new DateTime();
         
         $war = $this->War->loadLast();
-        
-        $war->endTime;
+        if (($war->state != 'warEnded') && ($war->endTime < $timestamp)) {
+            $war = $this->loader->warCall($timestamp);
+            $war->save();
+        }
     }
     
 }

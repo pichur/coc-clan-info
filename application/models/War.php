@@ -6,9 +6,9 @@ class War extends Model {
             'clan'                 => ['type' => 'OneToOne' , 'target' => WarClan::class],
             'opponent'             => ['type' => 'OneToOne' , 'target' => WarClan::class],
             'attackList'           => ['type' => 'OneToMany', 'target' => Attack ::class],
-            'preparationStartTime' => ['converter' => 'toDate'],
-            'startTime'            => ['converter' => 'toDate'],
-            'endTime'              => ['converter' => 'toDate'],
+            'preparationStartTime' => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
+            'startTime'            => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
+            'endTime'              => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
             'warNumber'            => ['key' => true],
     ];
     
@@ -26,7 +26,10 @@ class War extends Model {
      * @return War|NULL
      */
     public function loadLast () {
-        return $this->db()->select()->from('War')->order_by('warNumber', 'DESC')->limit(1)->get()->custom_row_object(0, 'War');
+        $war = $this->db()->select()->from('War')->order_by('warNumber', 'DESC')->limit(1)->get()->custom_row_object(0, 'War');
+        if ($war) {
+            $war->fixDbLoad();
+        }
     }
     
     protected function exist () {
@@ -73,12 +76,16 @@ class War extends Model {
         }
     }
     
-    public static function toDate ($input) {
+    public static function jsonToDate ($input) {
         $input = substr($input, 0, -5);
         $date = DateTime::createFromFormat('Ymd\THis', $input, new DateTimeZone('UTC'));
         $date->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-        $result = $date->format('Y-m-d H:i:s');
-        return $result;
+        return $date;
+    }
+    
+    public static function dbToDate ($input) {
+        $date = DateTime::createFromFormat('Y-m-d H:i:s', $input);
+        return $date;
     }
     
 }
