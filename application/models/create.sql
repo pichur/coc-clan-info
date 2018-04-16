@@ -1,5 +1,8 @@
-DROP TABLE IF EXISTS Attack           CASCADE;
 DROP TABLE IF EXISTS Member           CASCADE;
+DROP TABLE IF EXISTS Player           CASCADE;
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+DROP TABLE IF EXISTS Attack           CASCADE;
+DROP TABLE IF EXISTS WarPlayer        CASCADE;
 DROP TABLE IF EXISTS WarClanBadgeUrls CASCADE;
 DROP TABLE IF EXISTS WarClan          CASCADE;
 DROP TABLE IF EXISTS War              CASCADE;
@@ -12,7 +15,7 @@ DROP TABLE IF EXISTS IconUrls         CASCADE;
 DROP TABLE IF EXISTS League           CASCADE;
 DROP TABLE IF EXISTS BadgeUrls        CASCADE;
 DROP TABLE IF EXISTS Clan             CASCADE;
-DROP TABLE IF EXISTS Player           CASCADE;
+DROP TABLE IF EXISTS PlayerTotals     CASCADE;
 DROP TABLE IF EXISTS Location         CASCADE;
 DROP TABLE IF EXISTS Version          CASCADE;
 
@@ -40,38 +43,32 @@ CREATE TABLE Location (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE Player (
-    tag                         CHAR(10),
-                                
-    name                        VARCHAR(64),
-    role                        VARCHAR(32),
-                                
-    expLevel                    INTEGER,
+CREATE TABLE PlayerTotals (
+    tag                   CHAR(10),
     
-    townHallLevel               INTEGER,
-    trophies                    INTEGER,
-    bestTrophies                INTEGER,
+    inClanFirstTime       TIMESTAMP,
+    inClanCurrentTime     TIMESTAMP,
+    inClanTotalHours      INTEGER,
+    inClanTotalEnters     INTEGER,
+                          
+    donations             INTEGER,
+    donationsReceived     INTEGER,
     
-    builderHallLevel            INTEGER,
-    versusTrophies              INTEGER,
-    bestVersusTrophies          INTEGER,
-    versusBattleWins            INTEGER,
-                                
-    donations                   INTEGER,
-    donationsReceived           INTEGER,
-    totalDonations              INTEGER,
-    totalDonationsReceived      INTEGER,
-                                
-    warStars                    INTEGER,
-    attackWins                  INTEGER,
-    defenseWins                 INTEGER,
-    versusBattleWinCount        INTEGER,
-    clanRank                    INTEGER,
-    previousClanRank            INTEGER,
-    league_id                   INTEGER,
+    warCount              INTEGER,
+    warAttacks            INTEGER,
+    warStars              INTEGER,
+    warNewStars           INTEGER,
+    warDefenses           INTEGER,
+    warLostStars          INTEGER,
+    warOpponents          DOUBLE,
+    warOpponentDiffs      DOUBLE,
     
-    PRIMARY KEY (timestamp, tag),
-    FOREIGN KEY (league_id) REFERENCES League (id)
+    gamesCount            INTEGER,
+    gamesPoints           INTEGER,
+    gamesMissingPoints    INTEGER,
+    gamesPercentage       DOUBLE,
+    
+    PRIMARY KEY (tag)
 );
 
 CREATE TABLE Clan (
@@ -249,7 +246,7 @@ CREATE TABLE WarClanBadgeUrls (
     FOREIGN KEY (warNumber, type) REFERENCES WarClan (warNumber, type)
 );
 
-CREATE TABLE Member (
+CREATE TABLE WarPlayer (
     warNumber             INTEGER,
     tag                   CHAR(10),
     

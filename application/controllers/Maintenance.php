@@ -17,11 +17,6 @@ class Maintenance extends CI_Controller {
      */
     public $War;
     
-    public function call () {
-        $this->cyclic ();
-        $this->planned();
-    }
-    
     public function read () {
         $this->load->library('Loader');
         $this->load->database();
@@ -74,16 +69,24 @@ class Maintenance extends CI_Controller {
     }
     
     public function cyclic () {
+        debug('cyclic');
+        
         $this->load->library('Loader');
         $this->load->database();
         
         $timestamp = new DateTime();
         
+        debug('clan call');
         $clan = $this->loader->clanCall($timestamp);
+        debug('clan save');
         $clan->save();
         
+        debug('war call');
         $war = $this->loader->warCall($timestamp);
+        debug('war save');
         $war->save();
+        
+        debug('cyclic end');
     }
     
     public function planned () {

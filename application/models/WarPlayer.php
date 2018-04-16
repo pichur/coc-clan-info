@@ -1,6 +1,6 @@
 <?php
 
-class Member extends Model {
+class WarPlayer extends Model {
     
     public static $fieldMapping = [
             'bestOpponentAttack' => ['type' => 'ManyToOne', 'target' => Attack::class],

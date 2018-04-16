@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array();
+$autoload['helper'] = array('log');
 
 /*
 | -------------------------------------------------------------------
@@ -147,12 +147,12 @@ $autoload['model'] = array(
     'League',
     'Location',
     'PlayerHistory',
-    'Player',
+    'PlayerTotals',
     'Spell',
     'Troop',
     'War',
     'WarClan',
     'WarClanBadgeUrls',
-    'Member',
+    'WarPlayer',
     'Attack',
 );

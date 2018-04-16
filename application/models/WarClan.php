@@ -4,7 +4,7 @@ class WarClan extends Model {
     
     public static $fieldMapping = [
             'badgeUrls' => ['type' => 'OneToOne' , 'target' => WarClanBadgeUrls::class],
-            'members'   => ['type' => 'OneToMany', 'target' => Member          ::class],
+            'members'   => ['type' => 'OneToMany', 'target' => WarPlayer       ::class],
     ];
     
     /** @var integer          */ public $warNumber            ;
@@ -16,7 +16,7 @@ class WarClan extends Model {
     /** @var integer          */ public $attacks              ;
     /** @var integer          */ public $stars                ;
     /** @var double           */ public $destructionPercentage;
-    /** @var array[Member]    */ public $members              ;
+    /** @var array[WarPlayer] */ public $members              ;
     
     public function save () {
         parent::save();
