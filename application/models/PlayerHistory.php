@@ -1,6 +1,6 @@
 <?php
 
-class Player extends TimestampModel {
+class PlayerHistory extends TimestampModel {
     
     public static $fieldMapping = [
         'league'       => ['type' => 'ManyToOne', 'target' => League     ::class],

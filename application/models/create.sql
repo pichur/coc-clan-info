@@ -7,11 +7,12 @@ DROP TABLE IF EXISTS Troop            CASCADE;
 DROP TABLE IF EXISTS Spell            CASCADE;
 DROP TABLE IF EXISTS Hero             CASCADE;
 DROP TABLE IF EXISTS Achievement      CASCADE;
-DROP TABLE IF EXISTS Player           CASCADE;
+DROP TABLE IF EXISTS PlayerHistory    CASCADE;
 DROP TABLE IF EXISTS IconUrls         CASCADE;
 DROP TABLE IF EXISTS League           CASCADE;
 DROP TABLE IF EXISTS BadgeUrls        CASCADE;
 DROP TABLE IF EXISTS Clan             CASCADE;
+DROP TABLE IF EXISTS Player           CASCADE;
 DROP TABLE IF EXISTS Location         CASCADE;
 DROP TABLE IF EXISTS Version          CASCADE;
 
@@ -37,6 +38,40 @@ CREATE TABLE Location (
     countryCode           VARCHAR(8),
     
     PRIMARY KEY (id)
+);
+
+CREATE TABLE Player (
+    tag                         CHAR(10),
+                                
+    name                        VARCHAR(64),
+    role                        VARCHAR(32),
+                                
+    expLevel                    INTEGER,
+    
+    townHallLevel               INTEGER,
+    trophies                    INTEGER,
+    bestTrophies                INTEGER,
+    
+    builderHallLevel            INTEGER,
+    versusTrophies              INTEGER,
+    bestVersusTrophies          INTEGER,
+    versusBattleWins            INTEGER,
+                                
+    donations                   INTEGER,
+    donationsReceived           INTEGER,
+    totalDonations              INTEGER,
+    totalDonationsReceived      INTEGER,
+                                
+    warStars                    INTEGER,
+    attackWins                  INTEGER,
+    defenseWins                 INTEGER,
+    versusBattleWinCount        INTEGER,
+    clanRank                    INTEGER,
+    previousClanRank            INTEGER,
+    league_id                   INTEGER,
+    
+    PRIMARY KEY (timestamp, tag),
+    FOREIGN KEY (league_id) REFERENCES League (id)
 );
 
 CREATE TABLE Clan (
@@ -93,7 +128,7 @@ CREATE TABLE IconUrls (
     FOREIGN KEY (id) REFERENCES League (id)
 );
 
-CREATE TABLE Player (
+CREATE TABLE PlayerHistory (
     timestamp             TIMESTAMP,
     tag                   CHAR(10),
     
@@ -132,7 +167,7 @@ CREATE TABLE Achievement (
     target                INTEGER,
     
     PRIMARY KEY (timestamp, tag, name, village),
-    FOREIGN KEY (timestamp, tag) REFERENCES Player (timestamp, tag)
+    FOREIGN KEY (timestamp, tag) REFERENCES PlayerHistory (timestamp, tag)
 );
 
 CREATE TABLE Hero (
@@ -145,7 +180,7 @@ CREATE TABLE Hero (
     maxLevel              INTEGER,
     
     PRIMARY KEY (timestamp, tag, name, village),
-    FOREIGN KEY (timestamp, tag) REFERENCES Player (timestamp, tag)
+    FOREIGN KEY (timestamp, tag) REFERENCES PlayerHistory (timestamp, tag)
 );
 
 CREATE TABLE Spell (
@@ -158,7 +193,7 @@ CREATE TABLE Spell (
     maxLevel              INTEGER,
     
     PRIMARY KEY (timestamp, tag, name, village),
-    FOREIGN KEY (timestamp, tag) REFERENCES Player (timestamp, tag)
+    FOREIGN KEY (timestamp, tag) REFERENCES PlayerHistory (timestamp, tag)
 );
 
 CREATE TABLE Troop (
@@ -171,7 +206,7 @@ CREATE TABLE Troop (
     maxLevel              INTEGER,
     
     PRIMARY KEY (timestamp, tag, name, village),
-    FOREIGN KEY (timestamp, tag) REFERENCES Player (timestamp, tag)
+    FOREIGN KEY (timestamp, tag) REFERENCES PlayerHistory (timestamp, tag)
 );
 
 CREATE TABLE War (

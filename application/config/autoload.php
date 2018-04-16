@@ -146,6 +146,7 @@ $autoload['model'] = array(
     'IconUrls',
     'League',
     'Location',
+    'PlayerHistory',
     'Player',
     'Spell',
     'Troop',
