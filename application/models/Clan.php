@@ -28,14 +28,24 @@ class Clan extends TimestampModel {
     /** @var array[PlayerHistory] */ public $memberList      ;
     
     public function save () {
+        debug('Clan save start');
+        
+        debug('location save');
         $this->location->save();
         $this->location_id = $this->location->id;
         
+        debug('parent save');
         parent::save();
         
+        debug('badgeUrls save');
         $this->badgeUrls->save();
         
-        foreach ($this->memberList as $member) $member->save();
+        foreach ($this->memberList as $member) {
+            debug('member ' . $member->tag . ' save');
+            $member->save();
+        }
+        
+        debug('Clan save end');
     }
     
 }

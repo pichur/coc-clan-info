@@ -59,7 +59,7 @@ CREATE TABLE PlayerTotals (
     donationsReceived     INTEGER,
     
     warCount              INTEGER,
-    warAttacks            INTEGER,
+    warAttackCount        INTEGER,
     warStars              INTEGER,
     warNewStars           INTEGER,
     warDefenses           INTEGER,
@@ -260,6 +260,13 @@ CREATE TABLE WarPlayer (
     townHallLevel         INTEGER,
     opponentAttacks       INTEGER,
     bestOpponentAttack_nr INTEGER,
+    
+    attackCount           INTEGER,
+    stars                 INTEGER,
+    newStars              INTEGER,
+    defenses              INTEGER,
+    lostStars             INTEGER,
+    opponents             DOUBLE, 
     
     PRIMARY KEY (number, tag),
     FOREIGN KEY (number, type) REFERENCES WarClan (number, type)

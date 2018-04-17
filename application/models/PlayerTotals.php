@@ -15,7 +15,7 @@ class PlayerTotals extends Model {
     /** @var integer  */ public $donationsReceived;
     
     /** @var integer  */ public $warCount         ;
-    /** @var integer  */ public $warAttacks       ;
+    /** @var integer  */ public $warAttackCount   ;
     /** @var integer  */ public $warStars         ;
     /** @var integer  */ public $warNewStars      ;
     /** @var integer  */ public $warDefenses      ;

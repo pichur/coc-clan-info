@@ -17,6 +17,12 @@ class WarPlayer extends Model {
     /** @var Attack        */ public $bestOpponentAttack;
     /** @var array[Attack] */ public $attacks           ;
     
+    /** @var integer       */ public $attackCount       ;
+    /** @var integer       */ public $stars             ;
+    /** @var integer       */ public $newStars          ;
+    /** @var integer       */ public $defenses          ;
+    /** @var integer       */ public $lostStars         ;
+    
     public function save () {
         if ($this->bestOpponentAttack) {
             $this->bestOpponentAttack_nr = $this->bestOpponentAttack->position;
