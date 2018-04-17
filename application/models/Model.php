@@ -176,4 +176,16 @@ class Model extends CI_Model {
         }
     }
     
+    public static function jsonToDate ($input) {
+        $input = substr($input, 0, -5);
+        $date = DateTime::createFromFormat('Ymd\THis', $input, new DateTimeZone('UTC'));
+        $date->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+        return $date;
+    }
+    
+    public static function dbToDate ($input) {
+        $date = DateTime::createFromFormat('Y-m-d H:i:s', $input);
+        return $date;
+    }
+    
 }

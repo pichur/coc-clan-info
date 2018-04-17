@@ -1,6 +1,8 @@
 DROP TABLE IF EXISTS Member           CASCADE;
 DROP TABLE IF EXISTS Player           CASCADE;
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+DROP TABLE IF EXISTS GamesPlayer      CASCADE;
+DROP TABLE IF EXISTS Games            CASCADE;
 DROP TABLE IF EXISTS Attack           CASCADE;
 DROP TABLE IF EXISTS WarPlayer        CASCADE;
 DROP TABLE IF EXISTS WarClanBadgeUrls CASCADE;
@@ -50,7 +52,9 @@ CREATE TABLE PlayerTotals (
     inClanCurrentTime     TIMESTAMP,
     inClanTotalHours      INTEGER,
     inClanTotalEnters     INTEGER,
-                          
+    
+    lastActiveTime        TIMESTAMP,
+    
     donations             INTEGER,
     donationsReceived     INTEGER,
     
@@ -207,7 +211,7 @@ CREATE TABLE Troop (
 );
 
 CREATE TABLE War (
-    warNumber             INTEGER,
+    number                INTEGER,
     
     state                 VARCHAR(32),
     teamSize              INTEGER,
@@ -215,12 +219,12 @@ CREATE TABLE War (
     startTime             TIMESTAMP,
     endTime               TIMESTAMP,
     
-    PRIMARY KEY (warNumber),
+    PRIMARY KEY (number),
     UNIQUE      (preparationStartTime)
 );
 
 CREATE TABLE WarClan (
-    warNumber             INTEGER,
+    number                INTEGER,
     type                  VARCHAR(32),
     
     tag                   CHAR(9),
@@ -230,24 +234,24 @@ CREATE TABLE WarClan (
     stars                 INTEGER,
     destructionPercentage DOUBLE,
     
-    PRIMARY KEY (warNumber, type),
-    FOREIGN KEY (warNumber) REFERENCES War (warNumber)
+    PRIMARY KEY (number, type),
+    FOREIGN KEY (number) REFERENCES War (number)
 );
 
 CREATE TABLE WarClanBadgeUrls (
-    warNumber             INTEGER,
+    number                INTEGER,
     type                  VARCHAR(32),
     
     small                 VARCHAR(255),
     medium                VARCHAR(255),
     large                 VARCHAR(255),
     
-    PRIMARY KEY (warNumber, type),
-    FOREIGN KEY (warNumber, type) REFERENCES WarClan (warNumber, type)
+    PRIMARY KEY (number, type),
+    FOREIGN KEY (number, type) REFERENCES WarClan (number, type)
 );
 
 CREATE TABLE WarPlayer (
-    warNumber             INTEGER,
+    number                INTEGER,
     tag                   CHAR(10),
     
     type                  VARCHAR(32),
@@ -257,12 +261,12 @@ CREATE TABLE WarPlayer (
     opponentAttacks       INTEGER,
     bestOpponentAttack_nr INTEGER,
     
-    PRIMARY KEY (warNumber, tag),
-    FOREIGN KEY (warNumber, type) REFERENCES WarClan (warNumber, type)
+    PRIMARY KEY (number, tag),
+    FOREIGN KEY (number, type) REFERENCES WarClan (number, type)
 );
 
 CREATE TABLE Attack (
-    warNumber             INTEGER,
+    number                INTEGER,
     position              INTEGER,
     
     attackerTag           CHAR(10),
@@ -270,8 +274,31 @@ CREATE TABLE Attack (
     stars                 INTEGER,
     destructionPercentage INTEGER,
     
-    PRIMARY KEY (warNumber, position),
-    FOREIGN KEY (warNumber) REFERENCES War (warNumber)
+    PRIMARY KEY (number, position),
+    FOREIGN KEY (number) REFERENCES War (number)
+);
+
+CREATE TABLE Games (
+    number                INTEGER,
+    
+    startTime             TIMESTAMP,
+    endTime               TIMESTAMP,
+    
+    maxPoints             INTEGER,
+    
+    PRIMARY KEY (number),
+    UNIQUE      (startTime)
+);
+
+CREATE TABLE GamesPlayer (
+    number                INTEGER,
+    tag                   CHAR(10),
+    
+    points                INTEGER,
+    percentage            DOUBLE,
+    
+    PRIMARY KEY (number, tag),
+    FOREIGN KEY (number) REFERENCES Games (number)
 );
 
 INSERT INTO VERSION (number, version1, version2, version3, info) values (0, 0, 0, 1, 'Install script');

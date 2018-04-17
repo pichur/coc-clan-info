@@ -1,6 +1,6 @@
 <?php
 
-class War extends Model {
+class War extends SortedModel {
     
     public static $fieldMapping = [
             'clan'                 => ['type' => 'OneToOne' , 'target' => WarClan::class],
@@ -9,10 +9,9 @@ class War extends Model {
             'preparationStartTime' => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
             'startTime'            => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
             'endTime'              => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
-            'warNumber'            => ['key' => true],
+            'number'               => ['key' => true],
     ];
     
-    /** @var integer       */ public $warNumber           ;
     /** @var string        */ public $state               ;
     /** @var integer       */ public $teamSize            ;
     /** @var DateTime      */ public $preparationStartTime;
@@ -22,34 +21,6 @@ class War extends Model {
     /** @var WarClan       */ public $opponent            ;
     /** @var array[Attack] */ public $attackList          ;
     
-    /**
-     * @return War|NULL
-     */
-    public function loadLast () {
-        $war = $this->db()->select()->from('War')->order_by('warNumber', 'DESC')->limit(1)->get()->custom_row_object(0, 'War');
-        if ($war) {
-            $war->fixDbLoad();
-        }
-    }
-    
-    protected function exist () {
-        return $this->warNumber > 0;
-    }
-    
-    protected function autoKey () {
-        if ($this->warNumber) {
-            return;
-        }
-        
-        $result = $this->db()->select_max('warNumber')->from($this->table())->get()->result();
-        $count = count($result);
-        if ($count == 0) {
-            $this->warNumber = 1;
-        } else {
-            $this->warNumber = $result[0]->warNumber + 1;
-        }
-    }
-    
     public function save () {
         if ($this->state == 'notInWar') {
             return;
@@ -58,7 +29,7 @@ class War extends Model {
         $war = $this->getBy('preparationStartTime');
         
         if ($war) {
-            $this->warNumber = $war->warNumber;
+            $this->number = $war->number;
         }
         
         // Basic save (insert or update)
@@ -66,26 +37,14 @@ class War extends Model {
         
         if ($this->state == 'warEnded') {
             // Full save
-            $this->clan    ->warNumber = $this->warNumber;
-            $this->clan    ->type      = 'clan';
+            $this->clan    ->number = $this->number;
+            $this->clan    ->type   = 'clan';
             $this->clan    ->save();
             
-            $this->opponent->warNumber = $this->warNumber;
-            $this->opponent->type      = 'opponent';
+            $this->opponent->number = $this->number;
+            $this->opponent->type   = 'opponent';
             $this->opponent->save();
         }
-    }
-    
-    public static function jsonToDate ($input) {
-        $input = substr($input, 0, -5);
-        $date = DateTime::createFromFormat('Ymd\THis', $input, new DateTimeZone('UTC'));
-        $date->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-        return $date;
-    }
-    
-    public static function dbToDate ($input) {
-        $date = DateTime::createFromFormat('Y-m-d H:i:s', $input);
-        return $date;
     }
     
 }

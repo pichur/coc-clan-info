@@ -7,7 +7,7 @@ class WarPlayer extends Model {
             'attacks'            => ['type' => 'OneToMany', 'target' => Attack::class],
     ];
     
-    /** @var integer       */ public $warNumber         ;
+    /** @var integer       */ public $number            ;
     /** @var string        */ public $type              ;
     /** @var string        */ public $tag               ;
     /** @var string        */ public $name              ;
@@ -25,7 +25,7 @@ class WarPlayer extends Model {
         parent::save();
         
         foreach ($this->attacks as $attack) {
-            $attack->warNumber = $this->warNumber;
+            $attack->number = $this->number;
             $attack->save();
         }
     }

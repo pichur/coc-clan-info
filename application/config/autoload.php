@@ -137,6 +137,7 @@ $autoload['model'] = array(
     'StaticModel',
     'TimestampModel',
     'HistoryModel',
+    'SortedModel',
     'PlayerInfo',
     'PlayerImprovement',
     'Achievement',
@@ -155,4 +156,6 @@ $autoload['model'] = array(
     'WarClanBadgeUrls',
     'WarPlayer',
     'Attack',
+    'Games',
+    'GamesPlayer',
 );

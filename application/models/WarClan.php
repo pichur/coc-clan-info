@@ -7,7 +7,7 @@ class WarClan extends Model {
             'members'   => ['type' => 'OneToMany', 'target' => WarPlayer       ::class],
     ];
     
-    /** @var integer          */ public $warNumber            ;
+    /** @var integer          */ public $number               ;
     /** @var string           */ public $type                 ;
     /** @var string           */ public $tag                  ;
     /** @var string           */ public $name                 ;
@@ -21,13 +21,13 @@ class WarClan extends Model {
     public function save () {
         parent::save();
         
-        $this->badgeUrls->warNumber = $this->warNumber;
-        $this->badgeUrls->type      = $this->type     ;
+        $this->badgeUrls->number = $this->number;
+        $this->badgeUrls->type   = $this->type  ;
         $this->badgeUrls->save();
         
         foreach ($this->members as $member) {
-            $member->warNumber = $this->warNumber;
-            $member->type      = $this->type     ;
+            $member->number = $this->number;
+            $member->type   = $this->type  ;
             $member->save();
         }
     }
