@@ -152,6 +152,7 @@ CREATE TABLE PlayerHistory (
     clanRank              INTEGER,
     previousClanRank      INTEGER,
     league_id             INTEGER,
+    clanGamesPoints       INTEGER,
     
     PRIMARY KEY (timestamp, tag),
     FOREIGN KEY (league_id) REFERENCES League (id)

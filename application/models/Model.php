@@ -176,6 +176,22 @@ class Model extends CI_Model {
         }
     }
     
+    /**
+     * @return CI_DB_query_builder
+     */
+    private static function db () {
+        return get_instance()->db;
+    }
+    
+    protected static function getByKey ($key) {
+        $result = $this->db()->select()->from($this->table())->where($key)->get()->custom_result_object(get_class($this));
+        foreach ($result as $row) {
+            $row->fixDbLoad();
+        }
+        
+        return $result;
+    }
+    
     public static function jsonToDate ($input) {
         $input = substr($input, 0, -5);
         $date = DateTime::createFromFormat('Ymd\THis', $input, new DateTimeZone('UTC'));

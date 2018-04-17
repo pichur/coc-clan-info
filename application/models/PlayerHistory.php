@@ -33,14 +33,19 @@ class PlayerHistory extends TimestampModel {
     
     /** @var League  */ public $league              ;
     
+    /** @var integer */ public $clanGamesPoints     ;
+    
     /** @var array[Achievement] */ public $achievements;
     /** @var array[Troop      ] */ public $troops      ;
     /** @var array[Hero       ] */ public $heroes      ;
     /** @var array[Spell      ] */ public $spells      ;
     
+    
     public function save () {
         $this->league->save();
         $this->league_id = $this->league->id;
+        
+        $this->transferGamesPoints();
         
         parent::save();
         
@@ -48,6 +53,15 @@ class PlayerHistory extends TimestampModel {
             foreach ($this->$list as $entry) {
                 $entry->tag = $this->tag;
                 $entry->save();
+            }
+        }
+    }
+    
+    private function transferGamesPoints () {
+        foreach ($this->achievements as $achievement) {
+            if ($achievement->name == 'Games Champion') {
+                $this->clanGamesPoints = $achievement->value;
+                break;
             }
         }
     }
