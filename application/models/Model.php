@@ -76,17 +76,6 @@ class Model extends CI_Model {
         return $this;
     }
     
-    /**
-     * @return CI_DB_query_builder
-     */
-    public function db () {
-        return $this->db;
-    }
-    
-    protected function table () {
-        return get_class($this);
-    }
-    
     protected function exist () {
         return false;
     }
@@ -130,66 +119,50 @@ class Model extends CI_Model {
     
     protected function save () {
         if ($this->exist()) {
-            $this->db()->update($this->table(), $this->set(), $this->key());
+            static::db()->update(static::table(), $this->set(), $this->key());
         } else {
             $this->autoKey();
-            $this->db()->insert($this->table(), $this->set());
-        }
-    }
-    
-    /**
-     * @param string|array[string] $key keys field names mapped to values, or single field name (value to get from object) to search for
-     * @return array[mixed]
-     */
-    protected function listBy ($key) {
-        if (!is_array($key)) {
-            $key = array($key => $this->$key);
-        }
-        
-        foreach ($key as $var => $val) {
-            if ($val instanceof DateTime) {
-                $key[$var] = $val->format('Y-m-d H:i:s');
-            }
-        }
-        
-        $result = $this->db()->select()->from($this->table())->where($key)->get()->custom_result_object(get_class($this));
-        foreach ($result as $row) {
-            $row->fixDbLoad();
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * @param string|array[string] $key keys field names mapped to values, or single field name (value to get from object) to search for
-     * @return self
-     */
-    protected function getBy ($key) {
-        $result = $this->listBy($key);
-        $count = count($result);
-        if ($count === 0) {
-            return null;
-        } else if ($count === 1) {
-            return $result[0];
-        } else {
-            throw new Exception("Not unique, $count results");
+            static::db()->insert(static::table(), $this->set());
         }
     }
     
     /**
      * @return CI_DB_query_builder
      */
-    private static function db () {
+    public static function db () {
         return get_instance()->db;
     }
     
-    protected static function getByKey ($key) {
-        $result = $this->db()->select()->from($this->table())->where($key)->get()->custom_result_object(get_class($this));
-        foreach ($result as $row) {
-            $row->fixDbLoad();
+    public static function table () {
+        return get_called_class();
+    }
+    
+    public static function listBy (array $key) {
+        foreach ($key as $var => $val) {
+            if ($val instanceof DateTime) {
+                $key[$var] = $val->format('Y-m-d H:i:s');
+            }
+        }
+        
+        $result = static::db()->select()->from(static::table())->where($key)->get()->custom_result_object(get_called_class());
+        
+        foreach ($result as $model) {
+            $model->fixDbLoad();
         }
         
         return $result;
+    }
+    
+    public static function getBy ($key) {
+        $result = static::listBy($key);
+        $count = count($result);
+        if ($count === 0) {
+            return null;
+        } else if ($count === 1) {
+            return $result[0];
+        } else {
+            throw new Exception('Not unique key ' . json_encode($key). ', ' . $count . ' results');
+        }
     }
     
     public static function jsonToDate ($input) {

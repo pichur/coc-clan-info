@@ -26,7 +26,7 @@ class War extends SortedModel {
             return;
         }
         
-        $war = $this->getBy('preparationStartTime');
+        $war = static::getBy(['preparationStartTime' => $this->preparationStartTime]);
         
         if ($war) {
             $this->number = $war->number;

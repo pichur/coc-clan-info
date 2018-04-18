@@ -8,7 +8,7 @@ class SortedModel extends Model {
      * @return static|NULL
      */
     public function loadLast () {
-        $object = $this->db()->select()->from($this->table())->order_by('number', 'DESC')->limit(1)->get()->custom_row_object(0, get_class($this));
+        $object = static::db()->select()->from(static::table())->order_by('number', 'DESC')->limit(1)->get()->custom_row_object(0, get_class($this));
         if ($object) {
             $object->fixDbLoad();
         }
@@ -23,7 +23,7 @@ class SortedModel extends Model {
             return;
         }
         
-        $result = $this->db()->select_max('number')->from($this->table())->get()->result();
+        $result = static::db()->select_max('number')->from(static::table())->get()->result();
         $count = count($result);
         if ($count == 0) {
             $this->number = 1;

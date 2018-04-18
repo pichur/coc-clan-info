@@ -14,14 +14,14 @@ class HistoryModel extends TimestampModel {
     }
     
     public function save () {
-        $this->db()->from($this->table());
+        static::db()->from(static::table());
         $key = $this->key();
         if ($key) {
-            $this->db()->where($key);
+            static::db()->where($key);
         }
-        $this->db()->order_by('timestamp', 'desc');
-        $this->db()->limit(1);
-        $query = $this->db()->get();
+        static::db()->order_by('timestamp', 'desc');
+        static::db()->limit(1);
+        $query = static::db()->get();
         $result = $query->result();
         if (is_array($result)) {
             $count = count($result);

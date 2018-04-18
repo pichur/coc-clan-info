@@ -35,11 +35,11 @@ class Maintenance extends CI_Controller {
          * @var $clan Clan
          */
         $clan = $this->loader->clanFile($dir, $year, $month, $day, $time);
-        $clan->db()->trans_start();
+        $clan::db()->trans_start();
         $clan->save();
-        $clan->db()->trans_complete();
+        $clan::db()->trans_complete();
         
-        if ($clan->db()->trans_status() === FALSE) {
+        if ($clan::db()->trans_status() === FALSE) {
             echo 'DB fail';
         } else {
             echo $clan->tag . ' end';
@@ -57,11 +57,11 @@ class Maintenance extends CI_Controller {
          * @var $war War
          */
         $war = $this->loader->warFile($dir, $year, $month, $day, $time);
-        $war->db()->trans_start();
+        $war::db()->trans_start();
         $war->save();
-        $war->db()->trans_complete();
+        $war::db()->trans_complete();
         
-        if ($war->db()->trans_status() === FALSE) {
+        if ($war::db()->trans_status() === FALSE) {
             echo 'DB fail';
         } else {
             echo $war->tag . ' end';

@@ -4,7 +4,7 @@ class StaticModel extends Model {
     
     public function save () {
         $key = $this->key();
-        $result = $this->listBy($key);
+        $result = static::listBy($key);
         $count = count($result);
         if ($count == 0) {
             parent::save();
@@ -15,7 +15,7 @@ class StaticModel extends Model {
             foreach ($key as $field => $value) {
                 $msg .= ' ' . $field . '=' . $value;
             }
-            $msg .= ' in table ' . $this->table();
+            $msg .= ' in table ' . static::table();
             throw new Exception($msg);
         }
     }
