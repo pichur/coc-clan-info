@@ -117,7 +117,7 @@ class Model extends CI_Model {
         return $set;
     }
     
-    protected function save () {
+    public function save () {
         if ($this->exist()) {
             static::db()->update(static::table(), $this->set(), $this->key());
         } else {
@@ -153,7 +153,13 @@ class Model extends CI_Model {
         return $result;
     }
     
-    public static function getBy ($key) {
+    /**
+     * 
+     * @param array $key array of keys for object
+     * @throws Exception exception if not unique key given
+     * @return NULL|static
+     */
+    public static function getBy (array $key) {
         $result = static::listBy($key);
         $count = count($result);
         if ($count === 0) {

@@ -48,6 +48,8 @@ CREATE TABLE Location (
 CREATE TABLE PlayerTotals (
     tag                   CHAR(10),
     
+    timestamp             TIMESTAMP,
+    
     inClanFirstTime       TIMESTAMP,
     inClanCurrentTime     TIMESTAMP,
     inClanTotalHours      INTEGER,
