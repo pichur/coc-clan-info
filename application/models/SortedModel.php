@@ -7,8 +7,8 @@ class SortedModel extends Model {
     /**
      * @return static|NULL
      */
-    public function loadLast () {
-        $object = static::db()->select()->from(static::table())->order_by('number', 'DESC')->limit(1)->get()->custom_row_object(0, get_class($this));
+    public static function loadLast () {
+        $object = static::db()->select()->from(static::table())->order_by('number', 'DESC')->limit(1)->get()->custom_row_object(0, get_called_class());
         if ($object) {
             $object->fixDbLoad();
         }

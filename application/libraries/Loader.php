@@ -2,45 +2,28 @@
 
 class Loader {
     
-    public function loadAll () {
-        // Same timestamp for all calls
-        $timestamp = new DateTime();
-        
-        /**
-         * @var Clan $clan
-         */
-        $clan = $this->load($timestamp, 'clan');
-        foreach ($clan->memberList as $member) {
-            $this->load($timestamp, 'player', $member->tag, $member);
-        }
-        
-        /**
-         * @var War $war
-         */
-        $war = $this->load($timestamp, 'currentwar');
-        
-    }
-    
     /**
      * Load clan info from server
-     * @return Clan
+     * @return ClanHistory
      */
     public function clanCall ($timestamp = null) {
         if (!$timestamp) $timestamp = new DateTime();
         
         $clanJson = $this->load($timestamp, 'clan');
         foreach ($clanJson->memberList as $member) {
+            debug('Member ' . $member->tag . ' call');
             $this->load($timestamp, 'player', $member->tag, $member);
         }
         
-        $clanObject = Clan::parseJson($timestamp, $clanJson);
+        debug('Parse clan');
+        $clanObject = ClanHistory::parseJson($timestamp, $clanJson);
         
         return $clanObject;
     }
     
     /**
      * Load war info from server
-     * @return Clan
+     * @return ClanHistory
      */
     public function warCall ($timestamp = null) {
         if (!$timestamp) $timestamp = new DateTime();
@@ -104,7 +87,7 @@ class Loader {
             }
         }
         
-        $clanObject = Clan::parseJson($timestamp, $clanJson);
+        $clanObject = ClanHistory::parseJson($timestamp, $clanJson);
         
         return $clanObject;
     }

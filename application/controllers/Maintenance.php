@@ -7,16 +7,6 @@ class Maintenance extends CI_Controller {
      */
     public $loader;
     
-    /**
-     * @var Clan
-     */
-    public $Clan;
-    
-    /**
-     * @var War
-     */
-    public $War;
-    
     public function read () {
         $this->load->library('Loader');
         $this->load->database();
@@ -32,7 +22,7 @@ class Maintenance extends CI_Controller {
         $dir = APPPATH.'logs'.$ds.'calls'.$ds.$year.$ds.$month.$ds.$day.$ds.$time.$ds;
         
         /*
-         * @var $clan Clan
+         * @var $clan ClanHistory
          */
         $clan = $this->loader->clanFile($dir, $year, $month, $day, $time);
         $clan::db()->trans_start();
@@ -94,7 +84,7 @@ class Maintenance extends CI_Controller {
         
         $timestamp = new DateTime();
         
-        $war = $this->War->loadLast();
+        $war = War::loadLast();
         if (($war->state != 'warEnded') && ($war->endTime < $timestamp)) {
             $war = $this->loader->warCall($timestamp);
             $war->save();

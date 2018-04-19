@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS Member           CASCADE;
 DROP TABLE IF EXISTS Player           CASCADE;
+DROP TABLE IF EXISTS Clan             CASCADE;
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 DROP TABLE IF EXISTS GamesPlayer      CASCADE;
 DROP TABLE IF EXISTS Games            CASCADE;
@@ -16,8 +17,9 @@ DROP TABLE IF EXISTS PlayerHistory    CASCADE;
 DROP TABLE IF EXISTS IconUrls         CASCADE;
 DROP TABLE IF EXISTS League           CASCADE;
 DROP TABLE IF EXISTS BadgeUrls        CASCADE;
-DROP TABLE IF EXISTS Clan             CASCADE;
+DROP TABLE IF EXISTS ClanHistory      CASCADE;
 DROP TABLE IF EXISTS PlayerTotals     CASCADE;
+DROP TABLE IF EXISTS ClanTotals       CASCADE;
 DROP TABLE IF EXISTS Location         CASCADE;
 DROP TABLE IF EXISTS Version          CASCADE;
 
@@ -45,8 +47,48 @@ CREATE TABLE Location (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE ClanTotals (
+    tag                         VARCHAR(16),
+    
+    historyFrom                 TIMESTAMP,
+    
+    clanTimestamp               TIMESTAMP,
+    clanMinPoints               INTEGER,
+    clanMaxPoints               INTEGER,
+    clanMinVersusPoints         INTEGER,
+    clanMaxVersusPoints         INTEGER,
+    clanMaxWarWinStreak         INTEGER,
+    clanMinMembers              INTEGER,
+    clanMaxMembers              INTEGER,
+    
+    warTimestamp                TIMESTAMP,
+    warCount                    INTEGER,
+    warWins                     INTEGER,
+    warTies                     INTEGER,
+    warLosses                   INTEGER,
+    warMinAttacksPercentage     DOUBLE,
+    warAvgAttacksPercentage     DOUBLE,
+    warMaxAttacksPercentage     DOUBLE,
+    warMinStarsPercentage       DOUBLE,
+    warAvgStarsPercentage       DOUBLE,
+    warMaxStarsPercentage       DOUBLE,
+    warMinDestructionPercentage DOUBLE,
+    warAvgDestructionPercentage DOUBLE,
+    warMaxDestructionPercentage DOUBLE,
+    
+    gamesTimestamp              TIMESTAMP,
+    gamesMinPlayers             INTEGER,
+    gamesAvgPlayers             INTEGER,
+    gamesMaxPlayers             INTEGER,
+    gamesMinMaxPlayers          INTEGER,
+    gamesAvgMaxPlayers          INTEGER,
+    gamesMaxMaxPlayers          INTEGER,
+    
+    PRIMARY KEY (tag)
+);
+
 CREATE TABLE PlayerTotals (
-    tag                   CHAR(10),
+    tag                   VARCHAR(16),
     
     timestamp             TIMESTAMP,
     
@@ -77,10 +119,10 @@ CREATE TABLE PlayerTotals (
     PRIMARY KEY (tag)
 );
 
-CREATE TABLE Clan (
+CREATE TABLE ClanHistory (
     timestamp             TIMESTAMP,
                           
-    tag                   CHAR(9),
+    tag                   VARCHAR(16),
     name                  VARCHAR(64),
     type                  VARCHAR(32),
     description           VARCHAR(255),
@@ -133,7 +175,7 @@ CREATE TABLE IconUrls (
 
 CREATE TABLE PlayerHistory (
     timestamp             TIMESTAMP,
-    tag                   CHAR(10),
+    tag                   VARCHAR(16),
     
     name                  VARCHAR(64),
     role                  VARCHAR(32),
@@ -162,7 +204,7 @@ CREATE TABLE PlayerHistory (
 
 CREATE TABLE Achievement (
     timestamp             TIMESTAMP,
-    tag                   CHAR(10),
+    tag                   VARCHAR(16),
     name                  VARCHAR(255),
     village               VARCHAR(32),
     
@@ -176,7 +218,7 @@ CREATE TABLE Achievement (
 
 CREATE TABLE Hero (
     timestamp             TIMESTAMP,
-    tag                   CHAR(10),
+    tag                   VARCHAR(16),
     name                  VARCHAR(255),
     village               VARCHAR(32),
     
@@ -189,7 +231,7 @@ CREATE TABLE Hero (
 
 CREATE TABLE Spell (
     timestamp             TIMESTAMP,
-    tag                   CHAR(10),
+    tag                   VARCHAR(16),
     name                  VARCHAR(255),
     village               VARCHAR(32),
     
@@ -202,7 +244,7 @@ CREATE TABLE Spell (
 
 CREATE TABLE Troop (
     timestamp             TIMESTAMP,
-    tag                   CHAR(10),
+    tag                   VARCHAR(16),
     name                  VARCHAR(255),
     village               VARCHAR(32),
     
@@ -230,7 +272,7 @@ CREATE TABLE WarClan (
     number                INTEGER,
     type                  VARCHAR(32),
     
-    tag                   CHAR(9),
+    tag                   VARCHAR(16),
     name                  VARCHAR(64),
     clanLevel             INTEGER,
     attacks               INTEGER,
@@ -255,7 +297,7 @@ CREATE TABLE WarClanBadgeUrls (
 
 CREATE TABLE WarPlayer (
     number                INTEGER,
-    tag                   CHAR(10),
+    tag                   VARCHAR(16),
     
     type                  VARCHAR(32),
     mapPosition           INTEGER,
@@ -279,8 +321,8 @@ CREATE TABLE Attack (
     number                INTEGER,
     position              INTEGER,
     
-    attackerTag           CHAR(10),
-    defenderTag           CHAR(10),
+    attackerTag           VARCHAR(16),
+    defenderTag           VARCHAR(16),
     stars                 INTEGER,
     destructionPercentage INTEGER,
     
@@ -302,7 +344,7 @@ CREATE TABLE Games (
 
 CREATE TABLE GamesPlayer (
     number                INTEGER,
-    tag                   CHAR(10),
+    tag                   VARCHAR(16),
     
     points                INTEGER,
     percentage            DOUBLE,

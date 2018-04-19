@@ -1,6 +1,6 @@
 <?php
 
-class Clan extends TimestampModel {
+class ClanHistory extends TimestampModel {
     
     public static $fieldMapping = [
         'location'   => ['type' => 'ManyToOne', 'target' => Location     ::class],
@@ -28,7 +28,7 @@ class Clan extends TimestampModel {
     /** @var array[PlayerHistory] */ public $memberList      ;
     
     public function save () {
-        debug('Clan save start');
+        debug('ClanHistory save start');
         
         debug('location save');
         $this->location->save();
@@ -45,7 +45,7 @@ class Clan extends TimestampModel {
             $member->save();
         }
         
-        debug('Clan save end');
+        debug('ClanHistory save end');
     }
     
 }
