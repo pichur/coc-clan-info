@@ -158,11 +158,11 @@ class Model extends CI_Model {
     }
     
     /**
-     * @param unknown $orderby   Field for order, and optionally boundary
-     * @param unknown $boundary  Boundary for order key
-     * @param array   $key       Array of keys for where clause
-     * @param string  $direction Direction of sorting
-     * @param unknown $limit     Limit of rows to get
+     * @param string $orderby   Field for order, and optionally boundary
+     * @param mixed  $boundary  Boundary for order key
+     * @param array  $key       Array of keys for where clause
+     * @param string $direction Direction of sorting
+     * @param int    $limit     Limit of rows to get
      * @throws Exception
      * @return array[static]
      */
@@ -189,10 +189,10 @@ class Model extends CI_Model {
     }
     
     /**
-     * @param unknown $orderby   Field for order, and optionally boundary
-     * @param unknown $boundary  Boundary for order key
-     * @param array   $key       Array of keys for where clause
-     * @param string  $direction Direction of sorting
+     * @param string $orderby   Field for order, and optionally boundary
+     * @param mixed  $boundary  Boundary for order key
+     * @param array  $key       Array of keys for where clause
+     * @param string $direction Direction of sorting
      * @throws Exception
      * @return NULL|static
      */

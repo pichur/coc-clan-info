@@ -6,14 +6,18 @@ class PlayerAnalyzer {
     /** @var PlayerHistory */ private $current ;
     /** @var PlayerTotals  */ private $totals  ;
     
-    public function __construct(PlayerHistory $history, $previousTimestamp) {
-        $this->current = $history;
+    public static function construct (PlayerHistory $history, $previousTimestamp) {
+        $analyzer = new PlayerAnalyzer();
+        
+        $analyzer->current = $history;
         
         if ($previousTimestamp) {
-            $this->previous = PlayerHistory::getBy(['tag' => $tag, 'timestamp' => $previousTimestamp]);
+            $analyzer->previous = PlayerHistory::getBy(['tag' => $tag, 'timestamp' => $previousTimestamp]);
         }
         
-        $this->totals = PlayerTotals::getBy(['tag' => $tag]);
+        $analyzer->totals = PlayerTotals::getBy(['tag' => $tag]);
+        
+        return $analyzer;
     }
     
     public function analyze () {

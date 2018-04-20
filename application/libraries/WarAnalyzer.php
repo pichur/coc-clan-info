@@ -6,8 +6,12 @@ class WarAnalyzer {
     /** @var PlayerHistory */ private $current ;
     /** @var PlayerTotals  */ private $totals  ;
     
-    public function __construct($timestamp) {
-        $this->war = PlayerTotals ::getBy(['tag' => $tag]);
+    public static function construct ($timestamp) {
+        $analyzer = new WarAnalyzer();
+        
+        $analyzer->war = PlayerTotals ::getBy(['tag' => $tag]);
+        
+        return $analyzer;
     }
     
     public function analyze () {

@@ -3,10 +3,10 @@
 if (!function_exists('logFolderDateTime')) {
     
     /**
-     * @param unknown $year
-     * @param unknown $month
-     * @param unknown $day
-     * @param unknown $time
+     * @param $year
+     * @param $month
+     * @param $day
+     * @param $time
      * @return DateTime
      */
     function logFolderDateTime ($year, $month, $day, $time) {

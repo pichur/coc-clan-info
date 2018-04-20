@@ -5,9 +5,13 @@ class ClanAnalyzer {
     /** @var ClanHistory */ private $history;
     /** @var ClanTotals  */ private $totals ;
     
-    public function __construct(ClanHistory $history) {
-        $this->history = $history;
-        $this->totals  = ClanTotals::getBy(['tag' => $tag]);
+    public static function construct(ClanHistory $history) {
+        $analyzer = new ClanAnalyzer();
+        
+        $analyzer->history = $history;
+        $analyzer->totals  = ClanTotals::getBy(['tag' => $tag]);
+        
+        return $analyzer;
     }
     
     public function analyze () {
