@@ -150,8 +150,10 @@ class Model extends CI_Model {
         
         $result = static::db()->select()->from(static::table())->where($key)->get()->custom_result_object(get_called_class());
         
-        foreach ($result as $model) {
-            $model->fixDbLoad();
+        if (is_array($result)) {
+            foreach ($result as $model) {
+                $model->fixDbLoad();
+            }
         }
         
         return $result;
@@ -171,7 +173,7 @@ class Model extends CI_Model {
             $key = [];
         }
         if ($boundary) {
-            $key[$orderby . ' ' . ($direction == 'DESC') ? '<' : '>'] = $boundary;
+            $key[$orderby . ' ' . (($direction == 'DESC') ? '<' : '>')] = $boundary;
         }
         foreach ($key as $var => $val) {
             if ($val instanceof DateTime) {
@@ -179,10 +181,12 @@ class Model extends CI_Model {
             }
         }
         
-        $result = static::db()->select()->from(static::table())->where($key)->order_by($orderby, $direction)->limit($limit)->get()->custom_row_object(0, get_called_class());
+        $result = static::db()->select()->from(static::table())->where($key)->order_by($orderby, $direction)->limit($limit)->get()->custom_result_object(get_called_class());
         
-        foreach ($result as $model) {
-            $model->fixDbLoad();
+        if (is_array($result)) {
+            foreach ($result as $model) {
+                $model->fixDbLoad();
+            }
         }
         
         return $result;
@@ -226,8 +230,14 @@ class Model extends CI_Model {
     }
     
     public static function jsonToDate ($input) {
+        if (!$input) {
+            return null;
+        }
         $input = substr($input, 0, -5);
         $date = DateTime::createFromFormat('Ymd\THis', $input, new DateTimeZone('UTC'));
+        if ($date === false) {
+            throw new Exception('Cannot parse date ' . $input);
+        }
         $date->setTimeZone(new DateTimeZone(date_default_timezone_get()));
         return $date;
     }

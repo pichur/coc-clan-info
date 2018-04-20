@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('log', 'time');
+$autoload['helper'] = array('log', 'time', 'string');
 
 /*
 | -------------------------------------------------------------------
@@ -132,31 +132,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array(
-    'Model',
-    'StaticModel',
-    'TimestampModel',
-    'HistoryModel',
-    'SortedModel',
-    'PlayerInfo',
-    'PlayerImprovement',
-    'Achievement',
-    'BadgeUrls', 
-    'ClanHistory',
-    'ClanTotals',
-    'Hero',
-    'IconUrls',
-    'League',
-    'Location',
-    'PlayerHistory',
-    'PlayerTotals',
-    'Spell',
-    'Troop',
-    'War',
-    'WarClan',
-    'WarClanBadgeUrls',
-    'WarPlayer',
-    'Attack',
-    'Games',
-    'GamesPlayer',
-);
+$autoload['model'] = array();

@@ -2,6 +2,14 @@
 
 class PlayerTotals extends Model {
     
+    public static $fieldMapping = [
+        'tag'               => ['key' => true],
+        'timestamp'         => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
+        'inClanFirstTime'   => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
+        'inClanCurrentTime' => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
+        'lastActiveTime'    => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
+    ];
+    
     /**
      * Player tag
      * @var string
@@ -44,22 +52,22 @@ class PlayerTotals extends Model {
      */
     public $lastActiveTime;
     
-    /** @var integer  */ public $donations        ;
-    /** @var integer  */ public $donationsReceived;
+    /** @var integer  */ public $donations         ;
+    /** @var integer  */ public $donationsReceived ;
     
-    /** @var integer  */ public $warCount         ;
-    /** @var integer  */ public $warAttackCount   ;
-    /** @var integer  */ public $warStars         ;
-    /** @var integer  */ public $warNewStars      ;
-    /** @var integer  */ public $warDefenses      ;
-    /** @var integer  */ public $warLostStars     ;
-    /** @var double   */ public $warOpponents     ;
-    /** @var double   */ public $warOpponentDiffs ;
+    /** @var integer  */ public $warCount          ;
+    /** @var integer  */ public $warAttackCount    ;
+    /** @var integer  */ public $warStars          ;
+    /** @var integer  */ public $warNewStars       ;
+    /** @var integer  */ public $warDefenses       ;
+    /** @var integer  */ public $warLostStars      ;
+    /** @var double   */ public $warOpponents      ;
+    /** @var double   */ public $warOpponentDiffs  ;
     
-    /** @var integer  */ public $gamesCount       ;
-    /** @var integer  */ public $gamesPoints      ;
-    /** @var integer  */ public $gamesMissingPoint;
-    /** @var double   */ public $gamesPercentage  ;
+    /** @var integer  */ public $gamesCount        ;
+    /** @var integer  */ public $gamesPoints       ;
+    /** @var integer  */ public $gamesMissingPoints;
+    /** @var double   */ public $gamesPercentage   ;
     
     protected function exist () {
         return $this->inClanFirstTime != $this->timestamp;
@@ -68,29 +76,29 @@ class PlayerTotals extends Model {
     public function init (PlayerHistory $player) {
         $this->tag = $player->tag;
         
-        $this->inClanFirstTime   = $player->timestamp;
-        $this->inClanCurrentTime = $player->timestamp;
-        $this->inClanTotalHours  = 0;
-        $this->inClanTotalEnters = 1;
+        $this->inClanFirstTime    = $player->timestamp;
+        $this->inClanCurrentTime  = $player->timestamp;
+        $this->inClanTotalHours   = 0;
+        $this->inClanTotalEnters  = 1;
         
-        $this->lastActiveTime    = $player->timestamp;
+        $this->lastActiveTime     = $player->timestamp;
         
-        $this->donations         = 0;
-        $this->donationsReceived = 0;
+        $this->donations          = 0;
+        $this->donationsReceived  = 0;
         
-        $this->warCount          = 0;
-        $this->warAttackCount    = 0;
-        $this->warStars          = 0;
-        $this->warNewStars       = 0;
-        $this->warDefenses       = 0;
-        $this->warLostStars      = 0;
-        $this->warOpponents      = 0;
-        $this->warOpponentDiffs  = 0;
+        $this->warCount           = 0;
+        $this->warAttackCount     = 0;
+        $this->warStars           = 0;
+        $this->warNewStars        = 0;
+        $this->warDefenses        = 0;
+        $this->warLostStars       = 0;
+        $this->warOpponents       = 0;
+        $this->warOpponentDiffs   = 0;
         
-        $this->gamesCount        = 0;
-        $this->gamesPoints       = 0;
-        $this->gamesMissingPoint = 0;
-        $this->gamesPercentage   = 0;
+        $this->gamesCount         = 0;
+        $this->gamesPoints        = 0;
+        $this->gamesMissingPoints = 0;
+        $this->gamesPercentage    = 0;
     }
     
     public function enter (PlayerHistory $player) {

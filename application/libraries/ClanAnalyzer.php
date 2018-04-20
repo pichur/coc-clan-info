@@ -9,7 +9,7 @@ class ClanAnalyzer {
         $analyzer = new ClanAnalyzer();
         
         $analyzer->history = $history;
-        $analyzer->totals  = ClanTotals::getBy(['tag' => $tag]);
+        $analyzer->totals  = ClanTotals::getBy(['tag' => $history->tag]);
         
         return $analyzer;
     }

@@ -2,21 +2,21 @@
 
 class Maintenance extends CI_Controller {
     
-    /**
-     * @var Loader
-     */
-    public $loader;
+    use Transactional;
     
     public function read ($start, $stop) {
         $this->load->database();
-        $this->load->library('Loader');
         $this->load->library('ClanAnalyzer');
         $this->load->library('WarAnalyzer');
         $this->load->library('PlayerAnalyzer');
         
-        $this->loader->read($start, $stop);
+        $this->trans_begin();
+        
+        Loader::read($start, $stop);
         
         echo 'Read';
+        
+        $this->trans_complete();
     }
     
     public function clan ($year, $month, $day, $time) {
@@ -25,6 +25,8 @@ class Maintenance extends CI_Controller {
         $this->load->library('ClanAnalyzer');
         $this->load->library('PlayerAnalyzer');
         
+        $this->trans_begin();
+        
         $ds = DIRECTORY_SEPARATOR;
         $dir = APPPATH.'logs'.$ds.'calls'.$ds.$year.$ds.$month.$ds.$day.$ds.$time.$ds;
         
@@ -32,15 +34,9 @@ class Maintenance extends CI_Controller {
          * @var $clan ClanHistory
          */
         $clan = $this->loader->clanFile($dir, $year, $month, $day, $time);
-        $clan::db()->trans_start();
         $clan->save();
-        $clan::db()->trans_complete();
         
-        if ($clan::db()->trans_status() === FALSE) {
-            echo 'DB fail';
-        } else {
-            echo $clan->tag . ' end';
-        }
+        $this->trans_complete();
     }
     
     public function war ($year, $month, $day, $time) {
@@ -49,6 +45,8 @@ class Maintenance extends CI_Controller {
         $this->load->library('ClanAnalyzer');
         $this->load->library('WarAnalyzer');
         
+        $this->trans_begin();
+        
         $ds = DIRECTORY_SEPARATOR;
         $dir = APPPATH.'logs'.$ds.'calls'.$ds.$year.$ds.$month.$ds.$day.$ds.$time.$ds;
         
@@ -56,15 +54,9 @@ class Maintenance extends CI_Controller {
          * @var $war War
          */
         $war = $this->loader->warFile($dir, $year, $month, $day, $time);
-        $war::db()->trans_start();
         $war->save();
-        $war::db()->trans_complete();
         
-        if ($war::db()->trans_status() === FALSE) {
-            echo 'DB fail';
-        } else {
-            echo $war->tag . ' end';
-        }
+        $this->trans_complete();
     }
     
     public function cyclic () {
@@ -75,6 +67,8 @@ class Maintenance extends CI_Controller {
         $this->load->library('ClanAnalyzer');
         $this->load->library('WarAnalyzer');
         $this->load->library('PlayerAnalyzer');
+        
+        $this->trans_begin();
         
         $timestamp = new DateTime();
         
@@ -89,6 +83,8 @@ class Maintenance extends CI_Controller {
         $war->save();
         
         debug('cyclic end');
+        
+        $this->trans_complete();
     }
     
     public function planned () {
@@ -97,6 +93,8 @@ class Maintenance extends CI_Controller {
         $this->load->library('ClanAnalyzer');
         $this->load->library('WarAnalyzer');
         
+        $this->trans_begin();
+        
         $timestamp = new DateTime();
         
         $war = War::loadLast();
@@ -104,6 +102,8 @@ class Maintenance extends CI_Controller {
             $war = $this->loader->warCall($timestamp);
             $war->save();
         }
+        
+        $this->trans_complete();
     }
     
 }

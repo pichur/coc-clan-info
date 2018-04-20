@@ -533,3 +533,23 @@ $config['proxy_ips'] = '';
 $config['coc_api' ] = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjdhMzljMzFlLTNlNzktNGYzNi05OWY5LTcwYWZjN2ZlZWFiMyIsImlhdCI6MTUyMTMxMjkzMCwic3ViIjoiZGV2ZWxvcGVyLzRjMjdhYjhiLWEyNmQtZDM3Yi1hNmNmLWFjYmVhOTZhNWZjNSIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjg1LjIyMS4yMDQuMTk4IiwiOTEuMjI3LjEyMy44MCIsIjc5LjE3My40NC42NSJdLCJ0eXBlIjoiY2xpZW50In1dfQ.rTtCn9GJ0DtvypYjj0ONZeubwgDv_Fg5oo3WgKqw5qbbjT7lHxLMH60NT1_AC2ppDk5juCuP39LFBBKNCsSziw';
 $config['clan_tag'] = '#PVJC0RR8';
 
+spl_autoload_register (
+    function ($className) {
+        echo 'AL ' . $className . PHP_EOL;
+        
+        if (substr($className, 0, 3) === 'CI_') {
+            $root = BASEPATH;
+            $className = substr($className, 3);
+        } else {
+            $root = APPPATH;
+        }
+        $paths = ['controllers', 'libraries', 'models', 'core'];
+        foreach ($paths as $path) {
+            $file = $root . $path . DIRECTORY_SEPARATOR . $className . '.php';
+            if (file_exists($file)) {
+                require_once($file);
+                return;
+            }
+        }
+    }
+);

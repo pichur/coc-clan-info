@@ -2,6 +2,14 @@
 
 class ClanTotals extends Model {
     
+    public static $fieldMapping = [
+        'tag'            => ['key' => true],
+        'historyFrom'    => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
+        'clanTimestamp'  => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
+        'warTimestamp'   => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
+        'gamesTimestamp' => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
+    ];
+    
     /**
      * Clan tag
      * @var string

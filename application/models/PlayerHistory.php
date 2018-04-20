@@ -3,6 +3,8 @@
 class PlayerHistory extends TimestampModel {
     
     public static $fieldMapping = [
+        'tag'          => ['key' => true],
+        'timestamp'    => ['key' => true, 'jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
         'league'       => ['type' => 'ManyToOne', 'target' => League     ::class],
         'achievements' => ['type' => 'OneToMany', 'target' => Achievement::class],
         'troops'       => ['type' => 'OneToMany', 'target' => Troop      ::class],

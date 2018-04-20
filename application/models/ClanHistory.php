@@ -3,6 +3,8 @@
 class ClanHistory extends TimestampModel {
     
     public static $fieldMapping = [
+        'tag'        => ['key' => true],
+        'timestamp'  => ['key' => true, 'jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
         'location'   => ['type' => 'ManyToOne', 'target' => Location     ::class],
         'badgeUrls'  => ['type' => 'OneToOne' , 'target' => BadgeUrls    ::class],
         'memberList' => ['type' => 'OneToMany', 'target' => PlayerHistory::class],

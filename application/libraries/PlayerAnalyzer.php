@@ -12,10 +12,10 @@ class PlayerAnalyzer {
         $analyzer->current = $history;
         
         if ($previousTimestamp) {
-            $analyzer->previous = PlayerHistory::getBy(['tag' => $tag, 'timestamp' => $previousTimestamp]);
+            $analyzer->previous = PlayerHistory::getBy(['tag' => $history->tag, 'timestamp' => $previousTimestamp]);
         }
         
-        $analyzer->totals = PlayerTotals::getBy(['tag' => $tag]);
+        $analyzer->totals = PlayerTotals::getBy(['tag' => $history->tag]);
         
         return $analyzer;
     }

@@ -6,13 +6,13 @@ class Loader {
      * Load clan info from server
      * @return ClanHistory
      */
-    public function clanCall ($timestamp = null) {
+    public static function clanCall ($timestamp = null) {
         if (!$timestamp) $timestamp = new DateTime();
         
-        $clanJson = $this->load($timestamp, 'clan');
+        $clanJson = static::load($timestamp, 'clan');
         foreach ($clanJson->memberList as $member) {
             debug('Member ' . $member->tag . ' call');
-            $this->load($timestamp, 'player', $member->tag, $member);
+            static::load($timestamp, 'player', $member->tag, $member);
         }
         
         debug('Parse clan');
@@ -25,20 +25,20 @@ class Loader {
      * Load war info from server
      * @return ClanHistory
      */
-    public function warCall ($timestamp = null) {
+    public static function warCall ($timestamp = null) {
         if (!$timestamp) $timestamp = new DateTime();
         
         /**
          * @var War $war
          */
-        $warJson = $this->load($timestamp, 'currentwar');
+        $warJson = static::load($timestamp, 'currentwar');
         
         $warObject = War::parseJson($timestamp, $warJson);
         
         return $warObject;
     }
     
-    public function read ($start, $stop) {
+    public static function read ($start, $stop) {
         if ($start) $start = DateTime::createFromFormat('Y-m-d\TH:i:s', $start);
         if ($stop ) $stop  = DateTime::createFromFormat('Y-m-d\TH:i:s', $stop );
         
@@ -68,7 +68,7 @@ class Loader {
                                         if ($stop && ($timestamp > $stop)) {
                                             break 4;
                                         }
-                                        $clanHistory = $this->clanFile($dir, $timestamp);
+                                        $clanHistory = static::clanFile($dir, $timestamp);
                                         $clanHistory->save();
                                         $clanAnalyzer = ClanAnalyzer::construct($clanHistory);
                                         $clanAnalyzer->analyze();
@@ -79,7 +79,7 @@ class Loader {
                                             $playerAnalyzer->analyze();
                                         }
                                         
-                                        $war = $this->warFile($dir, $timestamp);
+                                        $war = static::warFile($dir, $timestamp);
                                         $war->save();
                                         
                                         echo $dir . PHP_EOL;
@@ -93,7 +93,7 @@ class Loader {
         }
     }
     
-    public function clanFile ($dir, DateTime $timestamp) {
+    public static function clanFile ($dir, DateTime $timestamp) {
         $clanValue = file_get_contents ($dir . 'clan.json');
         $clanJson = json_decode($clanValue);
         
@@ -111,7 +111,7 @@ class Loader {
         return $clanObject;
     }
     
-    public function warFile ($dir, DateTime $timestamp) {
+    public static function warFile ($dir, DateTime $timestamp) {
         $warValue = file_get_contents ($dir . 'currentwar.json');
         $warJson = json_decode($warValue);
         
@@ -120,7 +120,7 @@ class Loader {
         return $warObject;
     }
     
-    private function load (DateTime $timestamp, $mode = 'clan', $tag = null, $object = null) {
+    private static function load (DateTime $timestamp, $mode = 'clan', $tag = null, $object = null) {
         $url = 'https://api.clashofclans.com/v1/';
         if ($mode == 'player') {
             $url .= 'players/' . urlencode($tag);
