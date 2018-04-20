@@ -137,6 +137,10 @@ class Model extends CI_Model {
         return get_called_class();
     }
     
+    /**
+     * @param array $key Array of keys for where clause
+     * @return array[static]
+     */
     public static function listBy (array $key) {
         foreach ($key as $var => $val) {
             if ($val instanceof DateTime) {
@@ -154,8 +158,58 @@ class Model extends CI_Model {
     }
     
     /**
-     * 
-     * @param array $key array of keys for object
+     * @param unknown $orderby   Field for order, and optionally boundary
+     * @param unknown $boundary  Boundary for order key
+     * @param array   $key       Array of keys for where clause
+     * @param string  $direction Direction of sorting
+     * @param unknown $limit     Limit of rows to get
+     * @throws Exception
+     * @return array[static]
+     */
+    public static function loadByOrder ($orderby, $boundary = null, array $key = [], $direction = 'DESC', $limit = null) {
+        if ($key == null) {
+            $key = [];
+        }
+        if ($boundary) {
+            $key[$orderby . ' ' . ($direction == 'DESC') ? '<' : '>'] = $boundary;
+        }
+        foreach ($key as $var => $val) {
+            if ($val instanceof DateTime) {
+                $key[$var] = $val->format('Y-m-d H:i:s');
+            }
+        }
+        
+        $result = static::db()->select()->from(static::table())->where($key)->order_by($orderby, $direction)->limit($limit)->get()->custom_row_object(0, get_called_class());
+        
+        foreach ($result as $model) {
+            $model->fixDbLoad();
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * @param unknown $orderby   Field for order, and optionally boundary
+     * @param unknown $boundary  Boundary for order key
+     * @param array   $key       Array of keys for where clause
+     * @param string  $direction Direction of sorting
+     * @throws Exception
+     * @return NULL|static
+     */
+    public static function loadSingleByOrder ($orderby, $boundary = null, array $key = [], $direction = 'DESC') {
+        $result = static::loadByOrder($orderby, $boundary, $key, $direction, 1);
+        $count = count($result);
+        if ($count === 0) {
+            return null;
+        } else if ($count === 1) {
+            return $result[0];
+        } else {
+            throw new Exception('Not expected size of result : ' . $count);
+        }
+    }
+    
+    /**
+     * @param array $key Array of keys for where clause
      * @throws Exception exception if not unique key given
      * @return NULL|static
      */

@@ -38,7 +38,10 @@ class Loader {
         return $warObject;
     }
     
-    public function read () {
+    public function read ($start, $stop) {
+        if ($start) $start = DateTime::createFromFormat('Y-m-d\TH:i:s', $start);
+        if ($stop ) $stop  = DateTime::createFromFormat('Y-m-d\TH:i:s', $stop );
+        
         $directory = APPPATH . 'logs' . DIRECTORY_SEPARATOR . 'calls' . DIRECTORY_SEPARATOR;
         $filesY = scandir($directory);
         foreach ($filesY as $fileY) {
@@ -56,8 +59,29 @@ class Loader {
                                 foreach ($filesT as $fileT) {
                                     if ($fileT && ($fileT[0] != '.') && is_dir($dirYMD . $fileT)) {
                                         $dir = $dirYMD . $fileT . DIRECTORY_SEPARATOR;
-                                        $this->clanFile($dir, $fileY, $fileM, $fileD, $fileT)->save();
-                                        $this->warFile ($dir, $fileY, $fileM, $fileD, $fileT)->save();
+                                        
+                                        $timestamp = logFolderDateTime($fileY, $fileM, $fileD, $fileT);
+                                        
+                                        if ($start && ($timestamp < $start)) {
+                                            continue;
+                                        }
+                                        if ($stop && ($timestamp > $stop)) {
+                                            break 4;
+                                        }
+                                        $clanHistory = $this->clanFile($dir, $timestamp);
+                                        $clanHistory->save();
+                                        $clanAnalyzer = new ClanAnalyzer($clanHistory);
+                                        $clanAnalyzer->analyze();
+                                        $previousClanHistory = ClanHistory::loadSingleByOrder('timestamp', $timestamp);
+                                        $previousTimestamp = $previousClanHistory ? $previousClanHistory->timestamp : null;
+                                        foreach ($clanHistory->memberList as $playerHistory) {
+                                            $playerAnalyzer = new PlayerAnalyzer($playerHistory, $previousTimestamp);
+                                            $playerAnalyzer->analyze();
+                                        }
+                                        
+                                        $war = $this->warFile($dir, $timestamp);
+                                        $war->save();
+                                        
                                         echo $dir . PHP_EOL;
                                     }
                                 }
@@ -69,14 +93,9 @@ class Loader {
         }
     }
     
-    public function clanFile ($dir, $year, $month, $day, $time) {
+    public function clanFile ($dir, DateTime $timestamp) {
         $clanValue = file_get_contents ($dir . 'clan.json');
         $clanJson = json_decode($clanValue);
-        
-        $times = explode('-', $time);
-        $timestamp = new DateTime();
-        $timestamp->setDate($year, $month, $day);
-        $timestamp->setTime($times[0], $times[1], $times[2]);
         
         foreach ($clanJson->memberList as $player) {
             $playerValue = file_get_contents($dir . 'player_' . substr($player->tag, 1) . '.json');
@@ -92,14 +111,9 @@ class Loader {
         return $clanObject;
     }
     
-    public function warFile ($dir, $year, $month, $day, $time) {
+    public function warFile ($dir, DateTime $timestamp) {
         $warValue = file_get_contents ($dir . 'currentwar.json');
         $warJson = json_decode($warValue);
-        
-        $times = explode('-', $time);
-        $timestamp = new DateTime();
-        $timestamp->setDate($year, $month, $day);
-        $timestamp->setTime($times[0], $times[1], $times[2]);
         
         $warObject = War::parseJson($timestamp, $warJson);
         

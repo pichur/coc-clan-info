@@ -6,10 +6,14 @@ class PlayerAnalyzer {
     /** @var PlayerHistory */ private $current ;
     /** @var PlayerTotals  */ private $totals  ;
     
-    public function __construct($previous, $current, $tag) {
-        $this->previous = PlayerHistory::getBy(['tag' => $tag, 'timestamp' => $previous]);
-        $this->current  = PlayerHistory::getBy(['tag' => $tag, 'timestamp' => $current ]);
-        $this->totals   = PlayerTotals ::getBy(['tag' => $tag]);
+    public function __construct(PlayerHistory $history, $previousTimestamp) {
+        $this->current = $history;
+        
+        if ($previousTimestamp) {
+            $this->previous = PlayerHistory::getBy(['tag' => $tag, 'timestamp' => $previousTimestamp]);
+        }
+        
+        $this->totals = PlayerTotals::getBy(['tag' => $tag]);
     }
     
     public function analyze () {
@@ -46,10 +50,6 @@ class PlayerAnalyzer {
         }
         $this->totals->donations         += $donations        ;
         $this->totals->donationsReceived += $donationsReceived;
-    }
-    
-    private function enter() {
-        
     }
     
 }

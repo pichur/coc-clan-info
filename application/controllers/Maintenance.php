@@ -7,16 +7,23 @@ class Maintenance extends CI_Controller {
      */
     public $loader;
     
-    public function read () {
-        $this->load->library('Loader');
+    public function read ($start, $stop) {
         $this->load->database();
-        $this->loader->read();
+        $this->load->library('Loader');
+        $this->load->library('ClanAnalyzer');
+        $this->load->library('WarAnalyzer');
+        $this->load->library('PlayerAnalyzer');
+        
+        $this->loader->read($start, $stop);
+        
         echo 'Read';
     }
     
     public function clan ($year, $month, $day, $time) {
-        $this->load->library('Loader');
         $this->load->database();
+        $this->load->library('Loader');
+        $this->load->library('ClanAnalyzer');
+        $this->load->library('PlayerAnalyzer');
         
         $ds = DIRECTORY_SEPARATOR;
         $dir = APPPATH.'logs'.$ds.'calls'.$ds.$year.$ds.$month.$ds.$day.$ds.$time.$ds;
@@ -37,8 +44,10 @@ class Maintenance extends CI_Controller {
     }
     
     public function war ($year, $month, $day, $time) {
-        $this->load->library('Loader');
         $this->load->database();
+        $this->load->library('Loader');
+        $this->load->library('ClanAnalyzer');
+        $this->load->library('WarAnalyzer');
         
         $ds = DIRECTORY_SEPARATOR;
         $dir = APPPATH.'logs'.$ds.'calls'.$ds.$year.$ds.$month.$ds.$day.$ds.$time.$ds;
@@ -61,8 +70,11 @@ class Maintenance extends CI_Controller {
     public function cyclic () {
         debug('cyclic');
         
-        $this->load->library('Loader');
         $this->load->database();
+        $this->load->library('Loader');
+        $this->load->library('ClanAnalyzer');
+        $this->load->library('WarAnalyzer');
+        $this->load->library('PlayerAnalyzer');
         
         $timestamp = new DateTime();
         
@@ -81,6 +93,9 @@ class Maintenance extends CI_Controller {
     
     public function planned () {
         $this->load->database();
+        $this->load->library('Loader');
+        $this->load->library('ClanAnalyzer');
+        $this->load->library('WarAnalyzer');
         
         $timestamp = new DateTime();
         
