@@ -24,21 +24,21 @@ DROP TABLE IF EXISTS Location         CASCADE;
 DROP TABLE IF EXISTS Version          CASCADE;
 
 CREATE TABLE Version (
-    number                INTEGER,
+    number                INTEGER      NOT NULL,
     
-    version1              INTEGER,
-    version2              INTEGER,
-    version3              INTEGER,
-    info                  VARCHAR(128),
-    updateDate            TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updateUser            VARCHAR(64),
+    version1              INTEGER      NOT NULL,
+    version2              INTEGER      NOT NULL,
+    version3              INTEGER      NOT NULL,
+    info                  VARCHAR(128) NOT NULL,
+    updateDate            TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updateUser            VARCHAR(64)  NOT NULL,
     
     PRIMARY KEY (number)
 );
 CREATE TRIGGER VersionLog BEFORE INSERT ON Version FOR EACH ROW SET new.updateUser = user();
 
 CREATE TABLE Location (
-    id                    INTEGER,
+    id                    INTEGER NOT NULL,
     
     name                  VARCHAR(64),
     isCountry             BOOLEAN,
@@ -50,9 +50,9 @@ CREATE TABLE Location (
 CREATE TABLE ClanTotals (
     tag                         VARCHAR(16),
     
-    historyFrom                 TIMESTAMP,
+    historyFrom                 TIMESTAMP NULL DEFAULT NULL,
     
-    clanTimestamp               TIMESTAMP,
+    clanTimestamp               TIMESTAMP NULL DEFAULT NULL,
     clanMinPoints               INTEGER,
     clanMaxPoints               INTEGER,
     clanMinVersusPoints         INTEGER,
@@ -61,7 +61,7 @@ CREATE TABLE ClanTotals (
     clanMinMembers              INTEGER,
     clanMaxMembers              INTEGER,
     
-    warTimestamp                TIMESTAMP,
+    warTimestamp                TIMESTAMP NULL DEFAULT NULL,
     warCount                    INTEGER,
     warWins                     INTEGER,
     warTies                     INTEGER,
@@ -76,7 +76,7 @@ CREATE TABLE ClanTotals (
     warAvgDestructionPercentage DOUBLE,
     warMaxDestructionPercentage DOUBLE,
     
-    gamesTimestamp              TIMESTAMP,
+    gamesTimestamp              TIMESTAMP NULL DEFAULT NULL,
     gamesMinPlayers             INTEGER,
     gamesAvgPlayers             INTEGER,
     gamesMaxPlayers             INTEGER,
@@ -87,17 +87,18 @@ CREATE TABLE ClanTotals (
     PRIMARY KEY (tag)
 );
 
+add name
 CREATE TABLE PlayerTotals (
     tag                   VARCHAR(16),
     
-    timestamp             TIMESTAMP,
+    timestamp             TIMESTAMP NULL DEFAULT NULL,
     
-    inClanFirstTime       TIMESTAMP,
-    inClanCurrentTime     TIMESTAMP,
+    inClanFirstTime       TIMESTAMP NULL DEFAULT NULL,
+    inClanCurrentTime     TIMESTAMP NULL DEFAULT NULL,
     inClanTotalHours      INTEGER,
     inClanTotalEnters     INTEGER,
     
-    lastActiveTime        TIMESTAMP,
+    lastActiveTime        TIMESTAMP NULL DEFAULT NULL,
     
     donations             INTEGER,
     donationsReceived     INTEGER,
@@ -202,6 +203,7 @@ CREATE TABLE PlayerHistory (
     FOREIGN KEY (league_id) REFERENCES League (id)
 );
 
+add only changed
 CREATE TABLE Achievement (
     timestamp             TIMESTAMP,
     tag                   VARCHAR(16),
@@ -216,6 +218,7 @@ CREATE TABLE Achievement (
     FOREIGN KEY (timestamp, tag) REFERENCES PlayerHistory (timestamp, tag)
 );
 
+add only changed
 CREATE TABLE Hero (
     timestamp             TIMESTAMP,
     tag                   VARCHAR(16),
@@ -229,6 +232,7 @@ CREATE TABLE Hero (
     FOREIGN KEY (timestamp, tag) REFERENCES PlayerHistory (timestamp, tag)
 );
 
+add only changed
 CREATE TABLE Spell (
     timestamp             TIMESTAMP,
     tag                   VARCHAR(16),
@@ -242,6 +246,7 @@ CREATE TABLE Spell (
     FOREIGN KEY (timestamp, tag) REFERENCES PlayerHistory (timestamp, tag)
 );
 
+add only changed
 CREATE TABLE Troop (
     timestamp             TIMESTAMP,
     tag                   VARCHAR(16),
@@ -256,13 +261,13 @@ CREATE TABLE Troop (
 );
 
 CREATE TABLE War (
-    number                INTEGER,
+    number                INTEGER NOT NULL,
     
-    state                 VARCHAR(32),
-    teamSize              INTEGER,
-    preparationStartTime  TIMESTAMP,
-    startTime             TIMESTAMP,
-    endTime               TIMESTAMP,
+    state                 VARCHAR(32) NOT NULL,
+    teamSize              INTEGER NOT NULL,
+    preparationStartTime  TIMESTAMP NOT NULL,
+    startTime             TIMESTAMP NOT NULL,
+    endTime               TIMESTAMP NOT NULL,
     
     PRIMARY KEY (number),
     UNIQUE      (preparationStartTime)
@@ -333,8 +338,8 @@ CREATE TABLE Attack (
 CREATE TABLE Games (
     number                INTEGER,
     
-    startTime             TIMESTAMP,
-    endTime               TIMESTAMP,
+    startTime             TIMESTAMP NOT NULL,
+    endTime               TIMESTAMP     NULL DEFAULT NULL,
     
     maxPoints             INTEGER,
     

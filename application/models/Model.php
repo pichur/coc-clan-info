@@ -124,6 +124,7 @@ class Model extends CI_Model {
             $this->autoKey();
             static::db()->insert(static::table(), $this->set());
         }
+        info(static::db()->last_query());
     }
     
     /**
@@ -149,6 +150,7 @@ class Model extends CI_Model {
         }
         
         $result = static::db()->select()->from(static::table())->where($key)->get()->custom_result_object(get_called_class());
+        info(static::db()->last_query());
         
         if (is_array($result)) {
             foreach ($result as $model) {
@@ -182,6 +184,7 @@ class Model extends CI_Model {
         }
         
         $result = static::db()->select()->from(static::table())->where($key)->order_by($orderby, $direction)->limit($limit)->get()->custom_result_object(get_called_class());
+        info(static::db()->last_query());
         
         if (is_array($result)) {
             foreach ($result as $model) {
@@ -243,6 +246,9 @@ class Model extends CI_Model {
     }
     
     public static function dbToDate ($input) {
+        if (!$input) {
+            return null;
+        }
         $date = DateTime::createFromFormat('Y-m-d H:i:s', $input);
         return $date;
     }

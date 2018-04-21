@@ -6,9 +6,6 @@ class Maintenance extends CI_Controller {
     
     public function read ($start, $stop) {
         $this->load->database();
-        $this->load->library('ClanAnalyzer');
-        $this->load->library('WarAnalyzer');
-        $this->load->library('PlayerAnalyzer');
         
         $this->trans_begin();
         
@@ -21,9 +18,6 @@ class Maintenance extends CI_Controller {
     
     public function clan ($year, $month, $day, $time) {
         $this->load->database();
-        $this->load->library('Loader');
-        $this->load->library('ClanAnalyzer');
-        $this->load->library('PlayerAnalyzer');
         
         $this->trans_begin();
         
@@ -41,9 +35,6 @@ class Maintenance extends CI_Controller {
     
     public function war ($year, $month, $day, $time) {
         $this->load->database();
-        $this->load->library('Loader');
-        $this->load->library('ClanAnalyzer');
-        $this->load->library('WarAnalyzer');
         
         $this->trans_begin();
         
@@ -63,10 +54,6 @@ class Maintenance extends CI_Controller {
         debug('cyclic');
         
         $this->load->database();
-        $this->load->library('Loader');
-        $this->load->library('ClanAnalyzer');
-        $this->load->library('WarAnalyzer');
-        $this->load->library('PlayerAnalyzer');
         
         $this->trans_begin();
         
@@ -89,9 +76,6 @@ class Maintenance extends CI_Controller {
     
     public function planned () {
         $this->load->database();
-        $this->load->library('Loader');
-        $this->load->library('ClanAnalyzer');
-        $this->load->library('WarAnalyzer');
         
         $this->trans_begin();
         

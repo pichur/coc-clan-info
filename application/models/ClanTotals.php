@@ -55,8 +55,17 @@ class ClanTotals extends Model {
     }
     
     public function init (ClanHistory $history) {
-        $this->tag         = $history->tag      ;
-        $this->historyFrom = $history->timestamp;
+        $this->tag           = $history->tag      ;
+        $this->historyFrom   = $history->timestamp;
+        $this->clanTimestamp = $history->timestamp;
+        
+        $this->clanMinPoints       = $history->clanPoints      ;
+        $this->clanMaxPoints       = $history->clanPoints      ;
+        $this->clanMinVersusPoints = $history->clanVersusPoints;
+        $this->clanMaxVersusPoints = $history->clanVersusPoints;
+        $this->clanMaxWarWinStreak = $history->warWinStreak    ;
+        $this->clanMinMembers      = $history->members         ;
+        $this->clanMaxMembers      = $history->members         ;
     }
     
     public function addClanHistory (ClanHistory $history) {
