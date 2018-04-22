@@ -60,6 +60,8 @@ class Loader {
                                     if ($fileT && ($fileT[0] != '.') && is_dir($dirYMD . $fileT)) {
                                         $dir = $dirYMD . $fileT . DIRECTORY_SEPARATOR;
                                         
+                                        debug($dir . PHP_EOL);
+                                        
                                         $timestamp = logFolderDateTime($fileY, $fileM, $fileD, $fileT);
                                         
                                         if ($start && ($timestamp < $start)) {
@@ -81,8 +83,6 @@ class Loader {
                                         
                                         $war = static::warFile($dir, $timestamp);
                                         $war->save();
-                                        
-                                        echo $dir . PHP_EOL;
                                     }
                                 }
                             }

@@ -68,4 +68,5 @@ class PlayerHistory extends TimestampModel {
         }
     }
     
+    
 }

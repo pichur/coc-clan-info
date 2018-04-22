@@ -3,7 +3,8 @@
 class IconUrls extends HistoryModel {
     
     public static $fieldMapping = [
-        'id' => ['key' => true],
+        'timestamp' => ['key' => true, 'jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
+        'id'        => ['key' => true],
     ];
     
     /** @var integer */ public $id;

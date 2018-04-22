@@ -18,6 +18,7 @@ DROP TABLE IF EXISTS IconUrls         CASCADE;
 DROP TABLE IF EXISTS League           CASCADE;
 DROP TABLE IF EXISTS BadgeUrls        CASCADE;
 DROP TABLE IF EXISTS ClanHistory      CASCADE;
+DROP TABLE IF EXISTS PlayerPeriod     CASCADE;
 DROP TABLE IF EXISTS PlayerTotals     CASCADE;
 DROP TABLE IF EXISTS ClanTotals       CASCADE;
 DROP TABLE IF EXISTS Location         CASCADE;
@@ -87,9 +88,9 @@ CREATE TABLE ClanTotals (
     PRIMARY KEY (tag)
 );
 
-add name
 CREATE TABLE PlayerTotals (
     tag                   VARCHAR(16),
+    name                  VARCHAR(64),
     
     timestamp             TIMESTAMP NULL DEFAULT NULL,
     
@@ -99,6 +100,20 @@ CREATE TABLE PlayerTotals (
     inClanTotalEnters     INTEGER,
     
     lastActiveTime        TIMESTAMP NULL DEFAULT NULL,
+    
+    PRIMARY KEY (tag)
+);
+    
+CREATE TABLE PlayerPeriod (
+    tag                   VARCHAR(16),
+    name                  VARCHAR(64),
+    
+    period                VARCHAR(16),
+    
+    startTime             TIMESTAMP NULL DEFAULT NULL,
+    endTime               TIMESTAMP NULL DEFAULT NULL,
+    
+    timestamp             TIMESTAMP NULL DEFAULT NULL,
     
     donations             INTEGER,
     donationsReceived     INTEGER,
@@ -117,7 +132,7 @@ CREATE TABLE PlayerTotals (
     gamesMissingPoints    INTEGER,
     gamesPercentage       DOUBLE,
     
-    PRIMARY KEY (tag)
+    PRIMARY KEY (tag, period)
 );
 
 CREATE TABLE ClanHistory (
@@ -203,7 +218,6 @@ CREATE TABLE PlayerHistory (
     FOREIGN KEY (league_id) REFERENCES League (id)
 );
 
-add only changed
 CREATE TABLE Achievement (
     timestamp             TIMESTAMP,
     tag                   VARCHAR(16),
@@ -218,7 +232,6 @@ CREATE TABLE Achievement (
     FOREIGN KEY (timestamp, tag) REFERENCES PlayerHistory (timestamp, tag)
 );
 
-add only changed
 CREATE TABLE Hero (
     timestamp             TIMESTAMP,
     tag                   VARCHAR(16),
@@ -232,7 +245,6 @@ CREATE TABLE Hero (
     FOREIGN KEY (timestamp, tag) REFERENCES PlayerHistory (timestamp, tag)
 );
 
-add only changed
 CREATE TABLE Spell (
     timestamp             TIMESTAMP,
     tag                   VARCHAR(16),
@@ -246,7 +258,6 @@ CREATE TABLE Spell (
     FOREIGN KEY (timestamp, tag) REFERENCES PlayerHistory (timestamp, tag)
 );
 
-add only changed
 CREATE TABLE Troop (
     timestamp             TIMESTAMP,
     tag                   VARCHAR(16),

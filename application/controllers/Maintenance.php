@@ -11,7 +11,7 @@ class Maintenance extends CI_Controller {
         
         Loader::read($start, $stop);
         
-        echo 'Read';
+        debug('Read');
         
         $this->trans_complete();
     }

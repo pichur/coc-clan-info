@@ -32,7 +32,7 @@ class PlayerAnalyzer {
         
         $this->donations();
         
-        $this->totals->timestamp = $this->current->timestamp;
+        $this->totals->actualize($this->current);
         $this->totals->save();
     }
     
@@ -52,8 +52,8 @@ class PlayerAnalyzer {
         if ($donations) {
             $this->totals->lastActiveTime = $this->current->timestamp;
         }
-        $this->totals->donations         += $donations        ;
-        $this->totals->donationsReceived += $donationsReceived;
+        $this->totals->details->donations         += $donations        ;
+        $this->totals->details->donationsReceived += $donationsReceived;
     }
     
 }

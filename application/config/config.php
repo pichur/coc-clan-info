@@ -535,8 +535,6 @@ $config['clan_tag'] = '#PVJC0RR8';
 
 spl_autoload_register (
     function ($className) {
-        echo 'AL ' . $className . PHP_EOL;
-        
         if (substr($className, 0, 3) === 'CI_') {
             $root = BASEPATH;
             $className = substr($className, 3);
