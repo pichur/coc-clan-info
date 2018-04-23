@@ -30,14 +30,40 @@ class Analyze extends CI_Controller {
         $this->trans_begin();
         
         // Max timestamp of analyzed player
-        $res = PlayerTotals::db()->select_max('timestamp')->from(PlayerTotals::table())->get();
-        if ($res) {
-            $key = ['timestamp >' => Model::dbToDate($res[0][0])];
+        $timestamp = PlayerTotals::db()->select_max('timestamp')->from(PlayerTotals::table())->get()->first_row();
+        if ($timestamp->timestamp) {
+            $timestamp = Model::dbToDate($res->timestamp);
+        } else {
+            $timestamp = null;
         }
-        $tags = PlayerHistory::db()->select('tag')->from(PlayerHistory::table())->where($key)->distinct()->get();
-        foreach ($tags as $tag) {
-            
+        
+        $historyList = PlayerHistory::loadByOrder('timestamp', $timestamp, null, 'ASC');
+        $totalsMap = [];
+        foreach ($historyList as $history) {
+            $totals = $totalsMap[$history->tag];
+            if (!$totals) {
+                $totals = PlayerTotals::getBy(['tag' => $history->tag]);
+                if (!$totals) {
+                    $totals = new PlayerTotals($history);
+                    $totals[$history->tag] = $totals;
+                    continue;
+                }
+                $totals[$history->tag] = $totals;
+            }
+            $totals->
         }
+        
+        $this->trans_complete();
+    }
+    
+    public function clear () {
+        $this->load->database();
+        
+        $this->trans_begin();
+        
+        ClanTotals  ::delete();
+        PlayerTotals::delete();
+        PlayerPeriod::delete();
         
         $this->trans_complete();
     }

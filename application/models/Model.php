@@ -149,6 +149,10 @@ class Model extends CI_Model {
         return get_called_class();
     }
     
+    public static function delete ($where = '1 = 1', $limit = NULL, $reset_data = TRUE) {
+        static::db()->delete(static::table(), $where, $limit, $reset_data);
+    }
+    
     /**
      * @param array $key Array of keys for where clause
      * @return array[static]

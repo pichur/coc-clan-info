@@ -69,7 +69,7 @@ class PlayerTotals extends Model {
         return $this->inClanFirstTime != $this->timestamp;
     }
     
-    public function init (PlayerHistory $player) {
+    public function __construct (PlayerHistory $player) {
         $this->tag  = $player->tag ;
         $this->name = $player->name;
         

@@ -2,7 +2,7 @@
 
 class PlayerPeriod extends Model {
     
-    public static const FULL = 'full';
+    public const FULL = 'full';
     
     public static $fieldMapping = [
         'tag'       => ['key' => true],
