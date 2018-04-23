@@ -72,14 +72,6 @@ class Loader {
                                         }
                                         $clanHistory = static::clanFile($dir, $timestamp);
                                         $clanHistory->save();
-                                        $clanAnalyzer = ClanAnalyzer::construct($clanHistory);
-                                        $clanAnalyzer->analyze();
-                                        $previousClanHistory = ClanHistory::loadSingleByOrder('timestamp', $timestamp);
-                                        $previousTimestamp = $previousClanHistory ? $previousClanHistory->timestamp : null;
-                                        foreach ($clanHistory->memberList as $playerHistory) {
-                                            $playerAnalyzer = PlayerAnalyzer::construct($playerHistory, $previousTimestamp);
-                                            $playerAnalyzer->analyze();
-                                        }
                                         
                                         $war = static::warFile($dir, $timestamp);
                                         $war->save();

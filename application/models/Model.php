@@ -63,9 +63,16 @@ class Model extends CI_Model {
     }
     
     /**
+     * DB model status, null for unknown status (mostly the new), 'db' for object in database, 'new' for objects to insert
+     * @var string|null
+     */
+    private $_status;
+    
+    /**
      * @return self
      */
     public function fixDbLoad () {
+        $this->_status = 'db';
         foreach (static::$fieldMapping as $var => $properties) {
             $dbConverter = $properties['dbConverter'];
             if ($dbConverter) {
@@ -77,7 +84,7 @@ class Model extends CI_Model {
     }
     
     protected function exist () {
-        return false;
+        return $this->_status == 'db';
     }
     
     protected function key() {
@@ -100,6 +107,10 @@ class Model extends CI_Model {
         $set = [];
         $vars = get_object_vars($this);
         foreach ($vars as $key => $val) {
+            if (substr($key, 0, 1) == '_') {
+                // System field
+                continue;
+            }
             if (        static::$fieldMapping[$key]
                     &&  static::$fieldMapping[$key]['type']
                     && (static::$fieldMapping[$key]['type'] != 'column')) {
@@ -170,7 +181,7 @@ class Model extends CI_Model {
      * @throws Exception
      * @return array[static]
      */
-    public static function loadByOrder ($orderby, $boundary = null, array $key = [], $direction = 'DESC', $limit = null) {
+    public static function loadByOrder ($orderby, $boundary = null, $key = [], $direction = 'DESC', $limit = null) {
         if ($key == null) {
             $key = [];
         }

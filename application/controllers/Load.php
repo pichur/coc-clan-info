@@ -1,6 +1,6 @@
 <?php
 
-class Maintenance extends CI_Controller {
+class Load extends CI_Controller {
     
     use Transactional;
     
