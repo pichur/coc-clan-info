@@ -29,7 +29,15 @@ class Analyze extends CI_Controller {
         
         $this->trans_begin();
         
-        
+        // Max timestamp of analyzed player
+        $res = PlayerTotals::db()->select_max('timestamp')->from(PlayerTotals::table())->get();
+        if ($res) {
+            $key = ['timestamp >' => Model::dbToDate($res[0][0])];
+        }
+        $tags = PlayerHistory::db()->select('tag')->from(PlayerHistory::table())->where($key)->distinct()->get();
+        foreach ($tags as $tag) {
+            
+        }
         
         $this->trans_complete();
     }
