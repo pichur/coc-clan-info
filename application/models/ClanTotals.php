@@ -50,7 +50,7 @@ class ClanTotals extends Model {
     /** @var integer  */ public $gamesAvgMaxPlayers;
     /** @var integer  */ public $gamesMaxMaxPlayers;
     
-    public function __construct (ClanHistory $history) {
+    public function init (ClanHistory $history) {
         $this->tag           = $history->tag      ;
         $this->historyFrom   = $history->timestamp;
         $this->clanTimestamp = $history->timestamp;

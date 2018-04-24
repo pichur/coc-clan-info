@@ -2,34 +2,94 @@
 
 class ClanAnalyzer {
     
-    public static function analyze () {
+    /**
+     * @var ClanTotals
+     */
+    private $totals;
+    
+    /**
+     * @var array[ClanHistory]
+     */
+    private $historyList;
+    
+    /**
+     * @var ClanHistory
+     */
+    private $previousHistory;
+    
+    /**
+     * @var ClanHistory
+     */
+    private $currentHistory;
+    
+    /**
+     * @var ClanHistory
+     */
+    private $previousPlayers;
+    
+    public function analyze () {
         debug('Clan analyze');
-        $totals = ClanTotals::getBy(['tag' => config_item('clan_tag')]);
         
-        $historyList = ClanHistory::loadByOrder('timestamp', $totals->clanTimestamp, null, 'ASC');
-        
-        if (!$historyList) {
+        if (!$this->init()) {
             debug('Nothing to add');
             return;
         }
         
-        if ($totals == null) {
-            $history = array_shift($historyList);
-            $totals = new ClanTotals($history);
-        }
-        
-        /**
-         * @var ClanHistory $history
-         */
-        foreach ($historyList as $history) {
-            debug('Add clan history ' . $history->timestamp->format('Y-m-d H:i:s'));
-            $totals->addClanHistory($history);
-        }
+        $this->process();
         
         debug('Clan totals save');
         $totals->save();
         
         debug('Clan analyze finished');
+    }
+    
+    private function init () {
+        $this->totals = ClanTotals::getBy(['tag' => config_item('clan_tag')]);
+        
+        $this->historyList = ClanHistory::loadByOrder('timestamp', $this->totals->clanTimestamp, null, 'ASC');
+        
+        if (!$this->historyList) {
+            return false;
+        }
+        
+        if ($this->totals == null) {
+            $this->currentHistory = array_shift($historyList);
+            $this->totals = new ClanTotals();
+            $this->totals->init($this->currentHistory);
+        } else {
+            $this->currentHistory = ClanHistory::getBy(['timestamp' => $totals->clanTimestamp]);
+        }
+        
+        $this->setPrevious();
+        
+        return true;
+    }
+    
+    private function process () {
+        /**
+         * @var ClanHistory $history
+         */
+        foreach ($historyList as $history) {
+            $this->currentHistory = $history;
+            debug('Add clan history ' . $this->currentHistory->timestamp->format('Y-m-d H:i:s'));
+            $this->totals->addClanHistory($this->currentHistory);
+            
+            foreach ($this->currentHistory->memberList as $currentPlayer) {
+                $playerAnalyzer = new PlayerAnalyzer($this->previousPlayers[$currentPlayer->tag], $currentPlayer);
+                $playerAnalyzer->analyze();
+            }
+            
+            $this->setPrevious();
+        }
+    }
+    
+    private function setPrevious () {
+        $this->previousHistory = $this->currentHistory;
+        
+        $this->previousPlayers = [];
+        foreach ($this->previousHistory->$memberList as $previousPlayer) {
+            $this->previousPlayers[$previousPlayer->tag] = $previousPlayer;
+        }
     }
     
 }

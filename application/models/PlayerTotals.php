@@ -65,13 +65,13 @@ class PlayerTotals extends Model {
      */
     public $details;
     
-    protected function exist () {
-        return $this->inClanFirstTime != $this->timestamp;
-    }
-    
-    public function __construct (PlayerHistory $player) {
+    public function init (PlayerHistory $player) {
         $this->tag  = $player->tag ;
-        $this->name = $player->name;
+        
+        $this->details = new PlayerPeriod();
+        $this->details->tag  = $player->tag ;
+        
+        $this->actualize($player);
         
         $this->inClanFirstTime    = $player->timestamp;
         $this->inClanCurrentTime  = $player->timestamp;
@@ -80,13 +80,10 @@ class PlayerTotals extends Model {
         
         $this->lastActiveTime     = $player->timestamp;
         
-        $this->details = new PlayerPeriod();
-        $this->details->tag  = $player->tag ;
-        $this->details->name = $player->name;
-        
         $this->details->period    = PlayerPeriod::FULL;
         $this->details->startTime = null;
         $this->details->endTime   = null;
+        
     }
     
     public function actualize (PlayerHistory $player) {
