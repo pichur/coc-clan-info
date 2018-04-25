@@ -14,7 +14,7 @@ class Model extends CI_Model {
             $jsonName      = $var    ;
             $jsonConverter = false   ;
             $target        = false   ;
-            $type          = 'column';
+            $type          = 'Column';
             if ($mapping) {
                 $type = $mapping['type'];
                 if ($type == 'transient') {
@@ -113,7 +113,7 @@ class Model extends CI_Model {
             }
             if (        static::$fieldMapping[$key]
                     &&  static::$fieldMapping[$key]['type']
-                    && (static::$fieldMapping[$key]['type'] != 'column')) {
+                    && (static::$fieldMapping[$key]['type'] != 'Column')) {
                 continue;
             }
             if ($val instanceof DateTime) {
@@ -266,6 +266,59 @@ class Model extends CI_Model {
         }
         $date = DateTime::createFromFormat('Y-m-d H:i:s', $input);
         return $date;
+    }
+    
+    protected function getModelProperty ($field) {
+        $mapping = static::$fieldMapping[$field];
+        if (!$mapping) {
+            return $this->$field;
+        }
+        $type = $mapping['type'];
+        if (!$type) {
+            return $this->$field;
+        }
+        if ($type == 'Column') {
+            return $this->$field;
+        }
+        $loadedMark = '_loaded_' . $field;
+        if ($type == 'OneToOne')  {
+            if (is_object($this->$field)) {
+                return $this->$field;
+            }
+            if ($this->$loadedMark) {
+                return $this->$field;
+            }
+            
+            $key = $this->key();
+            $target = $mapping['target'];
+            $targetKey = $mapping['targetKey'];
+            if ($targetKey) {
+                $key = array_merge($key, $targetKey);
+            }
+            $this->$field = $target::getBy($key);
+            
+            $this->$loadedMark = true;
+            return $this->$field;
+        }
+        if ($type == 'OneToMany')  {
+            if (is_array($this->$field)) {
+                return $this->$field;
+            }
+            if ($this->$loadedMark) {
+                return $this->$field;
+            }
+            
+            $key = $this->key();
+            $target = $mapping['target'];
+            $this->$field = $target::listBy($key);
+            
+            $this->$loadedMark = true;
+            return $this->$field;
+        }
+        if ($type == 'ManyToOne')  {
+            throw new Exception('ManyToOne implementation need');
+        }
+        throw new Exception('Unknown field mapping type: ' . $type);
     }
     
 }

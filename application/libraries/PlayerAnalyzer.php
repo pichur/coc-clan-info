@@ -10,7 +10,7 @@ class PlayerAnalyzer {
         $this->previous = $previous;
         $this->current  = $current ;
         
-        $this->totals = PlayerTotals::getBy(['tag' => $history->tag]);
+        $this->totals = PlayerTotals::getBy(['tag' => $current->tag]);
     }
     
     public function analyze () {
@@ -46,8 +46,8 @@ class PlayerAnalyzer {
         if ($donations) {
             $this->totals->lastActiveTime = $this->current->timestamp;
         }
-        $this->totals->details->donations         += $donations        ;
-        $this->totals->details->donationsReceived += $donationsReceived;
+        $this->totals->getDetails()->donations         += $donations        ;
+        $this->totals->getDetails()->donationsReceived += $donationsReceived;
     }
     
 }

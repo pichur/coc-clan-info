@@ -3,7 +3,6 @@
 class ClanHistory extends TimestampModel {
     
     public static $fieldMapping = [
-        'tag'        => ['key' => true],
         'timestamp'  => ['key' => true, 'jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
         'location'   => ['type' => 'ManyToOne', 'target' => Location     ::class],
         'badgeUrls'  => ['type' => 'OneToOne' , 'target' => BadgeUrls    ::class],
@@ -42,12 +41,19 @@ class ClanHistory extends TimestampModel {
         debug('badgeUrls save');
         $this->badgeUrls->save();
         
-        foreach ($this->memberList as $member) {
+        foreach ($this->getMemberList() as $member) {
             debug('member ' . $member->tag . ' save');
             $member->save();
         }
         
         debug('ClanHistory save end');
+    }
+    
+    /**
+     * @return array[PlayerHistory]
+     */
+    public function getMemberList () {
+        return parent::getModelProperty('memberList');
     }
     
 }

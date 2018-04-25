@@ -38,7 +38,7 @@ class ClanAnalyzer {
         $this->process();
         
         debug('Clan totals save');
-        $totals->save();
+        $this->totals->save();
         
         debug('Clan analyze finished');
     }
@@ -53,9 +53,13 @@ class ClanAnalyzer {
         }
         
         if ($this->totals == null) {
-            $this->currentHistory = array_shift($historyList);
+            $this->currentHistory = array_shift($this->historyList);
             $this->totals = new ClanTotals();
             $this->totals->init($this->currentHistory);
+            foreach ($this->currentHistory->getMemberList() as $currentPlayer) {
+                $playerAnalyzer = new PlayerAnalyzer(null, $currentPlayer);
+                $playerAnalyzer->analyze();
+            }
         } else {
             $this->currentHistory = ClanHistory::getBy(['timestamp' => $totals->clanTimestamp]);
         }
@@ -69,12 +73,12 @@ class ClanAnalyzer {
         /**
          * @var ClanHistory $history
          */
-        foreach ($historyList as $history) {
+        foreach ($this->historyList as $history) {
             $this->currentHistory = $history;
             debug('Add clan history ' . $this->currentHistory->timestamp->format('Y-m-d H:i:s'));
             $this->totals->addClanHistory($this->currentHistory);
             
-            foreach ($this->currentHistory->memberList as $currentPlayer) {
+            foreach ($this->currentHistory->getMemberList() as $currentPlayer) {
                 $playerAnalyzer = new PlayerAnalyzer($this->previousPlayers[$currentPlayer->tag], $currentPlayer);
                 $playerAnalyzer->analyze();
             }
@@ -87,7 +91,8 @@ class ClanAnalyzer {
         $this->previousHistory = $this->currentHistory;
         
         $this->previousPlayers = [];
-        foreach ($this->previousHistory->$memberList as $previousPlayer) {
+        $memberList = $this->previousHistory->getMemberList();
+        foreach ($memberList as $previousPlayer) {
             $this->previousPlayers[$previousPlayer->tag] = $previousPlayer;
         }
     }

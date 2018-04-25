@@ -69,7 +69,7 @@ class PlayerTotals extends Model {
         $this->tag  = $player->tag ;
         
         $this->details = new PlayerPeriod();
-        $this->details->tag  = $player->tag ;
+        $this->getDetails()->tag  = $player->tag ;
         
         $this->actualize($player);
         
@@ -80,9 +80,9 @@ class PlayerTotals extends Model {
         
         $this->lastActiveTime     = $player->timestamp;
         
-        $this->details->period    = PlayerPeriod::FULL;
-        $this->details->startTime = null;
-        $this->details->endTime   = null;
+        $this->getDetails()->period    = PlayerPeriod::FULL;
+        $this->getDetails()->startTime = null;
+        $this->getDetails()->endTime   = null;
         
     }
     
@@ -90,8 +90,8 @@ class PlayerTotals extends Model {
         $this->timestamp = $player->timestamp;
         $this->name      = $player->name     ;
         
-        $this->details->timestamp = $player->timestamp;
-        $this->details->name      = $player->name     ;
+        $this->getDetails()->timestamp = $player->timestamp;
+        $this->getDetails()->name      = $player->name     ;
     }
     
     public function enter (PlayerHistory $player) {
@@ -104,7 +104,16 @@ class PlayerTotals extends Model {
     public function save () {
         parent::save();
         
-        $this->details->save();
+        if ($this->details) {
+            $this->details->save();
+        }
+    }
+    
+    /**
+     * @return PlayerPeriod
+     */
+    public function getDetails() {
+        return parent::getModelProperty('details');
     }
     
 }

@@ -10,7 +10,7 @@ class Loader {
         if (!$timestamp) $timestamp = new DateTime();
         
         $clanJson = static::load($timestamp, 'clan');
-        foreach ($clanJson->memberList as $member) {
+        foreach ($clanJson->getMemberList() as $member) {
             debug('Member ' . $member->tag . ' call');
             static::load($timestamp, 'player', $member->tag, $member);
         }
@@ -89,7 +89,7 @@ class Loader {
         $clanValue = file_get_contents ($dir . 'clan.json');
         $clanJson = json_decode($clanValue);
         
-        foreach ($clanJson->memberList as $player) {
+        foreach ($clanJson->getMemberList() as $player) {
             $playerValue = file_get_contents($dir . 'player_' . substr($player->tag, 1) . '.json');
             $playerJson = json_decode($playerValue);
             

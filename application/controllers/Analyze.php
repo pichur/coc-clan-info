@@ -9,7 +9,8 @@ class Analyze extends CI_Controller {
         
         $this->trans_begin();
         
-        ClanAnalyzer::analyze();
+        $clanAnalyzer = new ClanAnalyzer();
+        $clanAnalyzer->analyze();
         
         $this->trans_complete();
     }
@@ -24,6 +25,7 @@ class Analyze extends CI_Controller {
         PlayerPeriod::delete();
         
         $this->trans_complete();
+        debug("Analyze cleared");
     }
     
 }
