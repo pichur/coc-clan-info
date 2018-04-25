@@ -4,17 +4,6 @@ class Analyze extends CI_Controller {
     
     use Transactional;
     
-    public function clan () {
-        $this->load->database();
-        
-        $this->trans_begin();
-        
-        $clanAnalyzer = new ClanAnalyzer();
-        $clanAnalyzer->analyze();
-        
-        $this->trans_complete();
-    }
-    
     public function clear () {
         $this->load->database();
         
@@ -26,6 +15,28 @@ class Analyze extends CI_Controller {
         
         $this->trans_complete();
         debug("Analyze cleared");
+    }
+    
+    public function clan () {
+        $this->load->database();
+        
+        $this->trans_begin();
+        
+        $clanAnalyzer = new ClanAnalyzer();
+        $clanAnalyzer->analyze();
+        
+        $this->trans_complete();
+    }
+    
+    public function war () {
+        $this->load->database();
+        
+        $this->trans_begin();
+        
+        $warAnalyzer = new WarAnalyzer();
+        $warAnalyzer->analyze();
+        
+        $this->trans_complete();
     }
     
 }

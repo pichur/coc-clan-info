@@ -2,56 +2,40 @@
 
 class WarAnalyzer {
     
-    /** @var War */ private $war;
-    /** @var PlayerHistory */ private $current ;
-    /** @var PlayerTotals  */ private $totals  ;
+    /**
+     * @var ClanTotals
+     */
+    private $totals;
     
-    public static function construct ($timestamp) {
-        $analyzer = new WarAnalyzer();
+    /**
+     * @var array[War]
+     */
+    private $warList;
+    
+    public function __construct () {
+        $this->totals = ClanTotals::getBy(['tag' => config_item('clan_tag')]);
         
-        $analyzer->war = PlayerTotals ::getBy(['tag' => $tag]);
-        
-        return $analyzer;
+        $this->warList = War::loadByOrder('timestamp', $this->totals->warTimestamp, null, 'ASC');
     }
     
     public function analyze () {
-        if ($this->totals == null) {
-            $this->totals = new PlayerTotals();
-            $this->totals->init($this->current);
-        } else {
-            if ($this->previous == null) {
-                $this->totals->enter($this->current);
-            }
+        debug('War analyze');
+        
+        if (!$this->totals) {
+            throw new Exception('War analyze need analyzed clan');
         }
         
-        $this->donations();
+        if (!$this->warList) {
+            debug('Nothing to add');
+            return;
+        }
         
-        $this->totals->timestamp = $this->current->timestamp;
+        $this->process();
+        
+        debug('Clan totals save');
         $this->totals->save();
-    }
-    
-    private function donations () {
-        $donations         = 0;
-        $donationsReceived = 0;
         
-        if (       ($this->previous)
-                && ($this->previous->donations         < $this->current->donations        )
-                && ($this->previous->donationsReceived < $this->current->donationsReceived)) {
-            $donations         -= $this->previous->donations        ;
-            $donationsReceived -= $this->previous->donationsReceived;
-        }
-        $donations         += $this->current->donations        ;
-        $donationsReceived += $this->current->donationsReceived;
-        
-        if ($donations) {
-            $this->totals->lastActiveTime = $this->current->timestamp;
-        }
-        $this->totals->donations         += $donations        ;
-        $this->totals->donationsReceived += $donationsReceived;
-    }
-    
-    private function enter() {
-        
+        debug('War analyze finished');
     }
     
 }

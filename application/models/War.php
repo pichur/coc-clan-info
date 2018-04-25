@@ -44,7 +44,16 @@ class War extends SortedModel {
             $this->opponent->number = $this->number;
             $this->opponent->type   = 'opponent';
             $this->opponent->save();
+            
+            $this->memebersStats();
         }
+    }
+    
+    /**
+     * Calculate memver statistics
+     */
+    private function memebersStats () {
+        
     }
     
 }
