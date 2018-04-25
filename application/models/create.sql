@@ -312,22 +312,29 @@ CREATE TABLE WarClanBadgeUrls (
 );
 
 CREATE TABLE WarPlayer (
-    number                INTEGER,
-    tag                   VARCHAR(16),
+    number                  INTEGER,
+    tag                     VARCHAR(16),
     
-    type                  VARCHAR(32),
-    mapPosition           INTEGER,
-    name                  VARCHAR(64),
-    townHallLevel         INTEGER,
-    opponentAttacks       INTEGER,
-    bestOpponentAttack_nr INTEGER,
+    type                    VARCHAR(32),
+    mapPosition             INTEGER,
+    name                    VARCHAR(64),
+    townHallLevel           INTEGER,
+    opponentAttacks         INTEGER,
+    bestOpponentAttack_nr   INTEGER,
     
-    attackCount           INTEGER,
-    stars                 INTEGER,
-    newStars              INTEGER,
-    defenses              INTEGER,
-    lostStars             INTEGER,
-    opponents             DOUBLE, 
+    attackCount             INTEGER,
+    stars                   INTEGER,
+    newStars                INTEGER,
+    destruction             INTEGER,
+    newDestruction          INTEGER,
+    attackPositionDiff      INTEGER,
+    attackPositionDiffAvg   DOUBLE,
+    
+    defenseCount            INTEGER,
+    lostStars               INTEGER,
+    lostDestruction         INTEGER,
+    defensePositionDiff     INTEGER,
+    defensePositionDiffAvg  DOUBLE,
     
     PRIMARY KEY (number, tag),
     FOREIGN KEY (number, type) REFERENCES WarClan (number, type)
