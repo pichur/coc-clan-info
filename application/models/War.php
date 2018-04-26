@@ -29,8 +29,14 @@ class War extends SortedModel {
         
         $war = static::getBy(['preparationStartTime' => $this->preparationStartTime]);
         
+        if ($war->state == 'warEnded') {
+            // Processed, save not need
+            return;
+        }
+        
         if ($war) {
-            $this->number = $war->number;
+            $this->number  = $war->number ;
+            $this->_status = $war->_status;
         }
         
         // Basic save (insert or update)
@@ -57,18 +63,22 @@ class War extends SortedModel {
      * Calculate memver statistics
      */
     private function membersStats () {
-        $this->transterAttacks ();
-        $this->transterDefenses();
+        // Transfer data for clan
+        $this->transterAttacks ($this->clan, $this->opponent);
+        $this->transterDefenses($this->clan, $this->opponent);
+        // Transfer data for opponent
+        $this->transterAttacks ($this->opponent, $this->clan);
+        $this->transterDefenses($this->opponent, $this->clan);
     }
     
-    private function transterAttacks () {
+    private function transterAttacks ($clan, $opponent) {
         $attackers            = [];
         $defenders            = [];
         $opponentsStars       = [];
         $opponentsDestruction = [];
         $attackList           = [];
         
-        foreach ($this->clan->members as $player) {
+        foreach ($clan->members as $player) {
             $attackers[$player->tag] = $player;
             $player->attackCount = count($player->attacks);
             if ($player->attackCount) {
@@ -78,7 +88,7 @@ class War extends SortedModel {
             }
         }
         
-        foreach ($this->opponent->members as $player) {
+        foreach ($opponent->members as $player) {
             $defenders[$player->tag] = $player;
         }
         
@@ -106,25 +116,25 @@ class War extends SortedModel {
             $player->attackPositionDiff += $defenderPosition - $attackerPosition;
         }
         
-        foreach ($this->clan->members as $player) {
+        foreach ($clan->members as $player) {
             if ($player->attackCount > 0) {
                 $player->attackPositionDiffAvg = $player->attackPositionDiff / $player->attackCount;
             }
         }
     }
     
-    private function transterDefenses () {
+    private function transterDefenses ($clan, $opponent) {
         $attackers       = [];
         $defenders       = [];
         $lostStars       = [];
         $lostDestruction = [];
         $defenseList     = [];
         
-        foreach ($this->clan->members as $player) {
+        foreach ($clan->members as $player) {
             $defenders[$player->tag] = $player;
         }
         
-        foreach ($this->opponent->members as $player) {
+        foreach ($opponent->members as $player) {
             $attackers[$player->tag] = $player;
             if (is_array($player->attacks)) {
                 foreach ($player->attacks as $attack) {
@@ -151,7 +161,7 @@ class War extends SortedModel {
             $player->defensePositionDiff += $attackerPosition - $defenderPosition;
         }
         
-        foreach ($this->clan->members as $player) {
+        foreach ($clan->members as $player) {
             if ($player->defenseCount > 0) {
                 $player->defensePositionDiffAvg = $player->defensePositionDiff / $player->defenseCount;
             }

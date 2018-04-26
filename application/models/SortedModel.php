@@ -11,10 +11,6 @@ class SortedModel extends Model {
         return static::loadSingleByOrder('number');
     }
     
-    protected function exist () {
-        return $this->number > 0;
-    }
-    
     protected function autoKey () {
         if ($this->number) {
             return;

@@ -13,4 +13,7 @@ class IconUrls extends HistoryModel {
     /** @var string */ public $small ;
     /** @var string */ public $medium;
     
+    public function save () {
+        parent::save();
+    }
 }

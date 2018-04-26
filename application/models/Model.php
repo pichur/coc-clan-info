@@ -66,7 +66,7 @@ class Model extends CI_Model {
      * DB model status, null for unknown status (mostly the new), 'db' for object in database, 'new' for objects to insert
      * @var string|null
      */
-    private $_status;
+    protected $_status;
     
     /**
      * @return self

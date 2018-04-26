@@ -21,28 +21,19 @@ class WarPlayer extends Model {
                                                             
     /** @var array[Attack] */ public $attacks               ;
                                                             
-    /** @var integer       */ public $attackCount           ; // T
-    /** @var integer       */ public $stars                 ; // T
-    /** @var integer       */ public $newStars              ; // T
-    /** @var integer       */ public $destruction           ; // T
-    /** @var integer       */ public $newDestruction        ; // T
-    /** @var integer       */ public $attackPositionDiff    ; // T
-    /** @var double        */ public $attackPositionDiffAvg ; // T
+    /** @var integer       */ public $attackCount           ;
+    /** @var integer       */ public $stars                 ;
+    /** @var integer       */ public $newStars              ;
+    /** @var integer       */ public $destruction           ;
+    /** @var integer       */ public $newDestruction        ;
+    /** @var integer       */ public $attackPositionDiff    ;
+    /** @var double        */ public $attackPositionDiffAvg ;
     
-    /** @var integer       */ public $defenseCount          ; // T
-    /** @var integer       */ public $lostStars             ; // T
-    /** @var integer       */ public $lostDestruction       ; // T
-    /** @var integer       */ public $defensePositionDiff   ; // T
-    /** @var double        */ public $defensePositionDiffAvg; // T
-    
-    /* "tag"               :"#9QLQL2GV8",
-       "name"              :"POGROMCA WIOSEK",
-       "townhallLevel"     :5,
-       "mapPosition"       :49,
-       "attacks"           :[{"attackerTag":"#9QLQL2GV8","defenderTag":"#Y89C0VRRP","stars":0,"destructionPercentage":30,"order":1}],
-       "opponentAttacks"   :1,
-       "bestOpponentAttack":{"attackerTag":"#9C2RVJRVP","defenderTag":"#9QLQL2GV8","stars":3,"destructionPercentage":100,"order":103}
-    */
+    /** @var integer       */ public $defenseCount          ;
+    /** @var integer       */ public $lostStars             ;
+    /** @var integer       */ public $lostDestruction       ;
+    /** @var integer       */ public $defensePositionDiff   ;
+    /** @var double        */ public $defensePositionDiffAvg;
     
     public function save () {
         if ($this->bestOpponentAttack) {
