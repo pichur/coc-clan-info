@@ -89,7 +89,7 @@ class Loader {
         $clanValue = file_get_contents ($dir . 'clan.json');
         $clanJson = json_decode($clanValue);
         
-        foreach ($clanJson->getMemberList() as $player) {
+        foreach ($clanJson->memberList as $player) {
             $playerValue = file_get_contents($dir . 'player_' . substr($player->tag, 1) . '.json');
             $playerJson = json_decode($playerValue);
             

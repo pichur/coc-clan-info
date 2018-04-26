@@ -46,7 +46,7 @@ class WarPlayer extends Model {
     
     public function save () {
         if ($this->bestOpponentAttack) {
-            $this->bestOpponentAttack_nr = $this->bestOpponentAttack->position;
+            $this->bestOpponentAttack_nr = $this->bestOpponentAttack->order;
         }
         
         parent::save();

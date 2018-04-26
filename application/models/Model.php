@@ -92,7 +92,11 @@ class Model extends CI_Model {
         
         foreach (static::$fieldMapping as $field => $mapping) {
             if ($mapping['key']) {
-                $key[$field] = $this->$field;
+                $dbName = $field;
+                if ($mapping['dbName']) {
+                    $dbName = $mapping['dbName'];
+                }
+                $key[$dbName] = $this->$field;
             }
         }
         
@@ -111,10 +115,14 @@ class Model extends CI_Model {
                 // System field
                 continue;
             }
-            if (        static::$fieldMapping[$key]
-                    &&  static::$fieldMapping[$key]['type']
-                    && (static::$fieldMapping[$key]['type'] != 'Column')) {
+            $mapping = static::$fieldMapping[$key];
+            if (        $mapping
+                    &&  $mapping['type']
+                    && ($mapping['type'] != 'Column')) {
                 continue;
+            }
+            if ($mapping['dbName']) {
+                $key = $mapping['dbName'];
             }
             if ($val instanceof DateTime) {
                 $val = $val->format('Y-m-d H:i:s');

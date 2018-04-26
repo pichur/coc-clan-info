@@ -3,12 +3,22 @@
 class Attack extends StaticModel {
     
     public static $fieldMapping = [
-        'number'   => ['key' => true],
-        'position' => ['key' => true, 'jsonName' => 'order'],
+        'number' => ['key' => true],
+        'order'  => ['key' => true, 'dbName' => 'order_'],
     ];
     
-    /** @var integer */ public $number               ;
-    /** @var integer */ public $position             ;
+    /**
+     * War number
+     * @var integer
+     */
+    public $number;
+    
+    /**
+     * Position on
+     * @var integer
+     */
+    public $order;
+    
     /** @var string  */ public $attackerTag          ;
     /** @var string  */ public $defenderTag          ;
     /** @var integer */ public $stars                ;

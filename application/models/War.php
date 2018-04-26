@@ -22,6 +22,7 @@ class War extends SortedModel {
     /** @var array[Attack] */ public $attackList          ;
     
     public function save () {
+        debug('War save');
         if ($this->state == 'notInWar') {
             return;
         }
@@ -36,6 +37,7 @@ class War extends SortedModel {
         parent::save();
         
         if ($this->state == 'warEnded') {
+            debug('War full save');
             // Full save
             $this->membersStats();
             
@@ -47,14 +49,16 @@ class War extends SortedModel {
             $this->opponent->type   = 'opponent';
             $this->opponent->save();
         }
+        
+        debug('War save end');
     }
     
     /**
      * Calculate memver statistics
      */
     private function membersStats () {
-        $this->transterAttacks();
-        
+        $this->transterAttacks ();
+        $this->transterDefenses();
     }
     
     private function transterAttacks () {
@@ -69,7 +73,7 @@ class War extends SortedModel {
             $player->attackCount = count($player->attacks);
             if ($player->attackCount) {
                 foreach ($player->attacks as $attack) {
-                    $attackList[$attack->number] = $attack;
+                    $attackList[$attack->order] = $attack;
                 }
             }
         }
@@ -124,7 +128,7 @@ class War extends SortedModel {
             $attackers[$player->tag] = $player;
             if (is_array($player->attacks)) {
                 foreach ($player->attacks as $attack) {
-                    $defenseList[$attack->number] = $attack;
+                    $defenseList[$attack->order] = $attack;
                 }
             }
         }

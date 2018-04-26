@@ -342,14 +342,14 @@ CREATE TABLE WarPlayer (
 
 CREATE TABLE Attack (
     number                INTEGER,
-    position              INTEGER,
+    order_                INTEGER,
     
     attackerTag           VARCHAR(16),
     defenderTag           VARCHAR(16),
     stars                 INTEGER,
     destructionPercentage INTEGER,
     
-    PRIMARY KEY (number, position),
+    PRIMARY KEY (number, order_),
     FOREIGN KEY (number) REFERENCES War (number)
 );
 
