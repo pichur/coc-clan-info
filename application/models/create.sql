@@ -96,7 +96,7 @@ CREATE TABLE PlayerTotals (
     
     inClanFirstTime       TIMESTAMP NULL DEFAULT NULL,
     inClanCurrentTime     TIMESTAMP NULL DEFAULT NULL,
-    inClanTotalHours      INTEGER,
+    inClanTotalDays       DOUBLE,
     inClanTotalEnters     INTEGER,
     
     lastActiveTime        TIMESTAMP NULL DEFAULT NULL,

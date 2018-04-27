@@ -20,6 +20,9 @@ class PlayerAnalyzer {
         } else {
             if ($this->previous == null) {
                 $this->totals->enter($this->current);
+            } else {
+                $diff = ($this->current->timestamp->getTimestamp() - $this->previous->timestamp->getTimestamp()) / 86400;
+                $this->totals->inClanTotalDays += $diff;
             }
         }
         

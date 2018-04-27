@@ -42,10 +42,10 @@ class PlayerTotals extends Model {
     public $inClanCurrentTime;
     
     /**
-     * Total hours in clan
-     * @var integer
+     * Total days in clan
+     * @var double
      */
-    public $inClanTotalHours;
+    public $inClanTotalDays;
     
     /**
      * Count of enters into clan
@@ -75,7 +75,7 @@ class PlayerTotals extends Model {
         
         $this->inClanFirstTime    = $player->timestamp;
         $this->inClanCurrentTime  = $player->timestamp;
-        $this->inClanTotalHours   = 0;
+        $this->inClanTotalDays    = 0;
         $this->inClanTotalEnters  = 1;
         
         $this->lastActiveTime     = $player->timestamp;
