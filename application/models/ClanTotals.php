@@ -76,4 +76,22 @@ class ClanTotals extends Model {
         $this->clanMaxMembers      = max($this->clanMaxMembers     , $history->members         );
     }
     
+    public function addWarHistory (War $war) {
+        
+        $this->warTimestamp                = xxx;
+        $this->warCount                    = xxx;
+        $this->warWins                     = xxx;
+        $this->warTies                     = xxx;
+        $this->warLosses                   = xxx;
+        $this->warMinAttacksPercentage     = xxx;
+        $this->warAvgAttacksPercentage     = xxx;
+        $this->warMaxAttacksPercentage     = xxx;
+        $this->warMinStarsPercentage       = xxx;
+        $this->warAvgStarsPercentage       = xxx;
+        $this->warMaxStarsPercentage       = xxx;
+        $this->warMinDestructionPercentage = xxx;
+        $this->warAvgDestructionPercentage = xxx;
+        $this->warMaxDestructionPercentage = xxx;
+    }
+    
 }

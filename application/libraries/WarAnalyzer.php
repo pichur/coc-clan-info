@@ -38,4 +38,18 @@ class WarAnalyzer {
         debug('War analyze finished');
     }
     
+    private function process () {
+        foreach ($this->warList as $war) {
+            debug('Add war history ' . $war->number . ', end date ' . $war->endTime->format('Y-m-d H:i:s'));;
+            $this->totals->addWarHistory($war);
+            
+            foreach ($this->currentHistory->getMemberList() as $currentPlayer) {
+                $playerAnalyzer = new PlayerAnalyzer($this->previousPlayers[$currentPlayer->tag], $currentPlayer);
+                $playerAnalyzer->analyze();
+            }
+            
+            $this->setPrevious();
+        }
+    }
+    
 }
