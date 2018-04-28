@@ -37,15 +37,17 @@ class PlayerAnalyzer {
         $donations         = 0;
         $donationsReceived = 0;
         
-        if ($this->previous && ($this->previous->donations <= $this->current->donations)) {
-            $donations -= $this->previous->donations;
+        if ($this->previous) {
+            if ($this->previous->donations <= $this->current->donations) {
+                $donations -= $this->previous->donations;
+            }
+            $donations += $this->current->donations;
+            
+            if ($this->previous->donationsReceived <= $this->current->donationsReceived) {
+                $donationsReceived -= $this->previous->donationsReceived;
+            }
+            $donationsReceived += $this->current->donationsReceived;
         }
-        if ( $this->previous && ($this->previous->donationsReceived <= $this->current->donationsReceived)) {
-            $donationsReceived -= $this->previous->donationsReceived;
-        }
-        
-        $donations         += $this->current->donations        ;
-        $donationsReceived += $this->current->donationsReceived;
         
         if ($donations) {
             $this->totals->lastActiveTime = $this->current->timestamp;
