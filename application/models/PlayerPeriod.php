@@ -65,4 +65,57 @@ class PlayerPeriod extends Model {
     /** @var integer  */ public $gamesMissingPoints;
     /** @var double   */ public $gamesPercentage   ;
     
+    public function addWar (WarPlayer $warPlayer) {
+        mapPosition
+        // - name
+        // - townhallLevel
+        // + opponentAttacks
+        // - bestOpponentAttack
+        
+        // - attacks
+        
+        // + attackCount
+        // + stars
+        // + newStars
+        destruction
+        newDestruction
+        attackPositionDiff
+        attackPositionDiffAvg
+        
+        // + lostStars
+        lostDestruction
+        defensePositionDiff
+        defensePositionDiffAvg
+        
+        $this->warCount++;
+        
+        $this->warAttacks += $warPlayer->attackCount    ;
+        warAttacksAvg
+        
+        $this->warStars       += $warPlayer->stars          ;
+        warStarsAvg
+        
+        $this->warNewStars    += $warPlayer->newStars       ;
+        warNewStarsAvg
+        
+        $this->warDefenses    += $warPlayer->opponentAttacks;
+        warDefensesAvg
+        
+        $this->warLostStars   += $warPlayer->lostStars      ;
+        warLostStarsAvg
+        
+        destruction
+        destructionAvg
+        
+        newDestruction
+        newDestructionAvg
+        
+        lostDestruction
+        lostDestructionAvg
+        
+        attackPositionDiffAvg
+        defensePositionDiffAvg
+        // x $this->warOpponents
+        // x $this->warOpponentDiffs  
+    }
 }

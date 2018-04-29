@@ -319,7 +319,7 @@ CREATE TABLE WarPlayer (
     mapPosition             INTEGER,
     name                    VARCHAR(64),
     townHallLevel           INTEGER,
-    opponentAttacks         INTEGER,
+    opponentAttacks         INTEGER, -- defenseCount
     bestOpponentAttack_nr   INTEGER,
     
     attackCount             INTEGER,
@@ -330,7 +330,6 @@ CREATE TABLE WarPlayer (
     attackPositionDiff      INTEGER,
     attackPositionDiffAvg   DOUBLE,
     
-    defenseCount            INTEGER,
     lostStars               INTEGER,
     lostDestruction         INTEGER,
     defensePositionDiff     INTEGER,

@@ -15,7 +15,7 @@ class WarAnalyzer {
     public function __construct () {
         $this->totals = ClanTotals::getBy(['tag' => config_item('clan_tag')]);
         
-        $this->warList = War::loadByOrder('timestamp', $this->totals->warTimestamp, null, 'ASC');
+        $this->warList = War::loadByOrder('endTime', $this->totals->warTimestamp, null, 'ASC');
     }
     
     public function analyze () {
@@ -43,7 +43,7 @@ class WarAnalyzer {
             debug('Add war history ' . $war->number . ', end date ' . $war->endTime->format('Y-m-d H:i:s'));;
             $this->totals->addWarHistory($war);
             
-            foreach ($this->currentHistory->getMemberList() as $currentPlayer) {
+            foreach ($war->getClan()->getMembers() as $warPlayer) {
                 $playerAnalyzer = new PlayerAnalyzer($this->previousPlayers[$currentPlayer->tag], $currentPlayer);
                 $playerAnalyzer->analyze();
             }

@@ -329,4 +329,15 @@ class Model extends CI_Model {
         throw new Exception('Unknown field mapping type: ' . $type);
     }
     
+    public function __call ($name, $arguments) {
+        $namePrefix = substr($name, 0, 3);
+        if ($namePrefix == 'get') {
+            $nameMainPart = lcfirst(substr($name, 3));
+            if (static::$fieldMapping[$nameMainPart]) {
+                return $this->getModelProperty($nameMainPart);
+            }
+        }
+        return parent::__call($name, $arguments);
+    }
+    
 }

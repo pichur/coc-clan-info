@@ -16,9 +16,18 @@ class ClanTotals extends Model {
      */
     public $tag;
     
-    /** @var DateTime */ public $historyFrom;
+    /**
+     * First stored clan history
+     * @var DateTime
+     */
+    public $historyFrom;
     
-    /** @var DateTime */ public $clanTimestamp      ;
+    /**
+     * Last stored clan history
+     * @var DateTime
+     */
+    public $clanTimestamp;
+    
     /** @var integer  */ public $clanMinPoints      ;
     /** @var integer  */ public $clanMaxPoints      ;
     /** @var integer  */ public $clanMinVersusPoints;
@@ -27,7 +36,12 @@ class ClanTotals extends Model {
     /** @var integer  */ public $clanMinMembers     ;
     /** @var integer  */ public $clanMaxMembers     ;
     
-    /** @var DateTime */ public $warTimestamp               ;
+    /**
+     * Last stored end time of war
+     * @var DateTime
+     */
+    public $warTimestamp;
+    
     /** @var integer  */ public $warCount                   ;
     /** @var integer  */ public $warWins                    ;
     /** @var integer  */ public $warTies                    ;
@@ -77,21 +91,27 @@ class ClanTotals extends Model {
     }
     
     public function addWarHistory (War $war) {
+        $this->warTimestamp = $war->endTime;
         
-        $this->warTimestamp                = xxx;
-        $this->warCount                    = xxx;
-        $this->warWins                     = xxx;
-        $this->warTies                     = xxx;
-        $this->warLosses                   = xxx;
-        $this->warMinAttacksPercentage     = xxx;
-        $this->warAvgAttacksPercentage     = xxx;
-        $this->warMaxAttacksPercentage     = xxx;
-        $this->warMinStarsPercentage       = xxx;
-        $this->warAvgStarsPercentage       = xxx;
-        $this->warMaxStarsPercentage       = xxx;
-        $this->warMinDestructionPercentage = xxx;
-        $this->warAvgDestructionPercentage = xxx;
-        $this->warMaxDestructionPercentage = xxx;
+        $this->warCount++;
+        
+        if ($war->isWin ()) $this->warWins   ++;
+        if ($war->isTie ()) $this->warTies   ++;
+        if ($war->isLoss()) $this->warLosses ++;
+        
+        $attacksPercentage     = $war->getAttacksPercentage()          ;
+        $starsPercentage       = $war->getStarsPercentage  ()          ;
+        $destructionPercentage = $war->getClan()->destructionPercentage;
+        
+        $this->warMinAttacksPercentage     = min($this->warMinAttacksPercentage    , $attacksPercentage    );
+        $this->warAvgAttacksPercentage     = avg($this->warAvgAttacksPercentage    , $attacksPercentage    , $this->warCount - 1);
+        $this->warMaxAttacksPercentage     = max($this->warMaxAttacksPercentage    , $attacksPercentage    );
+        $this->warMinStarsPercentage       = min($this->warMinStarsPercentage      , $starsPercentage      );
+        $this->warAvgStarsPercentage       = avg($this->warAvgStarsPercentage      , $starsPercentage      , $this->warCount - 1);
+        $this->warMaxStarsPercentage       = max($this->warMaxStarsPercentage      , $starsPercentage      );
+        $this->warMinDestructionPercentage = min($this->warMinDestructionPercentage, $destructionPercentage);
+        $this->warAvgDestructionPercentage = avg($this->warAvgDestructionPercentage, $destructionPercentage, $this->warCount - 1);
+        $this->warMaxDestructionPercentage = max($this->warMaxDestructionPercentage, $destructionPercentage);
     }
     
 }

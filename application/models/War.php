@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * 
+ * @author piotr
+ * @method WarClan getClan
+ * @method WarClan getOpponent
+ */
 class War extends SortedModel {
     
     public static $fieldMapping = [
@@ -146,8 +152,6 @@ class War extends SortedModel {
         foreach ($defenseList as $attack) {
             $player = $defenders[$attack->defenderTag];
             
-            $player->defenseCount++;
-            
             if ($attack->stars > $player->lostStars) {
                 $player->lostStars = $attack->stars;
             }
@@ -167,5 +171,12 @@ class War extends SortedModel {
             }
         }
     }
+    
+    public function isWin  () { return $this->getClan()->stars > $this->getOpponent()->stars; }
+    public function isTie  () { return $this->getClan()->stars = $this->getOpponent()->stars; }
+    public function isLoss () { return $this->getClan()->stars < $this->getOpponent()->stars; }
+    
+    public function getAttacksPercentage () { return (100 * $this->getClan()->attacks) / (2 * $this->teamSize); }
+    public function getStarsPercentage   () { return (100 * $this->getClan()->stars  ) / (3 * $this->teamSize); }
     
 }

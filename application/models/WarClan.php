@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author piotr
+ * @method array[WarPlayer] getMembers
+ */
 class WarClan extends Model {
     
     public static $fieldMapping = [
@@ -25,7 +29,7 @@ class WarClan extends Model {
         $this->badgeUrls->type   = $this->type  ;
         $this->badgeUrls->save();
         
-        foreach ($this->members as $member) {
+        foreach ($this->getMembers() as $member) {
             $member->number = $this->number;
             $member->type   = $this->type  ;
             $member->save();

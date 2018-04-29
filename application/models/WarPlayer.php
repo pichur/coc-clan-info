@@ -16,7 +16,7 @@ class WarPlayer extends Model {
     /** @var integer       */ public $mapPosition           ;
     /** @var string        */ public $name                  ;
     /** @var integer       */ public $townhallLevel         ;
-    /** @var integer       */ public $opponentAttacks       ;
+    /** @var integer       */ public $opponentAttacks       ; // defenseCount
     /** @var Attack        */ public $bestOpponentAttack    ;
                                                             
     /** @var array[Attack] */ public $attacks               ;
