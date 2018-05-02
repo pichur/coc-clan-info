@@ -10,8 +10,8 @@ class War extends SortedModel {
     
     public static $fieldMapping = [
             'number'               => ['key' => true],
-            'clan'                 => ['type' => 'OneToOne' , 'target' => WarClan::class],
-            'opponent'             => ['type' => 'OneToOne' , 'target' => WarClan::class],
+            'clan'                 => ['type' => 'OneToOne' , 'target' => WarClan::class, 'targetKey' => ['type' => WarClan::CLAN    ]],
+            'opponent'             => ['type' => 'OneToOne' , 'target' => WarClan::class, 'targetKey' => ['type' => WarClan::OPPONENT]],
             'attackList'           => ['type' => 'OneToMany', 'target' => Attack ::class],
             'preparationStartTime' => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
             'startTime'            => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
@@ -166,15 +166,15 @@ class War extends SortedModel {
         }
         
         foreach ($clan->members as $player) {
-            if ($player->defenseCount > 0) {
-                $player->defensePositionDiffAvg = $player->defensePositionDiff / $player->defenseCount;
+            if ($player->opponentAttacks > 0) {
+                $player->defensePositionDiffAvg = $player->defensePositionDiff / $player->opponentAttacks;
             }
         }
     }
     
-    public function isWin  () { return $this->getClan()->stars > $this->getOpponent()->stars; }
-    public function isTie  () { return $this->getClan()->stars = $this->getOpponent()->stars; }
-    public function isLoss () { return $this->getClan()->stars < $this->getOpponent()->stars; }
+    public function isWin  () { return $this->getClan()->stars >  $this->getOpponent()->stars; }
+    public function isTie  () { return $this->getClan()->stars == $this->getOpponent()->stars; }
+    public function isLoss () { return $this->getClan()->stars <  $this->getOpponent()->stars; }
     
     public function getAttacksPercentage () { return (100 * $this->getClan()->attacks) / (2 * $this->teamSize); }
     public function getStarsPercentage   () { return (100 * $this->getClan()->stars  ) / (3 * $this->teamSize); }

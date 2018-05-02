@@ -29,7 +29,6 @@ class WarPlayer extends Model {
     /** @var integer       */ public $attackPositionDiff    ;
     /** @var double        */ public $attackPositionDiffAvg ;
     
-    /** @var integer       */ public $defenseCount          ;
     /** @var integer       */ public $lostStars             ;
     /** @var integer       */ public $lostDestruction       ;
     /** @var integer       */ public $defensePositionDiff   ;

@@ -105,32 +105,46 @@ CREATE TABLE PlayerTotals (
 );
     
 CREATE TABLE PlayerPeriod (
-    tag                   VARCHAR(16),
-    name                  VARCHAR(64),
+    tag                       VARCHAR(16),
+    name                      VARCHAR(64),
+                              
+    period                    VARCHAR(16),
+                              
+    startTime                 TIMESTAMP NULL DEFAULT NULL,
+    endTime                   TIMESTAMP NULL DEFAULT NULL,
+                              
+    timestamp                 TIMESTAMP NULL DEFAULT NULL,
+                              
+    donations                 INTEGER,
+    donationsReceived         INTEGER,
     
-    period                VARCHAR(16),
+	warCount                  INTEGER,    
+	warMapPositionMin         INTEGER,
+	warMapPositionAvg         DOUBLE,
+	warMapPositionMax         INTEGER,
+	warAttacks                INTEGER,
+	warStars                  INTEGER,
+	warNewStars               INTEGER,
+	warDestruction            INTEGER,
+	warNewDestruction         INTEGER,
+	warDefenses               INTEGER,
+	warLostStars              INTEGER,
+	warLostDestruction        INTEGER,
+	warAttacksAvg             DOUBLE,
+	warStarsAvg               DOUBLE,
+	warNewStarsAvg            DOUBLE,
+	warDestructionAvg         DOUBLE,
+	warNewDestructionAvg      DOUBLE,
+	warDefensesAvg            DOUBLE,
+	warLostStarsAvg           DOUBLE,
+	warLostDestructionAvg     DOUBLE,
+	warAttackPositionDiffAvg  DOUBLE,
+	warDefensePositionDiffAvg DOUBLE,
     
-    startTime             TIMESTAMP NULL DEFAULT NULL,
-    endTime               TIMESTAMP NULL DEFAULT NULL,
-    
-    timestamp             TIMESTAMP NULL DEFAULT NULL,
-    
-    donations             INTEGER,
-    donationsReceived     INTEGER,
-    
-    warCount              INTEGER,
-    warAttackCount        INTEGER,
-    warStars              INTEGER,
-    warNewStars           INTEGER,
-    warDefenses           INTEGER,
-    warLostStars          INTEGER,
-    warOpponents          DOUBLE,
-    warOpponentDiffs      DOUBLE,
-    
-    gamesCount            INTEGER,
-    gamesPoints           INTEGER,
-    gamesMissingPoints    INTEGER,
-    gamesPercentage       DOUBLE,
+    gamesCount                INTEGER,
+    gamesPoints               INTEGER,
+    gamesMissingPoints        INTEGER,
+    gamesPercentage           DOUBLE,
     
     PRIMARY KEY (tag, period)
 );
@@ -313,9 +327,9 @@ CREATE TABLE WarClanBadgeUrls (
 
 CREATE TABLE WarPlayer (
     number                  INTEGER,
+    type                    VARCHAR(32),
     tag                     VARCHAR(16),
     
-    type                    VARCHAR(32),
     mapPosition             INTEGER,
     name                    VARCHAR(64),
     townHallLevel           INTEGER,
@@ -335,7 +349,7 @@ CREATE TABLE WarPlayer (
     defensePositionDiff     INTEGER,
     defensePositionDiffAvg  DOUBLE,
     
-    PRIMARY KEY (number, tag),
+    PRIMARY KEY (number, type, tag),
     FOREIGN KEY (number, type) REFERENCES WarClan (number, type)
 );
 

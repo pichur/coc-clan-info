@@ -1,5 +1,10 @@
 <?php
 
+/**
+ *
+ * @author piotr
+ * @method PlayerPeriod getDetails
+ */
 class PlayerTotals extends Model {
     
     public static $fieldMapping = [
@@ -109,11 +114,11 @@ class PlayerTotals extends Model {
         }
     }
     
-    /**
-     * @return PlayerPeriod
-     */
-    public function getDetails() {
-        return parent::getModelProperty('details');
+    public function addWar (War $war, WarPlayer $warPlayer) {
+        if ($warPlayer->newDestruction) {
+            $this->lastActiveTime = $war->endTime;
+        }
+        $this->getDetails()->addWar($warPlayer);
     }
     
 }

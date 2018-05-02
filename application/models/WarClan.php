@@ -6,7 +6,12 @@
  */
 class WarClan extends Model {
     
+    const CLAN     = 'clan'    ;
+    const OPPONENT = 'opponent';
+    
     public static $fieldMapping = [
+            'number'    => ['key' => true],
+            'type'      => ['key' => true],
             'badgeUrls' => ['type' => 'OneToOne' , 'target' => WarClanBadgeUrls::class],
             'members'   => ['type' => 'OneToMany', 'target' => WarPlayer       ::class],
     ];

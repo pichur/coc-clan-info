@@ -44,11 +44,10 @@ class WarAnalyzer {
             $this->totals->addWarHistory($war);
             
             foreach ($war->getClan()->getMembers() as $warPlayer) {
-                $playerAnalyzer = new PlayerAnalyzer($this->previousPlayers[$currentPlayer->tag], $currentPlayer);
-                $playerAnalyzer->analyze();
+                $playerTotals = PlayerTotals::getBy(['tag' => $warPlayer->tag]);
+                $playerTotals->addWar($war, $warPlayer);
+                $playerTotals->save();
             }
-            
-            $this->setPrevious();
         }
     }
     
