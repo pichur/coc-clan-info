@@ -40,13 +40,15 @@ class WarAnalyzer {
     
     private function process () {
         foreach ($this->warList as $war) {
-            debug('Add war history ' . $war->number . ', end date ' . $war->endTime->format('Y-m-d H:i:s'));;
-            $this->totals->addWarHistory($war);
-            
-            foreach ($war->getClan()->getMembers() as $warPlayer) {
-                $playerTotals = PlayerTotals::getBy(['tag' => $warPlayer->tag]);
-                $playerTotals->addWar($war, $warPlayer);
-                $playerTotals->save();
+            if ($war->state == 'warEnded') {
+                debug('Add war history ' . $war->number . ', end date ' . $war->endTime->format('Y-m-d H:i:s'));;
+                $this->totals->addWarHistory($war);
+                
+                foreach ($war->getClan()->getMembers() as $warPlayer) {
+                    $playerTotals = PlayerTotals::getBy(['tag' => $warPlayer->tag]);
+                    $playerTotals->addWar($war, $warPlayer);
+                    $playerTotals->save();
+                }
             }
         }
     }

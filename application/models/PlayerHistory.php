@@ -60,10 +60,19 @@ class PlayerHistory extends TimestampModel {
     }
     
     private function transferGamesPoints () {
-        foreach ($this->achievements as $achievement) {
-            if ($achievement->name == 'Games Champion') {
-                $this->clanGamesPoints = $achievement->value;
-                break;
+        if ($this->achievements) {
+            foreach ($this->achievements as $achievement) {
+                if ($achievement->name == 'Games Champion') {
+                    $this->clanGamesPoints = $achievement->value;
+                    break;
+                }
+            }
+        } else {
+            info('Missing achievements for player ' . $this->tag . ' for history at ' . $this->timestamp->format('Y-m-d H:i:s'));
+            // Get previous one
+            $lastClanGamesPoints = PlayerHistory::loadSingleByOrder('timestamp', $this->timestamp, ['tag' => $this->tag]);
+            if ($lastClanGamesPoints) {
+                $this->clanGamesPoints = $lastClanGamesPoints->clanGamesPoints;
             }
         }
     }

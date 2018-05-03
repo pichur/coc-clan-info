@@ -90,11 +90,16 @@ class Loader {
         $clanJson = json_decode($clanValue);
         
         foreach ($clanJson->memberList as $player) {
-            $playerValue = file_get_contents($dir . 'player_' . substr($player->tag, 1) . '.json');
+            $file = $dir . 'player_' . substr($player->tag, 1) . '.json';
+            $playerValue = file_get_contents($file);
             $playerJson = json_decode($playerValue);
             
-            foreach ($playerJson as $k => $v) {
-                $player->$k = $v;
+            if ($playerJson) {
+                foreach ($playerJson as $k => $v) {
+                    $player->$k = $v;
+                }
+            } else {
+                error('Cannot parse JSON ' . $file);
             }
         }
         

@@ -108,8 +108,8 @@ class PlayerPeriod extends Model {
         $this->warLostStarsAvg       = $warPlayer->lostStars      ;
         $this->warLostDestructionAvg = $warPlayer->lostDestruction;
         
-        $this->warAttackPositionDiffAvg  = $warPlayer->lostDestruction;
-        $this->warDefensePositionDiffAvg = $warPlayer->lostDestruction;
+        $this->warAttackPositionDiffAvg  = $warPlayer->attackPositionDiffAvg ;
+        $this->warDefensePositionDiffAvg = $warPlayer->defensePositionDiffAvg;
     }
     
     public function addWar (WarPlayer $warPlayer) {
@@ -142,8 +142,8 @@ class PlayerPeriod extends Model {
         $this->warLostStarsAvg       = avg($this->warLostStarsAvg      , $warPlayer->lostStars      , $count);
         $this->warLostDestructionAvg = avg($this->warLostDestructionAvg, $warPlayer->lostDestruction, $count);
         
-        $this->warAttackPositionDiffAvg  = avg($this->warAttackPositionDiffAvg , $warPlayer->lostDestruction, $count);
-        $this->warDefensePositionDiffAvg = avg($this->warDefensePositionDiffAvg, $warPlayer->lostDestruction, $count);
+        $this->warAttackPositionDiffAvg  = avg($this->warAttackPositionDiffAvg , $warPlayer->attackPositionDiffAvg , $count);
+        $this->warDefensePositionDiffAvg = avg($this->warDefensePositionDiffAvg, $warPlayer->defensePositionDiffAvg, $count);
     }
     
 }

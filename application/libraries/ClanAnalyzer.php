@@ -61,7 +61,7 @@ class ClanAnalyzer {
                 $playerAnalyzer->analyze();
             }
         } else {
-            $this->currentHistory = ClanHistory::getBy(['timestamp' => $totals->clanTimestamp]);
+            $this->currentHistory = ClanHistory::getBy(['timestamp' => $this->totals->clanTimestamp]);
         }
         
         $this->setPrevious();
