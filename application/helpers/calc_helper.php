@@ -1,7 +1,7 @@
 <?php
 
 if (!function_exists('avg')) {
-    function avg ($lastAverage, $newValue, $count) {
-        return (($lastAverage * $count) + $newValue) / ($count + 1);
+    function avg ($lastAverage, $value, $count) {
+        return (($lastAverage * $count) - $lastAverage + $value) / $count;
     }
 }

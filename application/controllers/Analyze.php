@@ -9,9 +9,11 @@ class Analyze extends CI_Controller {
         
         $this->trans_begin();
         
-        ClanTotals  ::delete();
-        PlayerTotals::delete();
-        PlayerPeriod::delete();
+        ClanTotals       ::delete();
+        PlayerTotals     ::delete();
+        PlayerClanPeriod ::delete();
+        PlayerWarPeriod  ::delete();
+        PlayerGamesPeriod::delete();
         
         $this->trans_complete();
         debug("Analyze cleared");

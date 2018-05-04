@@ -42,7 +42,12 @@ class ClanTotals extends Model {
      */
     public $warTimestamp;
     
-    /** @var integer  */ public $warCount                   ;
+    /**
+     * Total war count
+     * @var integer
+     */
+    public $warCount;
+    
     /** @var integer  */ public $warWins                    ;
     /** @var integer  */ public $warTies                    ;
     /** @var integer  */ public $warLosses                  ;
@@ -56,7 +61,18 @@ class ClanTotals extends Model {
     /** @var double   */ public $warAvgDestructionPercentage;
     /** @var double   */ public $warMaxDestructionPercentage;
     
-    /** @var DateTime */ public $gamesTimestamp    ;
+    /**
+     * Last stored end time of game points
+     * @var DateTime
+     */
+    public $gamesTimestamp;
+    
+    /**
+     * Total games count
+     * @var integer
+     */
+    public $gamesCount;
+    
     /** @var integer  */ public $gamesMinPlayers   ;
     /** @var integer  */ public $gamesAvgPlayers   ;
     /** @var integer  */ public $gamesMaxPlayers   ;
@@ -114,13 +130,13 @@ class ClanTotals extends Model {
         $destructionPercentage = $war->getClan()->destructionPercentage;
         
         $this->warMinAttacksPercentage     = min($this->warMinAttacksPercentage    , $attacksPercentage    );
-        $this->warAvgAttacksPercentage     = avg($this->warAvgAttacksPercentage    , $attacksPercentage    , $this->warCount - 1);
+        $this->warAvgAttacksPercentage     = avg($this->warAvgAttacksPercentage    , $attacksPercentage    , $this->warCount);
         $this->warMaxAttacksPercentage     = max($this->warMaxAttacksPercentage    , $attacksPercentage    );
         $this->warMinStarsPercentage       = min($this->warMinStarsPercentage      , $starsPercentage      );
-        $this->warAvgStarsPercentage       = avg($this->warAvgStarsPercentage      , $starsPercentage      , $this->warCount - 1);
+        $this->warAvgStarsPercentage       = avg($this->warAvgStarsPercentage      , $starsPercentage      , $this->warCount);
         $this->warMaxStarsPercentage       = max($this->warMaxStarsPercentage      , $starsPercentage      );
         $this->warMinDestructionPercentage = min($this->warMinDestructionPercentage, $destructionPercentage);
-        $this->warAvgDestructionPercentage = avg($this->warAvgDestructionPercentage, $destructionPercentage, $this->warCount - 1);
+        $this->warAvgDestructionPercentage = avg($this->warAvgDestructionPercentage, $destructionPercentage, $this->warCount);
         $this->warMaxDestructionPercentage = max($this->warMaxDestructionPercentage, $destructionPercentage);
     }
     

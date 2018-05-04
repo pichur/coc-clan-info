@@ -1,28 +1,31 @@
-DROP TABLE IF EXISTS Member           CASCADE;
-DROP TABLE IF EXISTS Player           CASCADE;
-DROP TABLE IF EXISTS Clan             CASCADE;
+DROP TABLE IF EXISTS Member            CASCADE;
+DROP TABLE IF EXISTS Player            CASCADE;
+DROP TABLE IF EXISTS Clan              CASCADE;
+DROP TABLE IF EXISTS PlayerPeriod      CASCADE;
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-DROP TABLE IF EXISTS GamesPlayer      CASCADE;
-DROP TABLE IF EXISTS Games            CASCADE;
-DROP TABLE IF EXISTS Attack           CASCADE;
-DROP TABLE IF EXISTS WarPlayer        CASCADE;
-DROP TABLE IF EXISTS WarClanBadgeUrls CASCADE;
-DROP TABLE IF EXISTS WarClan          CASCADE;
-DROP TABLE IF EXISTS War              CASCADE;
-DROP TABLE IF EXISTS Troop            CASCADE;
-DROP TABLE IF EXISTS Spell            CASCADE;
-DROP TABLE IF EXISTS Hero             CASCADE;
-DROP TABLE IF EXISTS Achievement      CASCADE;
-DROP TABLE IF EXISTS PlayerHistory    CASCADE;
-DROP TABLE IF EXISTS IconUrls         CASCADE;
-DROP TABLE IF EXISTS League           CASCADE;
-DROP TABLE IF EXISTS BadgeUrls        CASCADE;
-DROP TABLE IF EXISTS ClanHistory      CASCADE;
-DROP TABLE IF EXISTS PlayerPeriod     CASCADE;
-DROP TABLE IF EXISTS PlayerTotals     CASCADE;
-DROP TABLE IF EXISTS ClanTotals       CASCADE;
-DROP TABLE IF EXISTS Location         CASCADE;
-DROP TABLE IF EXISTS Version          CASCADE;
+DROP TABLE IF EXISTS GamesPlayer       CASCADE;
+DROP TABLE IF EXISTS Games             CASCADE;
+DROP TABLE IF EXISTS Attack            CASCADE;
+DROP TABLE IF EXISTS WarPlayer         CASCADE;
+DROP TABLE IF EXISTS WarClanBadgeUrls  CASCADE;
+DROP TABLE IF EXISTS WarClan           CASCADE;
+DROP TABLE IF EXISTS War               CASCADE;
+DROP TABLE IF EXISTS Troop             CASCADE;
+DROP TABLE IF EXISTS Spell             CASCADE;
+DROP TABLE IF EXISTS Hero              CASCADE;
+DROP TABLE IF EXISTS Achievement       CASCADE;
+DROP TABLE IF EXISTS PlayerHistory     CASCADE;
+DROP TABLE IF EXISTS IconUrls          CASCADE;
+DROP TABLE IF EXISTS League            CASCADE;
+DROP TABLE IF EXISTS BadgeUrls         CASCADE;
+DROP TABLE IF EXISTS ClanHistory       CASCADE;
+DROP TABLE IF EXISTS PlayerClanPeriod  CASCADE;
+DROP TABLE IF EXISTS PlayerWarPeriod   CASCADE;
+DROP TABLE IF EXISTS PlayerGamesPeriod CASCADE;
+DROP TABLE IF EXISTS PlayerTotals      CASCADE;
+DROP TABLE IF EXISTS ClanTotals        CASCADE;
+DROP TABLE IF EXISTS Location          CASCADE;
+DROP TABLE IF EXISTS Version           CASCADE;
 
 CREATE TABLE Version (
     number                INTEGER      NOT NULL,
@@ -78,6 +81,7 @@ CREATE TABLE ClanTotals (
     warMaxDestructionPercentage DOUBLE,
     
     gamesTimestamp              TIMESTAMP NULL DEFAULT NULL,
+    gamesCount                  INTEGER,
     gamesMinPlayers             INTEGER,
     gamesAvgPlayers             INTEGER,
     gamesMaxPlayers             INTEGER,
@@ -104,7 +108,7 @@ CREATE TABLE PlayerTotals (
     PRIMARY KEY (tag)
 );
     
-CREATE TABLE PlayerPeriod (
+CREATE TABLE PlayerClanPeriod (
     tag                       VARCHAR(16),
     name                      VARCHAR(64),
                               
@@ -118,33 +122,67 @@ CREATE TABLE PlayerPeriod (
     donations                 INTEGER,
     donationsReceived         INTEGER,
     
-	warCount                  INTEGER,    
-	warMapPositionMin         INTEGER,
-	warMapPositionAvg         DOUBLE,
-	warMapPositionMax         INTEGER,
-	warAttacks                INTEGER,
-	warStars                  INTEGER,
-	warNewStars               INTEGER,
-	warDestruction            INTEGER,
-	warNewDestruction         INTEGER,
-	warDefenses               INTEGER,
-	warLostStars              INTEGER,
-	warLostDestruction        INTEGER,
-	warAttacksAvg             DOUBLE,
-	warStarsAvg               DOUBLE,
-	warNewStarsAvg            DOUBLE,
-	warDestructionAvg         DOUBLE,
-	warNewDestructionAvg      DOUBLE,
-	warDefensesAvg            DOUBLE,
-	warLostStarsAvg           DOUBLE,
-	warLostDestructionAvg     DOUBLE,
-	warAttackPositionDiffAvg  DOUBLE,
-	warDefensePositionDiffAvg DOUBLE,
+    PRIMARY KEY (tag, period)
+);
+
+CREATE TABLE PlayerWarPeriod (
+    tag                       VARCHAR(16),
+    name                      VARCHAR(64),
+                              
+    period                    VARCHAR(16),
+                              
+    startTime                 TIMESTAMP NULL DEFAULT NULL,
+    endTime                   TIMESTAMP NULL DEFAULT NULL,
     
-    gamesCount                INTEGER,
-    gamesPoints               INTEGER,
-    gamesMissingPoints        INTEGER,
-    gamesPercentage           DOUBLE,
+    startNumber               INTEGER,
+    endNumber                 INTEGER,
+                              
+    timestamp                 TIMESTAMP NULL DEFAULT NULL,
+                              
+	count                     INTEGER,    
+	mapPositionMin            INTEGER,
+	mapPositionAvg            DOUBLE,
+	mapPositionMax            INTEGER,
+	attacks                   INTEGER,
+	stars                     INTEGER,
+	newStars                  INTEGER,
+	destruction               INTEGER,
+	newDestruction            INTEGER,
+	defenses                  INTEGER,
+	lostStars                 INTEGER,
+	lostDestruction           INTEGER,
+	attacksAvg                DOUBLE,
+	starsAvg                  DOUBLE,
+	newStarsAvg               DOUBLE,
+	destructionAvg            DOUBLE,
+	newDestructionAvg         DOUBLE,
+	defensesAvg               DOUBLE,
+	lostStarsAvg              DOUBLE,
+	lostDestructionAvg        DOUBLE,
+	attackPositionDiffAvg     DOUBLE,
+	defensePositionDiffAvg    DOUBLE,
+    
+    PRIMARY KEY (tag, period)
+);
+
+CREATE TABLE PlayerGamesPeriod (
+    tag                       VARCHAR(16),
+    name                      VARCHAR(64),
+                              
+    period                    VARCHAR(16),
+                              
+    startTime                 TIMESTAMP NULL DEFAULT NULL,
+    endTime                   TIMESTAMP NULL DEFAULT NULL,
+                              
+    startNumber               INTEGER,
+    endNumber                 INTEGER,
+                              
+    timestamp                 TIMESTAMP NULL DEFAULT NULL,
+                              
+    count                     INTEGER,
+    points                    INTEGER,
+    missingPoints             INTEGER,
+    percentage                DOUBLE,
     
     PRIMARY KEY (tag, period)
 );

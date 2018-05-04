@@ -3,7 +3,9 @@
 /**
  *
  * @author piotr
- * @method PlayerPeriod getDetails
+ * @method PlayerClanPeriod  getClanDetails
+ * @method PlayerWarPeriod   getWarDetails
+ * @method PlayerGamesPeriod getGamesDetails
  */
 class PlayerTotals extends Model {
     
@@ -13,7 +15,9 @@ class PlayerTotals extends Model {
         'inClanFirstTime'   => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
         'inClanCurrentTime' => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
         'lastActiveTime'    => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
-        'details'           => ['type' => 'OneToOne', 'target' => PlayerPeriod::class, 'targetKey' => ['period' => PlayerPeriod::FULL]],
+        'clanDetails'       => ['type' => 'OneToOne', 'target' => PlayerClanPeriod ::class, 'targetKey' => ['period' => PlayerPeriod::FULL]],
+        'warDetails'        => ['type' => 'OneToOne', 'target' => PlayerWarPeriod  ::class, 'targetKey' => ['period' => PlayerPeriod::FULL]],
+        'gamesDetails'      => ['type' => 'OneToOne', 'target' => PlayerGamesPeriod::class, 'targetKey' => ['period' => PlayerPeriod::FULL]],
     ];
     
     /**
@@ -65,18 +69,30 @@ class PlayerTotals extends Model {
     public $lastActiveTime;
     
     /**
-     * Details from full period
-     * @var PlayerPeriod
+     * Clan details from full period
+     * @var PlayerClanPeriod
      */
-    public $details;
+    public $clanDetails;
+    
+    /**
+     * War details from full period
+     * @var PlayerWarPeriod
+     */
+    public $warDetails;
+    
+    /**
+     * Games details from full period
+     * @var PlayerGamesPeriod
+     */
+    public $gamesDetails;
     
     public function init (PlayerHistory $player) {
         $this->tag  = $player->tag ;
+        $this->name = $player->name;
         
-        $this->details = new PlayerPeriod();
-        $this->getDetails()->tag  = $player->tag ;
-        
-        $this->actualize($player);
+        $this->clanDetails  = PlayerClanPeriod ::constructFull($player);
+        $this->warDetails   = PlayerWarPeriod  ::constructFull($player);
+        $this->gamesDetails = PlayerGamesPeriod::constructFull($player);
         
         $this->inClanFirstTime    = $player->timestamp;
         $this->inClanCurrentTime  = $player->timestamp;
@@ -84,19 +100,6 @@ class PlayerTotals extends Model {
         $this->inClanTotalEnters  = 1;
         
         $this->lastActiveTime     = $player->timestamp;
-        
-        $this->getDetails()->period    = PlayerPeriod::FULL;
-        $this->getDetails()->startTime = null;
-        $this->getDetails()->endTime   = null;
-        
-    }
-    
-    public function actualize (PlayerHistory $player) {
-        $this->timestamp = $player->timestamp;
-        $this->name      = $player->name     ;
-        
-        $this->getDetails()->timestamp = $player->timestamp;
-        $this->getDetails()->name      = $player->name     ;
     }
     
     public function enter (PlayerHistory $player) {
@@ -109,16 +112,16 @@ class PlayerTotals extends Model {
     public function save () {
         parent::save();
         
-        if ($this->details) {
-            $this->details->save();
-        }
+        if ($this->clanDetails ) $this->clanDetails ->save();
+        if ($this->warDetails  ) $this->warDetails  ->save();
+        if ($this->gamesDetails) $this->gamesDetails->save();
     }
     
     public function addWar (War $war, WarPlayer $warPlayer) {
         if ($warPlayer->newDestruction) {
             $this->lastActiveTime = $war->endTime;
         }
-        $this->getDetails()->addWar($warPlayer);
+        $this->getWarDetails()->addWar($war, $warPlayer);
     }
     
 }

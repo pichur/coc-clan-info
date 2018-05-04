@@ -28,7 +28,9 @@ class PlayerAnalyzer {
         
         $this->donations();
         
-        $this->totals->actualize($this->current);
+        $this->name();
+        
+        $this->timestamp();
         
         $this->totals->save();
     }
@@ -52,8 +54,22 @@ class PlayerAnalyzer {
         if ($donations) {
             $this->totals->lastActiveTime = $this->current->timestamp;
         }
-        $this->totals->getDetails()->donations         += $donations        ;
-        $this->totals->getDetails()->donationsReceived += $donationsReceived;
+        $this->totals->getClanDetails()->donations         += $donations        ;
+        $this->totals->getClanDetails()->donationsReceived += $donationsReceived;
+    }
+    
+    private function name () {
+        if (   $this->previous
+            && $this->previous->name != $this->current->name) {
+                PlayerClanPeriod ::actualizeName($this->current->tag, $this->current->name);
+                PlayerWarPeriod  ::actualizeName($this->current->tag, $this->current->name);
+                PlayerGamesPeriod::actualizeName($this->current->tag, $this->current->name);
+        }
+    }
+    
+    private function timestamp () {
+        $this->totals->timestamp                   = $this->current->timestamp;
+        $this->totals->getClanDetails()->timestamp = $this->current->timestamp;
     }
     
 }
