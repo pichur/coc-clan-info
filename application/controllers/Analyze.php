@@ -41,4 +41,15 @@ class Analyze extends CI_Controller {
         $this->trans_complete();
     }
     
+    public function games () {
+        $this->load->database();
+        
+        $this->trans_begin();
+        
+        $gamesAnalyzer = new GamesAnalyzer();
+        $gamesAnalyzer->analyze();
+        
+        $this->trans_complete();
+    }
+    
 }

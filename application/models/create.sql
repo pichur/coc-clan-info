@@ -410,6 +410,8 @@ CREATE TABLE Games (
     startTime             TIMESTAMP NOT NULL,
     endTime               TIMESTAMP     NULL DEFAULT NULL,
     
+    finished              BOOLEAN NOT NULL DEFAULT FALSE,
+    
     maxPoints             INTEGER,
     
     PRIMARY KEY (number),
