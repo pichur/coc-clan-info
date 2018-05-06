@@ -41,9 +41,30 @@ class ClanHistory extends TimestampModel {
         debug('badgeUrls save');
         $this->badgeUrls->save();
         
+        $games = Games::loadLast();
+        if (!$games || $games->finished) {
+            // Create new one
+            $games = new Games();
+            $games->startTime = $this->timestamp;
+            $games->finished = false;
+        }
+        
         foreach ($this->getMemberList() as $member) {
             debug('member ' . $member->tag . ' save');
+            $member->transferGamesPoints($games);
             $member->save();
+        }
+        
+        if ($games && $games->endTime && !$games->finished) {
+            $diff = dayDiff($games->endTime, $this->timestamp);
+            if ($diff == 0) {
+                // New player data
+                $games->save();
+            } else if ($diff > 2) {
+                // Mark as finished
+                $games->finished = true;
+                $games->save();
+            }
         }
         
         debug('ClanHistory save end');

@@ -47,8 +47,6 @@ class PlayerHistory extends TimestampModel {
         $this->league->save();
         $this->league_id = $this->league->id;
         
-        $this->transferGamesPoints();
-        
         parent::save();
         
         foreach (['achievements', 'troops', 'heroes', 'spells'] as $list) {
@@ -59,7 +57,7 @@ class PlayerHistory extends TimestampModel {
         }
     }
     
-    private function transferGamesPoints () {
+    public function transferGamesPoints (Games $games) {
         if ($this->achievements) {
             foreach ($this->achievements as $achievement) {
                 if ($achievement->name == 'Games Champion') {
@@ -67,15 +65,22 @@ class PlayerHistory extends TimestampModel {
                     break;
                 }
             }
+            // Get previous one
+            $previousPlayerHistory = PlayerHistory::loadSingleByOrder('timestamp', $this->timestamp, ['tag' => $this->tag]);
+            if ($previousPlayerHistory) {
+                $newClanGamesPoints = $this->clanGamesPoints - $previousPlayerHistory->clanGamesPoints;
+                if ($newClanGamesPoints) {
+                    $games->addPlayerPoints($this, $newClanGamesPoints);
+                }
+            }
         } else {
             info('Missing achievements for player ' . $this->tag . ' for history at ' . $this->timestamp->format('Y-m-d H:i:s'));
             // Get previous one
-            $lastClanGamesPoints = PlayerHistory::loadSingleByOrder('timestamp', $this->timestamp, ['tag' => $this->tag]);
-            if ($lastClanGamesPoints) {
-                $this->clanGamesPoints = $lastClanGamesPoints->clanGamesPoints;
+            $previousPlayerHistory = PlayerHistory::loadSingleByOrder('timestamp', $this->timestamp, ['tag' => $this->tag]);
+            if ($previousPlayerHistory) {
+                $this->clanGamesPoints = $previousPlayerHistory->clanGamesPoints;
             }
         }
     }
-    
     
 }

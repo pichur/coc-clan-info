@@ -151,12 +151,12 @@ class ClanTotals extends Model {
             
         }
         
-        $this->gamesMinPlayers    = min($this->gamesMinPlayers   , $attacksPercentage    );
-        $this->gamesAvgPlayers    = avg($this->gamesAvgPlayers   , $attacksPercentage    , $this->gamesCount);
-        $this->gamesMaxPlayers    = max($this->gamesMaxPlayers   , $attacksPercentage    );
-        $this->gamesMinMaxPlayers = min($this->gamesMinMaxPlayers, $starsPercentage      );
-        $this->gamesAvgMaxPlayers = avg($this->gamesAvgMaxPlayers, $starsPercentage      , $this->gamesCount);
-        $this->gamesMaxMaxPlayers = max($this->gamesMaxMaxPlayers, $starsPercentage      );
+        $this->gamesMinPlayers    = min($this->gamesMinPlayers   , $attacksPercentage);
+        $this->gamesAvgPlayers    = avg($this->gamesAvgPlayers   , $attacksPercentage, $this->gamesCount);
+        $this->gamesMaxPlayers    = max($this->gamesMaxPlayers   , $attacksPercentage);
+        $this->gamesMinMaxPlayers = min($this->gamesMinMaxPlayers, $starsPercentage  );
+        $this->gamesAvgMaxPlayers = avg($this->gamesAvgMaxPlayers, $starsPercentage  , $this->gamesCount);
+        $this->gamesMaxMaxPlayers = max($this->gamesMaxMaxPlayers, $starsPercentage  );
     }
     
 }

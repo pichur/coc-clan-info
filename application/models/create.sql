@@ -422,6 +422,8 @@ CREATE TABLE GamesPlayer (
     number                INTEGER,
     tag                   VARCHAR(16),
     
+    name                  VARCHAR(64),
+    
     points                INTEGER,
     percentage            DOUBLE,
     
