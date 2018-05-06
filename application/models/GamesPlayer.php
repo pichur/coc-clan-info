@@ -10,6 +10,7 @@ class GamesPlayer extends Model {
     /** @var integer */ public $number    ;
     /** @var string  */ public $tag       ;
     /** @var string  */ public $name      ;
+    /** @var integer */ public $allPoints ;
     /** @var integer */ public $points    ;
     /** @var double  */ public $percentage;
     
@@ -25,7 +26,7 @@ class GamesPlayer extends Model {
         $gamesPlayer->tag  = $playerHistory->tag ;
         $gamesPlayer->name = $playerHistory->name;
         
-        $gamesPlayer->points = $newClanGamesPoints;
+        $gamesPlayer->allPoints = $newClanGamesPoints;
         
         return $gamesPlayer;
     }

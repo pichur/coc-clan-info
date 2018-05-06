@@ -47,6 +47,7 @@ class ClanHistory extends TimestampModel {
             $games = new Games();
             $games->startTime = $this->timestamp;
             $games->finished = false;
+            $games->analyzed = false;
         }
         
         foreach ($this->getMemberList() as $member) {

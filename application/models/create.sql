@@ -182,7 +182,8 @@ CREATE TABLE PlayerGamesPeriod (
     count                     INTEGER,
     points                    INTEGER,
     missingPoints             INTEGER,
-    percentage                DOUBLE,
+    pointsPercentageAvg       DOUBLE,
+    maxPointsPercentage       DOUBLE,
     
     PRIMARY KEY (tag, period)
 );
@@ -411,8 +412,12 @@ CREATE TABLE Games (
     endTime               TIMESTAMP     NULL DEFAULT NULL,
     
     finished              BOOLEAN NOT NULL DEFAULT FALSE,
+    analyzed              BOOLEAN NOT NULL DEFAULT FALSE,
     
-    maxPoints             INTEGER,
+    userMaxPoints         INTEGER,
+    totalMaxPoints        INTEGER,
+    totalPoints           INTEGER,
+    
     
     PRIMARY KEY (number),
     UNIQUE      (startTime)
@@ -424,6 +429,7 @@ CREATE TABLE GamesPlayer (
     
     name                  VARCHAR(64),
     
+    allPoints             INTEGER,
     points                INTEGER,
     percentage            DOUBLE,
     

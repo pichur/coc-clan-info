@@ -14,11 +14,14 @@ class Games extends SortedModel {
         'players'   => ['type' => 'OneToMany', 'target' => GamesPlayer::class],
     ];
     
-    /** @var DateTime           */ public $startTime;
-    /** @var DateTime           */ public $endTime  ;
-    /** @var boolean            */ public $finished ;
-    /** @var integer            */ public $maxPoints;
-    /** @var array[GamesPlayer] */ public $players  ;
+    /** @var DateTime           */ public $startTime     ;
+    /** @var DateTime           */ public $endTime       ;
+    /** @var boolean            */ public $finished      ;
+    /** @var boolean            */ public $analyzed      ;
+    /** @var integer            */ public $userMaxPoints ;
+    /** @var integer            */ public $totalMaxPoints;
+    /** @var integer            */ public $totalPoints   ;
+    /** @var array[GamesPlayer] */ public $players       ;
     
     public function addPlayerPoints (PlayerHistory $playerHistory, int $newClanGamesPoints) {
         // Actualize date
@@ -27,7 +30,7 @@ class Games extends SortedModel {
         foreach ($this->getPlayers() as $player) {
             if ($player->tag == $playerHistory->tag) {
                 // Add points to existing player
-                $player->points += $newClanGamesPoints;
+                $player->allPoints += $newClanGamesPoints;
                 return;
             }
         }

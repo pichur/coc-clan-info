@@ -10,9 +10,10 @@ class PlayerGamesPeriod extends PlayerPeriod {
         'timestamp' => ['jsonConverter' => 'jsonToDate', 'dbConverter' => 'dbToDate'],
     ];
     
-    /** @var integer */ public $count        ;
-    /** @var integer */ public $points       ;
-    /** @var integer */ public $missingPoints;
-    /** @var double  */ public $percentage   ;
+    /** @var integer */ public $count              ;
+    /** @var integer */ public $points             ;
+    /** @var integer */ public $missingPoints      ;
+    /** @var double  */ public $pointsPercentageAvg;
+    /** @var double  */ public $maxPointsPercentage;
     
 }
