@@ -1,7 +1,6 @@
 <?php
 
 /**
- *
  * @author piotr
  * @method PlayerClanPeriod  getClanDetails
  * @method PlayerWarPeriod   getWarDetails
@@ -122,6 +121,13 @@ class PlayerTotals extends Model {
             $this->lastActiveTime = $war->endTime;
         }
         $this->getWarDetails()->addWar($war, $warPlayer);
+    }
+    
+    public function addGames (Games $games, GamesPlayer $gamesPlayer) {
+        if ($gamesPlayer->allPoints) {
+            $this->lastActiveTime = $games->endTime;
+        }
+        $this->getGamesDetails()->addGames($games, $gamesPlayer);
     }
     
 }

@@ -44,9 +44,9 @@ class GamesAnalyzer {
                 debug('Add games history ' . $games->number . ', end date ' . $games->endTime->format('Y-m-d H:i:s'));;
                 $this->totals->addGamesHistory($games);
                 
-                foreach ($games->getPlayers() as $warPlayer) {
-                    $playerTotals = PlayerTotals::getBy(['tag' => $warPlayer->tag]);
-                    $playerTotals->addWar($war, $warPlayer);
+                foreach ($games->getPlayers() as $gamesPlayer) {
+                    $playerTotals = PlayerTotals::getBy(['tag' => $gamesPlayer->tag]);
+                    $playerTotals->addGames($games, $gamesPlayer);
                     $playerTotals->save();
                 }
             }

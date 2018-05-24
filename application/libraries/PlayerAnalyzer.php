@@ -59,11 +59,11 @@ class PlayerAnalyzer {
     }
     
     private function name () {
-        if (   $this->previous
-            && $this->previous->name != $this->current->name) {
-                PlayerClanPeriod ::actualizeName($this->current->tag, $this->current->name);
-                PlayerWarPeriod  ::actualizeName($this->current->tag, $this->current->name);
-                PlayerGamesPeriod::actualizeName($this->current->tag, $this->current->name);
+        if (       $this->previous
+                && $this->previous->name != $this->current->name) {
+            PlayerClanPeriod ::actualizeName($this->current->tag, $this->current->name);
+            PlayerWarPeriod  ::actualizeName($this->current->tag, $this->current->name);
+            PlayerGamesPeriod::actualizeName($this->current->tag, $this->current->name);
         }
     }
     

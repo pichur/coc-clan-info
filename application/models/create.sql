@@ -83,10 +83,10 @@ CREATE TABLE ClanTotals (
     gamesTimestamp              TIMESTAMP NULL DEFAULT NULL,
     gamesCount                  INTEGER,
     gamesMinPlayers             INTEGER,
-    gamesAvgPlayers             INTEGER,
+    gamesAvgPlayers             DOUBLE ,
     gamesMaxPlayers             INTEGER,
     gamesMinMaxPlayers          INTEGER,
-    gamesAvgMaxPlayers          INTEGER,
+    gamesAvgMaxPlayers          DOUBLE ,
     gamesMaxMaxPlayers          INTEGER,
     
     PRIMARY KEY (tag)
@@ -181,9 +181,9 @@ CREATE TABLE PlayerGamesPeriod (
                               
     count                     INTEGER,
     points                    INTEGER,
-    missingPoints             INTEGER,
+    pointsPercentageMin       DOUBLE,
     pointsPercentageAvg       DOUBLE,
-    maxPointsPercentage       DOUBLE,
+    pointsPercentageMax       DOUBLE,
     
     PRIMARY KEY (tag, period)
 );
@@ -418,6 +418,8 @@ CREATE TABLE Games (
     totalMaxPoints        INTEGER,
     totalPoints           INTEGER,
     
+    pointPlayers          INTEGER,
+    maxPlayers            INTEGER,
     
     PRIMARY KEY (number),
     UNIQUE      (startTime)

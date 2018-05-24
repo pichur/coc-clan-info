@@ -145,18 +145,21 @@ class ClanTotals extends Model {
         
         $this->gamesCount++;
         
-        $players    = count($games->getPlayers());
-        $maxPlayers = 0;
-        foreach ($games->getPlayers() as $gamePlayer) {
-            
+        if ($this->gamesCount == 1) {
+            $this->gamesMinPlayers    = $games->pointPlayers;
+            $this->gamesAvgPlayers    = $games->pointPlayers;
+            $this->gamesMaxPlayers    = $games->pointPlayers;
+            $this->gamesMinMaxPlayers = $games->maxPlayers  ;
+            $this->gamesAvgMaxPlayers = $games->maxPlayers  ;
+            $this->gamesMaxMaxPlayers = $games->maxPlayers  ;
+        } else {
+            $this->gamesMinPlayers    = min($this->gamesMinPlayers   , $games->pointPlayers);
+            $this->gamesAvgPlayers    = avg($this->gamesAvgPlayers   , $games->pointPlayers, $this->gamesCount);
+            $this->gamesMaxPlayers    = max($this->gamesMaxPlayers   , $games->pointPlayers);
+            $this->gamesMinMaxPlayers = min($this->gamesMinMaxPlayers, $games->maxPlayers  );
+            $this->gamesAvgMaxPlayers = avg($this->gamesAvgMaxPlayers, $games->maxPlayers  , $this->gamesCount);
+            $this->gamesMaxMaxPlayers = max($this->gamesMaxMaxPlayers, $games->maxPlayers  );
         }
-        
-        $this->gamesMinPlayers    = min($this->gamesMinPlayers   , $attacksPercentage);
-        $this->gamesAvgPlayers    = avg($this->gamesAvgPlayers   , $attacksPercentage, $this->gamesCount);
-        $this->gamesMaxPlayers    = max($this->gamesMaxPlayers   , $attacksPercentage);
-        $this->gamesMinMaxPlayers = min($this->gamesMinMaxPlayers, $starsPercentage  );
-        $this->gamesAvgMaxPlayers = avg($this->gamesAvgMaxPlayers, $starsPercentage  , $this->gamesCount);
-        $this->gamesMaxMaxPlayers = max($this->gamesMaxMaxPlayers, $starsPercentage  );
     }
     
 }
