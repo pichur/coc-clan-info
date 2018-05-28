@@ -439,4 +439,4 @@ CREATE TABLE GamesPlayer (
     FOREIGN KEY (number) REFERENCES Games (number)
 );
 
-INSERT INTO VERSION (number, version1, version2, version3, info) values (0, 0, 0, 1, 'Install script');
+INSERT INTO Version (number, version1, version2, version3, info) values (0, 0, 0, 1, 'Install script');
