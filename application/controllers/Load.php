@@ -54,6 +54,7 @@ class Load extends CI_Controller {
         debug('cyclic');
         
         $this->load->database();
+        $this->load->library('loader');
         
         $this->trans_begin();
         
@@ -72,22 +73,35 @@ class Load extends CI_Controller {
         debug('cyclic end');
         
         $this->trans_complete();
+        
+        $analyze = new Analyze();
+        $analyze->clan ();
+        $analyze->war  ();
+        $analyze->games();
     }
     
     public function planned () {
-        $this->load->database();
+        debug('planned');
         
-        $this->trans_begin();
+        $this->load->database();
+        $this->load->library('loader');
         
         $timestamp = new DateTime();
         
         $war = War::loadLast();
         if (($war->state != 'warEnded') && ($war->endTime < $timestamp)) {
+            $this->trans_begin();
+            
             $war = $this->loader->warCall($timestamp);
             $war->save();
+            
+            $this->trans_complete();
+            
+            $analyze = new Analyze();
+            $analyze->war  ();
         }
         
-        $this->trans_complete();
+        debug('planned end');
     }
     
 }

@@ -10,7 +10,7 @@ class Loader {
         if (!$timestamp) $timestamp = new DateTime();
         
         $clanJson = static::load($timestamp, 'clan');
-        foreach ($clanJson->getMemberList() as $member) {
+        foreach ($clanJson->memberList as $member) {
             debug('Member ' . $member->tag . ' call');
             static::load($timestamp, 'player', $member->tag, $member);
         }
